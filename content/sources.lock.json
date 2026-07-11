@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-07-11T23:58:39.154Z",
+  "tool": "pipeline/fetch",
+  "note": "Language data ingested from canonical EDRDG XML (github-hosted jmdict-simplified JSON is egress-blocked in the build environment). See docs/decisions.md D-007.",
+  "sources": [
+    {
+      "key": "jmdict",
+      "name": "JMdict (English)",
+      "url": "http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz",
+      "sha256": "70cb3c7a5f2c99f6db40e9eafd2eef54e7714a9fc797d9d50854e43f540ab3f4",
+      "bytes": 10493596,
+      "retrieved": "2026-07-11T23:58:36.041Z",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "JMdict — James William Breen and The Electronic Dictionary Research and Development Group; JMdict/EDICT project (https://www.edrdg.org/jmdict/j_jmdict.html).",
+      "datasetDate": "2026-07-11"
+    },
+    {
+      "key": "kanjidic2",
+      "name": "KANJIDIC2",
+      "url": "http://ftp.edrdg.org/pub/Nihongo/kanjidic2.xml.gz",
+      "sha256": "88609a4e35f417c033841e228ec3d2f25935b94814a5074b3c013728ea604407",
+      "bytes": 1488563,
+      "retrieved": "2026-07-11T23:58:36.725Z",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "KANJIDIC2 — James William Breen and The Electronic Dictionary Research and Development Group; KANJIDIC project (https://www.edrdg.org/wiki/index.php/KANJIDIC_Project).",
+      "datasetDate": "2026-07-11"
+    },
+    {
+      "key": "jlpt-vocab-n5",
+      "name": "JLPT vocab list (N5)",
+      "url": "https://raw.githubusercontent.com/elzup/jlpt-word-list/master/src/n5.csv",
+      "sha256": "8863a96442adeadfa3510edb84bd60b158ed6b3839172b93cab2ceb026e5ef8a",
+      "bytes": 55931,
+      "retrieved": "2026-07-11T23:58:36.937Z",
+      "license": "CC-BY",
+      "attribution": "JLPT vocabulary level tags: Jonathan Waller, JLPT Resources (https://www.tanos.co.uk/jlpt/), CC BY — via elzup/jlpt-word-list."
+    },
+    {
+      "key": "jlpt-vocab-n4",
+      "name": "JLPT vocab list (N4)",
+      "url": "https://raw.githubusercontent.com/elzup/jlpt-word-list/master/src/n4.csv",
+      "sha256": "10377b5d9a0289991b79532deb30cbe70892a2251cd013a21d62ca2a75cf5c76",
+      "bytes": 42190,
+      "retrieved": "2026-07-11T23:58:37.592Z",
+      "license": "CC-BY",
+      "attribution": "JLPT vocabulary level tags: Jonathan Waller, JLPT Resources (https://www.tanos.co.uk/jlpt/), CC BY — via elzup/jlpt-word-list."
+    },
+    {
+      "key": "jlpt-vocab-n3",
+      "name": "JLPT vocab list (N3)",
+      "url": "https://raw.githubusercontent.com/elzup/jlpt-word-list/master/src/n3.csv",
+      "sha256": "5828232b852f8d43e7d5ee09e9d8c218ed8e315ccbb425cd4d9205c77f5be6e3",
+      "bytes": 143457,
+      "retrieved": "2026-07-11T23:58:38.059Z",
+      "license": "CC-BY",
+      "attribution": "JLPT vocabulary level tags: Jonathan Waller, JLPT Resources (https://www.tanos.co.uk/jlpt/), CC BY — via elzup/jlpt-word-list."
+    },
+    {
+      "key": "jlpt-vocab-n2",
+      "name": "JLPT vocab list (N2)",
+      "url": "https://raw.githubusercontent.com/elzup/jlpt-word-list/master/src/n2.csv",
+      "sha256": "6b804f6d0365646740d979cc1ff6890dd85ea35833cf1a5ccfac415e79d6891b",
+      "bytes": 102601,
+      "retrieved": "2026-07-11T23:58:38.525Z",
+      "license": "CC-BY",
+      "attribution": "JLPT vocabulary level tags: Jonathan Waller, JLPT Resources (https://www.tanos.co.uk/jlpt/), CC BY — via elzup/jlpt-word-list."
+    },
+    {
+      "key": "jlpt-vocab-n1",
+      "name": "JLPT vocab list (N1)",
+      "url": "https://raw.githubusercontent.com/elzup/jlpt-word-list/master/src/n1.csv",
+      "sha256": "bea8e456d4719bed019e642f24aa249564f9dbf551dc04b267d317c772daf780",
+      "bytes": 161334,
+      "retrieved": "2026-07-11T23:58:38.790Z",
+      "license": "CC-BY",
+      "attribution": "JLPT vocabulary level tags: Jonathan Waller, JLPT Resources (https://www.tanos.co.uk/jlpt/), CC BY — via elzup/jlpt-word-list."
+    },
+    {
+      "key": "kanji-data",
+      "name": "kanji-data (jlpt_new)",
+      "url": "https://raw.githubusercontent.com/davidluzgouveia/kanji-data/master/kanji.json",
+      "sha256": "561b72ea9df703c58fae0c68585812e172aaa7611d2fcee6719d55fd2dfd4fa4",
+      "bytes": 5508152,
+      "retrieved": "2026-07-11T23:58:39.154Z",
+      "license": "MIT",
+      "attribution": "JLPT kanji level tags (jlpt_new): Jonathan Waller (CC BY) — via davidluzgouveia/kanji-data (MIT); kanji readings/meanings cross-checked against KANJIDIC2."
+    }
+  ]
+}

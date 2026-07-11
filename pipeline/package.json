@@ -3,10 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Build-time content pipeline: imports open datasets (JMdict, KANJIDIC2, KanjiVG, Tatoeba) into Zod-validated packs with provenance.",
+  "description": "Build-time content pipeline: imports open datasets (JMdict, KANJIDIC2, KanjiVG, Tatoeba) into Zod-validated packs with provenance. Node built-ins only.",
   "dependencies": {
-    "@hikkoshi/schemas": "*",
-    "@scriptin/jmdict-simplified-types": "^3.6.1",
-    "tar": "^7.5.19"
+    "@hikkoshi/schemas": "*"
   }
 }
