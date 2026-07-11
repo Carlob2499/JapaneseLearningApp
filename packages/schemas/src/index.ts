@@ -1,3 +1,5 @@
-// Placeholder — the real Zod pack/item schemas land in the next commit.
-// This keeps the @hikkoshi/schemas workspace resolvable and typechecking green.
-export const SCHEMA_VERSION = '1.0.0'
+// @hikkoshi/schemas — single source of truth for content-pack shapes,
+// shared by the build-time pipeline (validation) and the app runtime (loading).
+export * from './common'
+export * from './items'
+export * from './pack'
