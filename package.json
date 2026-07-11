@@ -4,14 +4,21 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Hikkoshi — a Japanese learning game (JLPT N5–N1 + real-world survival Japanese) as an installable, offline-capable PWA.",
+  "workspaces": [
+    "packages/*",
+    "pipeline"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc -b",
+    "typecheck": "tsc -b && tsc -p tsconfig.pipeline.json",
     "lint": "oxlint",
     "test": "vitest",
-    "icons": "node tools/gen-icons.mjs"
+    "icons": "node tools/gen-icons.mjs",
+    "pipeline:fetch": "tsx pipeline/src/fetch.ts",
+    "pipeline:build": "tsx pipeline/src/build.ts",
+    "pipeline:validate": "tsx pipeline/src/validate.ts"
   },
   "dependencies": {
     "react": "^19.2.7",
@@ -26,6 +33,7 @@
     "@vitejs/plugin-react": "^6.0.3",
     "jsdom": "^29.1.1",
     "oxlint": "^1.71.0",
+    "tsx": "^4.23.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
     "vite-plugin-pwa": "^1.3.0",

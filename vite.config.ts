@@ -45,7 +45,24 @@ export default defineConfig({
     }),
   ],
   test: {
-    environment: 'jsdom',
-    include: ['src/**/*.test.{ts,tsx}'],
+    // Two projects: the React app runs under jsdom; the framework-agnostic
+    // schemas package and the Node build pipeline run under the node environment.
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'app',
+          environment: 'jsdom',
+          include: ['src/**/*.test.{ts,tsx}'],
+        },
+      },
+      {
+        test: {
+          name: 'node',
+          environment: 'node',
+          include: ['packages/**/*.test.ts', 'pipeline/**/*.test.ts'],
+        },
+      },
+    ],
   },
 })
