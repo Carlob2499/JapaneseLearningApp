@@ -50,3 +50,14 @@ the repo. Grammar: no importable open inventory exists; we curate our own ~850�
 list with per-point level placement cross-referenced against ≥2 public inventories and a
 textbook anchor — counts citable, lists not copyable (Bunpro/JLPT Sensei are proprietary).
 *Source: Session 2 research, 2026-07-11.*
+
+### D-006: Selected game concept — A · Hikkoshi (user decision)
+From the three Session 3 proposals (docs/design-options.md), the user selected
+**Concept A — 「引っ越し」 Hikkoshi: A Life in Japan** (life-sim calendar: daily errands
+as disguised drills; life stages Tourist → Resident → Part-timer → Employee → Senior
+staff → handling it for someone else as the six-level progression). The shared engine
+E1–E8 from design-options.md is the build target. Concepts B/C remain future modes on
+the same engine. Known accepted trade-off (recorded from the comparison matrix): broadest
+art/scene authoring bill of the three — mitigation via template scenes and a stylized
+fixed-perspective look; scene variety must outpace the "wears thin" failure mode (P1).
+*Source: user selection at Session 3 gate, 2026-07-11.*
