@@ -1,0 +1,76 @@
+/* Scaffold-grade styles only — the real visual identity is a dedicated later
+   session (docs/architecture.md §9, item 8; decision D-003). */
+
+:root {
+  --bg: #f6f4ef;
+  --ink: #26222e;
+  --muted: #6d6878;
+  --card: #ffffff;
+  --line: #e4e0d8;
+  --accent: #bc002d; /* hinomaru red */
+  --ok: #2c7a4b;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17141f;
+    --ink: #efeaf4;
+    --muted: #a49dae;
+    --card: #211d2b;
+    --line: #322c3f;
+    --accent: #ff5470;
+    --ok: #5dd39e;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    'Hiragino Kaku Gothic ProN',
+    'Noto Sans JP',
+    sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sw-toast {
+  position: fixed;
+  inset-inline: 0;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  margin-inline: auto;
+  width: fit-content;
+  max-width: calc(100vw - 32px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.18);
+}
+
+.sw-toast button {
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font: inherit;
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+}
+
+.sw-toast button.ghost {
+  background: transparent;
+  color: var(--muted);
+}
