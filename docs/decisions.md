@@ -38,3 +38,15 @@ One phase per session; do not skip ahead. Session order: 1 research → 2 curric
 real-world scope → 3 design proposals (user picks one) → 4+ architecture then iterative
 build. Every session ends with done / verified / remaining.
 *Source: project brief, Session 1.*
+
+### D-005: JLPT level-tag provenance policy (Session 2 research outcome)
+No official N5–N1 lists exist (official guidebook FAQ Q7, 2009 — see docs/curriculum.md §2).
+Primary tag source: Jonathan Waller's JLPT Resources (CC BY), imported via counted GitHub
+mirrors (elzup/jlpt-word-list, davidluzgouveia/kanji-data, stephenmk/yomitan-jlpt-vocab),
+cross-checked and resolved against JMdict entries. Estimate spread across sources is
+disclosed in-app and in pack metadata (`levelTagSource`, `levelTagLicense`, `verification`).
+JEV and VDRJ are calibration references only — JEV forbids redistribution; neither enters
+the repo. Grammar: no importable open inventory exists; we curate our own ~850–950-point
+list with per-point level placement cross-referenced against ≥2 public inventories and a
+textbook anchor — counts citable, lists not copyable (Bunpro/JLPT Sensei are proprietary).
+*Source: Session 2 research, 2026-07-11.*
