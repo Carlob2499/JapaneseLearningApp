@@ -1,0 +1,166 @@
+/* Scaffold-grade study styling — the real visual identity is a later session (D-003). */
+
+.study-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px 22px;
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  text-align: center;
+}
+
+.card-kind {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.jp-xl {
+  font-size: clamp(64px, 22vw, 120px);
+  line-height: 1;
+  font-weight: 600;
+}
+.jp-lg {
+  font-size: clamp(24px, 7vw, 34px);
+  line-height: 1.5;
+}
+
+.reveal-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.card-back {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+.reading {
+  font-size: 26px;
+  color: var(--accent);
+}
+.readings {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 19px;
+}
+.readings .on {
+  color: var(--accent);
+}
+.meanings,
+.en {
+  font-size: 18px;
+}
+.glosses {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 4px;
+}
+.glosses .pos {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.grade-bar {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+}
+.grade {
+  flex: 1;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+}
+.grade-again {
+  background: #b3402f;
+}
+.grade-partial {
+  background: #b3812f;
+}
+.grade-good {
+  background: var(--ok);
+}
+
+/* Stroke viewer */
+.stroke-viewer {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+.stroke-svg {
+  width: 160px;
+  height: 160px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  background: var(--bg);
+}
+.stroke-path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: stroke-draw 0.5s ease forwards;
+}
+@keyframes stroke-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.ghost-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stroke-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* About disclosure */
+.about {
+  font-size: 13px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.about summary {
+  cursor: pointer;
+}
+.about-body {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.about a {
+  color: var(--accent);
+}
