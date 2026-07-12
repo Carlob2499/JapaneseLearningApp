@@ -78,6 +78,18 @@ export const SentenceItem = z.object({
 })
 export type SentenceItem = z.infer<typeof SentenceItem>
 
+/** Kanji stroke-order data — from KanjiVG, ordered SVG path strings on a 109×109 canvas. */
+export const StrokeItem = z.object({
+  kind: z.literal('strokes'),
+  id: z.string().min(1),
+  literal: z.string().min(1),
+  kanjivgId: z.string().min(1),
+  viewBox: z.string().min(1),
+  strokes: z.array(z.string().min(1)).min(1),
+  strokeCount: z.number().int().positive(),
+})
+export type StrokeItem = z.infer<typeof StrokeItem>
+
 /** Scene phrase template — curated register facts, cited. Defined now; populated later. */
 export const PhraseTemplate = z.object({
   kind: z.literal('phrase'),
@@ -95,6 +107,7 @@ export const Item = z.discriminatedUnion('kind', [
   KanjiItem,
   GrammarPoint,
   SentenceItem,
+  StrokeItem,
   PhraseTemplate,
 ])
 export type Item = z.infer<typeof Item>

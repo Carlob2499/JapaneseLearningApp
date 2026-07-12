@@ -21,7 +21,7 @@ export const Pack = z.object({
 })
 export type Pack = z.infer<typeof Pack>
 
-export const PackDomain = z.enum(['vocab', 'kanji', 'grammar', 'sentence', 'phrase', 'scene'])
+export const PackDomain = z.enum(['vocab', 'kanji', 'grammar', 'sentence', 'strokes', 'phrase', 'scene'])
 export type PackDomain = z.infer<typeof PackDomain>
 
 /** One row in the pack manifest — enough to load, verify, and precache a pack. */

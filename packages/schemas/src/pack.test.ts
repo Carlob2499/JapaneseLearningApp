@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Pack, VocabItem, KanjiItem } from './index'
+import { Pack, VocabItem, KanjiItem, StrokeItem } from './index'
 
 const vocab = {
   kind: 'vocab',
@@ -60,6 +60,20 @@ describe('item schemas', () => {
 
   it('rejects a vocab item with no senses (no verified meaning)', () => {
     expect(VocabItem.safeParse({ ...vocab, senses: [] }).success).toBe(false)
+  })
+
+  it('accepts a KanjiVG stroke item and rejects one with no strokes', () => {
+    const strokes = {
+      kind: 'strokes',
+      id: 'strokes:水',
+      literal: '水',
+      kanjivgId: '06c34',
+      viewBox: '0 0 109 109',
+      strokes: ['M52,15c1,1...', 'M17,45c1,0...'],
+      strokeCount: 2,
+    }
+    expect(StrokeItem.safeParse(strokes).success).toBe(true)
+    expect(StrokeItem.safeParse({ ...strokes, strokes: [] }).success).toBe(false)
   })
 })
 
