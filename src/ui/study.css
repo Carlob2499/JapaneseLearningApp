@@ -99,6 +99,57 @@
   background: var(--ok);
 }
 
+/* Multiple choice */
+.choice-q {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.choices {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+}
+.choice {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 17px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+.choice:disabled {
+  cursor: default;
+}
+.choice.correct {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: #fff;
+}
+.choice.wrong {
+  background: #b3402f;
+  border-color: #b3402f;
+  color: #fff;
+}
+.next-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  cursor: pointer;
+}
+
 /* Stroke viewer */
 .stroke-viewer {
   display: grid;
@@ -143,6 +194,9 @@
   .stroke-path {
     animation: none;
     stroke-dashoffset: 0;
+  }
+  .choice {
+    transition: none;
   }
 }
 

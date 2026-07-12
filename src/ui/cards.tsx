@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import type { KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
+import type { Choice } from '../review/choices'
 import StrokeViewer from './StrokeViewer'
 import './study.css'
 
@@ -109,5 +110,59 @@ export function SentenceCard({ item, onGrade }: { item: SentenceItem; onGrade: (
       onGrade={onGrade}
       back={<div className="en">{item.en}</div>}
     />
+  )
+}
+
+/**
+ * Multiple-choice card: pick the correct option, see the answer, advance. Kind-agnostic —
+ * the caller supplies the prompt and question; every option is verbatim dataset content.
+ * A correct pick grades `pass`, a wrong pick `fail`.
+ */
+export function ChoiceCard({
+  kind,
+  prompt,
+  question,
+  choices,
+  onGrade,
+}: {
+  kind: string
+  prompt: ReactNode
+  question: string
+  choices: Choice[]
+  onGrade: (o: Outcome) => void
+}) {
+  const [selected, setSelected] = useState<Choice | null>(null)
+  return (
+    <div className="study-card">
+      <span className="card-kind">{kind}</span>
+      <div className="card-front">{prompt}</div>
+      <p className="choice-q">{question}</p>
+      <div className="choices">
+        {choices.map((c, i) => {
+          const cls = ['choice']
+          if (selected) {
+            if (c.correct) cls.push('correct')
+            else if (c === selected) cls.push('wrong')
+          }
+          return (
+            <button
+              key={i}
+              className={cls.join(' ')}
+              data-testid="choice"
+              data-correct={c.correct}
+              disabled={selected !== null}
+              onClick={() => setSelected(c)}
+            >
+              {c.text}
+            </button>
+          )
+        })}
+      </div>
+      {selected && (
+        <button className="next-btn" onClick={() => onGrade(selected.correct ? 'pass' : 'fail')}>
+          Next →
+        </button>
+      )}
+    </div>
   )
 }
