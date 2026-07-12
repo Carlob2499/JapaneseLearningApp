@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ItemState, JournalEntry, ProgressExport } from './index'
+import { ItemState, JournalEntry, ProgressExport, RetrievalMode } from './index'
 
 const state = {
   itemId: 'vocab:1358280:たべる',
@@ -15,6 +15,13 @@ describe('progress schemas', () => {
     expect(ItemState.safeParse(state).success).toBe(true)
     expect(ItemState.safeParse({ ...state, stage: 8 }).success).toBe(false)
     expect(ItemState.safeParse({ ...state, stage: -1 }).success).toBe(false)
+  })
+
+  it('defines the retrieval modes and rejects an unknown one', () => {
+    for (const mode of ['recognition', 'production', 'recall']) {
+      expect(RetrievalMode.safeParse(mode).success).toBe(true)
+    }
+    expect(RetrievalMode.safeParse('typed').success).toBe(false)
   })
 
   it('constrains JournalEntry.outcome to the review outcomes', () => {

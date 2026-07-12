@@ -5,6 +5,17 @@ export const Outcome = z.enum(['pass', 'fail', 'partial'])
 export type Outcome = z.infer<typeof Outcome>
 
 /**
+ * Retrieval direction for a study card, escalating with mastery (see the review loop):
+ * `recognition` (cued: JP → meaning), `production` (harder: meaning → JP), `recall`
+ * (uncued: reveal + self-grade). Logged into `JournalEntry.interaction` so the journal
+ * records *how* an item was tested, not just which item. The `interaction` field stays a
+ * free-form string (older entries recorded the item kind), so this is a labelling vocabulary,
+ * not a runtime constraint on the journal.
+ */
+export const RetrievalMode = z.enum(['recognition', 'production', 'recall'])
+export type RetrievalMode = z.infer<typeof RetrievalMode>
+
+/**
  * SRS state for one learnable item (architecture §4/§5). Stored in IndexedDB,
  * keyed by `itemId`. `stage` indexes the interval ladder; `due` is epoch ms.
  */
