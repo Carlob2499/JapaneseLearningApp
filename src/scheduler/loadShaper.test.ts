@@ -3,6 +3,7 @@ import type { ItemState } from '@hikkoshi/schemas'
 import {
   DEFAULT_DUE_CEILING,
   dayIndex,
+  introBudget,
   loadHistogram,
   shapeDueQueue,
   snapToLightestDay,
@@ -83,6 +84,22 @@ describe('shapeDueQueue', () => {
     ]
     const { keep } = shapeDueQueue(due, now, 5)
     expect(keep.map((s) => s.itemId)).toEqual(['early', 'late'])
+  })
+})
+
+describe('introBudget', () => {
+  it('is a per-day cap: repeated sessions in one day do not re-flood', () => {
+    const now = 100 * DAY + 5 * HOUR
+    // Nothing introduced today → full budget.
+    expect(introBudget([], now, 10)).toBe(10)
+    // 4 introduced earlier today → 6 left, regardless of how many sessions ran.
+    const todayStates = Array.from({ length: 4 }, (_, i) => state(`t${i}`, { introducedAt: 100 * DAY }))
+    expect(introBudget(todayStates, now, 10)).toBe(6)
+    // Yesterday's intros don't count against today.
+    expect(introBudget([state('y', { introducedAt: 99 * DAY })], now, 10)).toBe(10)
+    // Never negative.
+    const many = Array.from({ length: 20 }, (_, i) => state(`m${i}`, { introducedAt: 100 * DAY }))
+    expect(introBudget(many, now, 10)).toBe(0)
   })
 })
 

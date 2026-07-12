@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { cp } from 'node:fs/promises'
 import { createReadStream, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { join, normalize, resolve } from 'node:path'
+import { join, normalize, resolve, sep } from 'node:path'
 
 // Deployed at https://<owner>.github.io/JapaneseLearningApp/ — base must match
 // the repo name or every asset URL and the service-worker scope break on Pages.
@@ -27,10 +27,16 @@ function contentPacks(): Plugin {
       server.middlewares.use((req, res, next) => {
         const raw = req.url
         if (!raw) return next()
-        const path = decodeURIComponent(raw.split('?')[0])
+        let path: string
+        try {
+          path = decodeURIComponent(raw.split('?')[0])
+        } catch {
+          return next() // malformed percent-encoding
+        }
         if (!path.startsWith(urlPrefix)) return next()
         const file = normalize(join(packsDir, path.slice(urlPrefix.length)))
-        if (!file.startsWith(packsDir) || !existsSync(file)) return next()
+        // Contain to packsDir (trailing separator so a sibling like packs-secret can't escape).
+        if ((file !== packsDir && !file.startsWith(packsDir + sep)) || !existsSync(file)) return next()
         res.setHeader('Content-Type', 'application/json; charset=utf-8')
         createReadStream(file).pipe(res)
       })

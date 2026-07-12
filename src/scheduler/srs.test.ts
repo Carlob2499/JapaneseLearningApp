@@ -97,4 +97,8 @@ describe('srs', () => {
     const states = [newState('a', NOW)]
     expect(pickNewItems(['a', 'b', 'c', 'd'], states, 2)).toEqual(['b', 'c'])
   })
+
+  it('pickNewItems introduces nothing when the cap is 0 (daily budget spent)', () => {
+    expect(pickNewItems(['a', 'b', 'c'], [], 0)).toEqual([])
+  })
 })

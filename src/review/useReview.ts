@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isHiragana } from 'wanakana'
 import type {
   ItemState,
+  JournalEntry,
   KanjiItem,
   Level,
   Outcome,
@@ -12,8 +13,14 @@ import type {
 } from '@hikkoshi/schemas'
 import { loadLevels, type Content } from '../content/packs'
 import { appendJournal, getAllItemStates, getJournal, putItemState } from '../store/db'
-import { applyReview, dueItems, isLeech, newState, pickNewItems } from '../scheduler/srs'
-import { DEFAULT_DAILY_NEW, loadHistogram, shapeDueQueue, snapToLightestDay } from '../scheduler/loadShaper'
+import { applyReview, dueItems, isLeech, LEECH_WINDOW_MS, newState, pickNewItems } from '../scheduler/srs'
+import {
+  dayIndex,
+  introBudget,
+  loadHistogram,
+  shapeDueQueue,
+  snapToLightestDay,
+} from '../scheduler/loadShaper'
 import { buildChoices, buildPools, retrievalModeFor, type Choice, type Pools } from './choices'
 
 export type Reviewable =
@@ -30,7 +37,6 @@ export interface Presentation {
 
 export type Mode = 'loading' | 'review' | 'practice' | 'summary' | 'error'
 
-const INTRO_CAP = DEFAULT_DAILY_NEW
 const PRACTICE_SIZE = 24
 
 /** Round-robin kanji/vocab/sentence so a fresh session's intro batch is varied (kanji first). */
@@ -93,39 +99,46 @@ export function useReview(levels: Level[]): ReviewApi {
   })
   const shownAtRef = useRef<number>(Date.now())
   const failTsRef = useRef<Map<string, number[]>>(new Map())
+  // Due-day histogram, maintained incrementally so anti-clumping is O(1) per grade.
+  const histRef = useRef<Map<number, number>>(new Map())
 
   useEffect(() => {
     let alive = true
     void (async () => {
       let content: Content
+      let states: ItemState[]
+      let journal: JournalEntry[]
       try {
         content = await loadLevels(levels)
+        ;[states, journal] = await Promise.all([getAllItemStates(), getJournal()])
       } catch (e) {
         if (!alive) return
-        setError(e instanceof Error ? e.message : 'Could not load content')
+        setError(e instanceof Error ? e.message : 'Could not load your progress or content.')
         setMode('error')
         return
       }
-      const [states, journal] = await Promise.all([getAllItemStates(), getJournal()])
       if (!alive) return
+
       const pool = buildPool(content)
       poolRef.current = pool
       poolsRef.current = buildPools(content)
       byIdRef.current = new Map(pool.map((r) => [r.id, r]))
       statesRef.current = new Map(states.map((s) => [s.itemId, s]))
 
-      // Fail history for leech detection (architecture §5), grouped per item.
+      const now = Date.now()
+
+      // Fail history for leech detection (architecture §5) — pruned to the 30-day window at load.
       const failTs = new Map<string, number[]>()
+      const cutoff = now - LEECH_WINDOW_MS
       for (const e of journal) {
-        if (e.outcome !== 'fail') continue
+        if (e.outcome !== 'fail' || e.ts < cutoff) continue
         const arr = failTs.get(e.itemId) ?? []
         arr.push(e.ts)
         failTs.set(e.itemId, arr)
       }
       failTsRef.current = failTs
 
-      const now = Date.now()
-      // Only shape items in the active levels — states from deselected levels stay untouched.
+      // Load-shape the due set (only items in the active levels); slide the lowest-stakes overflow.
       const dueInPool = dueItems(now, states).filter((s) => byIdRef.current.has(s.itemId))
       const { keep, slide } = shapeDueQueue(dueInPool, now)
       for (const s of slide) {
@@ -136,19 +149,19 @@ export function useReview(levels: Level[]): ReviewApi {
         .map((s) => byIdRef.current.get(s.itemId))
         .filter((r): r is Reviewable => r !== undefined)
 
-      const introIds = pickNewItems(
-        pool.map((r) => r.id),
-        states,
-        INTRO_CAP,
-      )
+      // True daily introduction cap: only what's left of today's budget (architecture §5).
+      const introIds = pickNewItems(pool.map((r) => r.id), states, introBudget(states, now))
       for (const id of introIds) {
-        const st = newState(id, Date.now())
+        const st = newState(id, now)
         statesRef.current.set(id, st)
         void putItemState(st)
       }
       const intro = introIds
         .map((id) => byIdRef.current.get(id))
         .filter((r): r is Reviewable => r !== undefined)
+
+      // Seed the histogram from the final scheduled state (post slide + intro).
+      histRef.current = loadHistogram([...statesRef.current.values()])
 
       const session = [...due, ...intro]
       setQueue(session)
@@ -162,36 +175,38 @@ export function useReview(levels: Level[]): ReviewApi {
 
   const grade = useCallback(
     (outcome: Outcome) => {
-      setQueue((q) => {
-        const cur = q[0]
-        if (!cur) return q
-        if (mode === 'review') {
-          const now = Date.now()
-          const prev = statesRef.current.get(cur.id) ?? newState(cur.id, now)
-          // Log the mode the user actually saw — pre-review stage, leech- and reading-aware.
-          const interaction = resolveMode(cur, prev)
-          const latencyMs = Math.max(0, Math.round(now - shownAtRef.current))
-          const next = applyReview(prev, outcome, now)
-          // Track fail history and (re)flag leeches — 3 fails / 30 days (architecture §5).
-          if (outcome === 'fail') {
-            const arr = failTsRef.current.get(cur.id) ?? []
-            arr.push(now)
-            failTsRef.current.set(cur.id, arr)
-          }
-          next.leech = isLeech(failTsRef.current.get(cur.id) ?? [], now)
-          // Anti-clumping: snap the next due to the lightest nearby day.
-          next.due = snapToLightestDay(next.due, now, loadHistogram([...statesRef.current.values()], cur.id))
-          statesRef.current.set(cur.id, next)
-          void putItemState(next)
-          void appendJournal({ itemId: cur.id, ts: now, interaction, outcome, latencyMs })
-          setReviewed((r) => r + 1)
+      const cur = queue[0]
+      if (!cur) return
+      // Side effects run once here (not inside the setQueue updater, which React may double-invoke).
+      if (mode === 'review') {
+        const now = Date.now()
+        const prev = statesRef.current.get(cur.id) ?? newState(cur.id, now)
+        // Log the mode the user actually saw — pre-review stage, leech- and reading-aware.
+        const interaction = resolveMode(cur, prev)
+        const latencyMs = Math.max(0, Math.round(now - shownAtRef.current))
+        const next = applyReview(prev, outcome, now)
+        // Track fail history and (re)flag leeches — 3 fails / 30 days (architecture §5).
+        if (outcome === 'fail') {
+          const arr = failTsRef.current.get(cur.id) ?? []
+          arr.push(now)
+          failTsRef.current.set(cur.id, arr)
         }
-        const rest = q.slice(1)
-        if (rest.length === 0) setMode('summary')
-        return rest
-      })
+        next.leech = isLeech(failTsRef.current.get(cur.id) ?? [], now)
+        // Anti-clumping via the incrementally-maintained histogram: move cur's slot, then snap.
+        const h = histRef.current
+        const oldDay = dayIndex(prev.due)
+        h.set(oldDay, Math.max(0, (h.get(oldDay) ?? 0) - 1))
+        next.due = snapToLightestDay(next.due, now, h)
+        h.set(dayIndex(next.due), (h.get(dayIndex(next.due)) ?? 0) + 1)
+        statesRef.current.set(cur.id, next)
+        void putItemState(next)
+        void appendJournal({ itemId: cur.id, ts: now, interaction, outcome, latencyMs })
+      }
+      setReviewed((r) => r + 1)
+      if (queue.length <= 1) setMode('summary')
+      setQueue((q) => q.slice(1))
     },
-    [mode],
+    [queue, mode],
   )
 
   const practiceMore = useCallback(() => {

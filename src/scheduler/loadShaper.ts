@@ -16,6 +16,17 @@ export function dayIndex(ms: number): number {
   return Math.floor(ms / DAY)
 }
 
+/**
+ * Remaining new-item budget for today: the daily cap minus items already introduced today
+ * (architecture §5's "daily introduction cap"). Keyed on `introducedAt` so repeated sessions in
+ * one day don't re-flood — the cap is per day, not per session.
+ */
+export function introBudget(states: ItemState[], now: number, cap = DEFAULT_DAILY_NEW): number {
+  const today = dayIndex(now)
+  const introducedToday = states.filter((s) => dayIndex(s.introducedAt) === today).length
+  return Math.max(0, cap - introducedToday)
+}
+
 /** Histogram of scheduled due-day → count from item states (optionally excluding one id). */
 export function loadHistogram(states: ItemState[], excludeId?: string): Map<number, number> {
   const h = new Map<number, number>()

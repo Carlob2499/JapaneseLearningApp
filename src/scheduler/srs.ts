@@ -90,9 +90,9 @@ export function pickNewItems(allIds: string[], states: ItemState[], cap = 12): s
   const known = new Set(states.map((s) => s.itemId))
   const fresh: string[] = []
   for (const id of allIds) {
+    if (fresh.length >= cap) break // check before pushing so cap 0 yields none
     if (known.has(id)) continue
     fresh.push(id)
-    if (fresh.length >= cap) break
   }
   return fresh
 }

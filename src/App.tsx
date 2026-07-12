@@ -7,7 +7,7 @@ import './App.css'
 
 export default function App() {
   const [view, setView] = useState<'home' | 'review'>('home')
-  const [levels, setLevels] = useState<Level[]>(getActiveLevels())
+  const [levels, setLevels] = useState<Level[]>(() => getActiveLevels())
 
   function toggleLevel(level: Level) {
     setLevels((prev) => {
