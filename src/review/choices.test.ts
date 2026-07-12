@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildChoices, buildPools, retrievalModeFor, type Pools } from './choices'
-import type { L1Content } from '../content/packs'
+import type { Content } from '../content/packs'
 import type { Reviewable } from './useReview'
 
 /** Deterministic rng in [0, 1) so shuffles are stable across runs. */
@@ -161,7 +161,7 @@ describe('buildChoices', () => {
 
 describe('buildPools', () => {
   it('harvests the primary gloss / meaning / literal / translation of each item', () => {
-    const content: L1Content = {
+    const content: Content = {
       vocab: [vocab('v1', '食べる', [['to eat', 'to consume']]).item, vocab('v2', '飲む', [['to drink']]).item],
       kanji: [kanji('k1', '一', ['one', 'first']).item, kanji('k2', '二', ['two']).item],
       sentences: [sentence('s1', '行くよ。', "I'm going.").item],

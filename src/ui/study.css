@@ -200,6 +200,39 @@
   }
 }
 
+/* Level picker */
+.level-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.level-chip {
+  display: grid;
+  gap: 2px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font: inherit;
+  cursor: pointer;
+  min-width: 68px;
+}
+.level-chip.on {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  color: var(--ink);
+}
+.level-chip .level-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.level-chip .level-count {
+  font-size: 11px;
+  color: var(--muted);
+}
+
 /* About disclosure */
 .about {
   font-size: 13px;

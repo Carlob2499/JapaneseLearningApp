@@ -2,13 +2,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type {
   ItemState,
   KanjiItem,
+  Level,
   Outcome,
   RetrievalMode,
   SentenceItem,
   StrokeItem,
   VocabItem,
 } from '@hikkoshi/schemas'
-import { loadL1, type L1Content } from '../content/packs'
+import { loadLevels, type Content } from '../content/packs'
 import { appendJournal, getAllItemStates, getJournal, putItemState } from '../store/db'
 import { applyReview, dueItems, isLeech, newState, pickNewItems } from '../scheduler/srs'
 import { DEFAULT_DAILY_NEW, loadHistogram, shapeDueQueue, snapToLightestDay } from '../scheduler/loadShaper'
@@ -26,13 +27,13 @@ export interface Presentation {
   choices?: Choice[]
 }
 
-export type Mode = 'loading' | 'review' | 'practice' | 'summary'
+export type Mode = 'loading' | 'review' | 'practice' | 'summary' | 'error'
 
 const INTRO_CAP = DEFAULT_DAILY_NEW
 const PRACTICE_SIZE = 24
 
 /** Round-robin kanji/vocab/sentence so a fresh session's intro batch is varied (kanji first). */
-function buildPool(c: L1Content): Reviewable[] {
+function buildPool(c: Content): Reviewable[] {
   const kanji = c.kanji.map<Reviewable>((k) => ({
     id: k.id,
     kind: 'kanji',
@@ -57,12 +58,14 @@ export interface ReviewApi {
   remaining: number
   reviewed: number
   sessionSize: number
+  error: string | null
   grade: (outcome: Outcome) => void
   practiceMore: () => void
 }
 
-export function useReview(): ReviewApi {
+export function useReview(levels: Level[]): ReviewApi {
   const [mode, setMode] = useState<Mode>('loading')
+  const [error, setError] = useState<string | null>(null)
   const [queue, setQueue] = useState<Reviewable[]>([])
   const [reviewed, setReviewed] = useState(0)
   const [sessionSize, setSessionSize] = useState(0)
@@ -82,7 +85,15 @@ export function useReview(): ReviewApi {
   useEffect(() => {
     let alive = true
     void (async () => {
-      const content = await loadL1()
+      let content: Content
+      try {
+        content = await loadLevels(levels)
+      } catch (e) {
+        if (!alive) return
+        setError(e instanceof Error ? e.message : 'Could not load content')
+        setMode('error')
+        return
+      }
       const [states, journal] = await Promise.all([getAllItemStates(), getJournal()])
       if (!alive) return
       const pool = buildPool(content)
@@ -134,7 +145,7 @@ export function useReview(): ReviewApi {
     return () => {
       alive = false
     }
-  }, [])
+  }, [levels])
 
   const grade = useCallback(
     (outcome: Outcome) => {
@@ -211,6 +222,7 @@ export function useReview(): ReviewApi {
     remaining: queue.length,
     reviewed,
     sessionSize,
+    error,
     grade,
     practiceMore,
   }

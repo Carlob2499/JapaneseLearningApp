@@ -1,13 +1,24 @@
 import { useState } from 'react'
+import type { Level } from '@hikkoshi/schemas'
 import Home from './ui/Home'
 import ReviewSession from './ui/ReviewSession'
+import { getActiveLevels, setActiveLevels } from './store/settings'
 import './App.css'
 
 export default function App() {
   const [view, setView] = useState<'home' | 'review'>('home')
+  const [levels, setLevels] = useState<Level[]>(getActiveLevels())
+
+  function toggleLevel(level: Level) {
+    setLevels((prev) => {
+      const next = prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]
+      return setActiveLevels(next) // persists, canonicalises, never empty
+    })
+  }
+
   return view === 'home' ? (
-    <Home onStart={() => setView('review')} />
+    <Home levels={levels} onToggleLevel={toggleLevel} onStart={() => setView('review')} />
   ) : (
-    <ReviewSession onHome={() => setView('home')} />
+    <ReviewSession levels={levels} onHome={() => setView('home')} />
   )
 }

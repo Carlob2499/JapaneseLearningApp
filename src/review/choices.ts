@@ -1,5 +1,5 @@
 import type { RetrievalMode } from '@hikkoshi/schemas'
-import type { L1Content } from '../content/packs'
+import type { Content } from '../content/packs'
 import type { Reviewable } from './useReview'
 
 /** A single multiple-choice option. `text` is verbatim dataset content (D-002). */
@@ -33,7 +33,7 @@ export interface Pools {
 }
 
 /** Harvest the distractor pools once from loaded content. */
-export function buildPools(content: L1Content): Pools {
+export function buildPools(content: Content): Pools {
   return {
     vocabGloss: content.vocab
       .map((v) => v.senses[0]?.gloss[0])

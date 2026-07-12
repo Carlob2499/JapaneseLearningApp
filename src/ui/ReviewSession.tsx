@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { Outcome } from '@hikkoshi/schemas'
+import type { Level, Outcome } from '@hikkoshi/schemas'
 import { useReview, type Presentation, type Reviewable } from '../review/useReview'
 import { ChoiceCard, KanjiCard, SentenceCard, VocabCard } from './cards'
 import './study.css'
@@ -58,13 +58,30 @@ function Card({ p, onGrade }: { p: Presentation; onGrade: (o: Outcome) => void }
   )
 }
 
-export default function ReviewSession({ onHome }: { onHome: () => void }) {
-  const { mode, view, remaining, reviewed, sessionSize, grade, practiceMore } = useReview()
+export default function ReviewSession({ levels, onHome }: { levels: Level[]; onHome: () => void }) {
+  const { mode, view, remaining, reviewed, sessionSize, error, grade, practiceMore } = useReview(levels)
 
   if (mode === 'loading') {
     return (
       <main className="shell">
-        <p className="loading">Loading N5 content…</p>
+        <p className="loading">Loading your content…</p>
+      </main>
+    )
+  }
+
+  if (mode === 'error') {
+    return (
+      <main className="shell">
+        <section className="card summary">
+          <h2>Couldn't load content</h2>
+          <p>
+            {error ?? 'Something went wrong.'} A level beyond N5 needs to be online once to download it
+            for offline use.
+          </p>
+          <button className="ghost-btn" onClick={onHome}>
+            Back home
+          </button>
+        </section>
       </main>
     )
   }

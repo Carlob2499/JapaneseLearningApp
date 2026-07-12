@@ -1,11 +1,45 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { cp } from 'node:fs/promises'
+import { createReadStream, existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { join, normalize, resolve } from 'node:path'
 
 // Deployed at https://<owner>.github.io/JapaneseLearningApp/ — base must match
 // the repo name or every asset URL and the service-worker scope break on Pages.
 const BASE = '/JapaneseLearningApp/'
+const ROOT = fileURLToPath(new URL('.', import.meta.url))
+
+/**
+ * Serve the content packs as static JSON: a dev middleware (so `fetch` works in `vite dev`)
+ * plus a build copy of content/packs → dist/packs (so L2–L5 are reachable on Pages). L1
+ * stays bundled via dynamic import (precached, offline day-one); higher levels are fetched
+ * and runtime-cached. content/packs remains the single source of truth — no duplication.
+ */
+function contentPacks(): Plugin {
+  const packsDir = resolve(ROOT, 'content/packs')
+  const urlPrefix = `${BASE}packs/`
+  return {
+    name: 'hikkoshi-content-packs',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const raw = req.url
+        if (!raw) return next()
+        const path = decodeURIComponent(raw.split('?')[0])
+        if (!path.startsWith(urlPrefix)) return next()
+        const file = normalize(join(packsDir, path.slice(urlPrefix.length)))
+        if (!file.startsWith(packsDir) || !existsSync(file)) return next()
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        createReadStream(file).pipe(res)
+      })
+    },
+    async closeBundle() {
+      await cp(packsDir, resolve(ROOT, 'dist/packs'), { recursive: true })
+    },
+  }
+}
 
 export default defineConfig({
   base: BASE,
@@ -14,6 +48,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    contentPacks(),
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png'],
@@ -36,10 +71,24 @@ export default defineConfig({
       },
       workbox: {
         // Versioned precache generated from actual build output (brief requirement:
-        // precache kept in sync with build). Packs will join this list in a later session.
+        // precache kept in sync with build). L1 packs are bundled JS chunks caught by the
+        // glob; L2–L5 JSON is runtime-cached below (lazy, so first load stays light).
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,webmanifest}'],
         navigateFallback: `${BASE}index.html`,
         cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            // Fetched higher-level packs: serve from cache, refresh in the background —
+            // available offline after the first online visit to that level.
+            urlPattern: new RegExp(`${BASE}packs/.*\\.json$`),
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'hikkoshi-packs',
+              expiration: { maxEntries: 40 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
       devOptions: { enabled: false },
     }),
