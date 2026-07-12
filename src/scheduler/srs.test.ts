@@ -1,9 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { applyReview, dueItems, newState, pickNewItems, STAGE_INTERVALS_MS } from './srs'
+import { applyReview, dueItems, newState, nudgeMultiplier, pickNewItems, STAGE_INTERVALS_MS } from './srs'
 
 const NOW = 1_700_000_000_000
 const HOUR = 3_600_000
 const DAY = 24 * HOUR
+
+/** The scheduled interval for a stage, scaled by the nudge the packed history implies. */
+function expectedDue(stage: number, lastOutcomes: number): number {
+  return NOW + Math.round(STAGE_INTERVALS_MS[stage] * nudgeMultiplier(lastOutcomes))
+}
 
 describe('srs', () => {
   it('introduces a new item at stage 0, due now', () => {
@@ -11,17 +16,18 @@ describe('srs', () => {
     expect(s).toMatchObject({ itemId: 'a', stage: 0, due: NOW, lapses: 0 })
   })
 
-  it('pass advances one stage and schedules the next interval', () => {
+  it('pass advances one stage and schedules the nudged next interval', () => {
     const s = applyReview(newState('a', NOW), 'pass', NOW)
     expect(s.stage).toBe(1)
-    expect(s.due).toBe(NOW + STAGE_INTERVALS_MS[1]) // 4h
+    expect(s.lastOutcomes).toBe(1)
+    expect(s.due).toBe(expectedDue(1, s.lastOutcomes)) // ~4h, nudged
   })
 
   it('pass caps at the max stage', () => {
     let s = { ...newState('a', NOW), stage: 7, due: NOW }
     s = applyReview(s, 'pass', NOW)
     expect(s.stage).toBe(7)
-    expect(s.due).toBe(NOW + STAGE_INTERVALS_MS[7])
+    expect(s.due).toBe(expectedDue(7, s.lastOutcomes))
   })
 
   it('fail drops two stages (min 1), counts a lapse, reschedules', () => {
@@ -29,7 +35,26 @@ describe('srs', () => {
     const s = applyReview(at5, 'fail', NOW)
     expect(s.stage).toBe(3)
     expect(s.lapses).toBe(1)
-    expect(s.due).toBe(NOW + STAGE_INTERVALS_MS[3])
+    expect(s.due).toBe(expectedDue(3, s.lastOutcomes))
+  })
+
+  it('nudge multiplier stays in [0.8, 1.3] and rewards recent passes', () => {
+    expect(nudgeMultiplier(0b0000)).toBe(0.8) // all miss
+    expect(nudgeMultiplier(0b1111)).toBe(1.3) // all pass
+    expect(nudgeMultiplier(0b0101)).toBeCloseTo(1.05) // 2 of last 4
+    for (const bits of [0, 1, 0b1010, 0xffff, 0b0111]) {
+      const m = nudgeMultiplier(bits)
+      expect(m).toBeGreaterThanOrEqual(0.8)
+      expect(m).toBeLessThanOrEqual(1.3)
+    }
+  })
+
+  it('a streak of passes stretches the interval versus a single pass', () => {
+    let s = newState('a', NOW)
+    for (let i = 0; i < 4; i++) s = applyReview({ ...s, due: NOW }, 'pass', NOW)
+    // stage 4 reached; four passes in history → 1.3× the ladder value
+    expect(s.stage).toBe(4)
+    expect(s.due).toBe(NOW + Math.round(STAGE_INTERVALS_MS[4] * 1.3))
   })
 
   it('fail never drops below stage 1', () => {
