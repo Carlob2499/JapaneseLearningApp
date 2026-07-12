@@ -67,6 +67,7 @@ describe('item schemas', () => {
       kind: 'strokes',
       id: 'strokes:水',
       literal: '水',
+      level: 'L1',
       kanjivgId: '06c34',
       viewBox: '0 0 109 109',
       strokes: ['M52,15c1,1...', 'M17,45c1,0...'],

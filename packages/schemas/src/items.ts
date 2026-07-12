@@ -83,6 +83,7 @@ export const StrokeItem = z.object({
   kind: z.literal('strokes'),
   id: z.string().min(1),
   literal: z.string().min(1),
+  level: Level,
   kanjivgId: z.string().min(1),
   viewBox: z.string().min(1),
   strokes: z.array(z.string().min(1)).min(1),
