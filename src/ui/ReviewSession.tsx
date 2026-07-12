@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import type { Level, Outcome } from '@hikkoshi/schemas'
 import { useReview, type Presentation, type Reviewable } from '../review/useReview'
-import { ChoiceCard, KanjiCard, SentenceCard, VocabCard } from './cards'
+import { ChoiceCard, KanjiCard, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
 
 const KIND_LABEL: Record<Reviewable['kind'], string> = {
@@ -45,6 +45,18 @@ function multipleChoicePrompt(
 
 function Card({ p, onGrade }: { p: Presentation; onGrade: (o: Outcome) => void }) {
   const { reviewable: r, mode, choices } = p
+  if (mode === 'typed') {
+    return r.kind === 'vocab' ? (
+      <TypedCard
+        kind={KIND_LABEL[r.kind]}
+        prompt={<span className="jp-xl">{r.item.expression}</span>}
+        answer={r.item.reading}
+        onGrade={onGrade}
+      />
+    ) : (
+      <RecallCard r={r} onGrade={onGrade} />
+    )
+  }
   if (mode === 'recall' || !choices) return <RecallCard r={r} onGrade={onGrade} />
   const { prompt, question } = multipleChoicePrompt(r, mode)
   return (

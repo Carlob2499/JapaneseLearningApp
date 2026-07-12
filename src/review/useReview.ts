@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { isHiragana } from 'wanakana'
 import type {
   ItemState,
   KanjiItem,
@@ -50,6 +51,17 @@ function buildPool(c: Content): Reviewable[] {
     if (sentence[i]) out.push(sentence[i])
   }
   return out
+}
+
+/**
+ * Retrieval mode for an item (leech-aware), with one runtime guard the pure selector can't make:
+ * typed reading only works when the reading is clean hiragana — katakana loanwords make romaji
+ * long-vowel input too fiddly, so those fall back to free recall.
+ */
+function resolveMode(r: Reviewable, st: ItemState | undefined): RetrievalMode {
+  const mode = retrievalModeFor(r.kind, st?.stage ?? 0, { leech: st?.leech, seed: st?.lapses })
+  if (mode === 'typed' && r.kind === 'vocab' && !isHiragana(r.item.reading)) return 'recall'
+  return mode
 }
 
 export interface ReviewApi {
@@ -155,11 +167,8 @@ export function useReview(levels: Level[]): ReviewApi {
         if (mode === 'review') {
           const now = Date.now()
           const prev = statesRef.current.get(cur.id) ?? newState(cur.id, now)
-          // Log the mode the user actually saw — pre-review stage, leech-aware.
-          const interaction = retrievalModeFor(cur.kind, prev.stage, {
-            leech: prev.leech,
-            seed: prev.lapses,
-          })
+          // Log the mode the user actually saw — pre-review stage, leech- and reading-aware.
+          const interaction = resolveMode(cur, prev)
           const latencyMs = Math.max(0, Math.round(now - shownAtRef.current))
           const next = applyReview(prev, outcome, now)
           // Track fail history and (re)flag leeches — 3 fails / 30 days (architecture §5).
@@ -205,9 +214,10 @@ export function useReview(levels: Level[]): ReviewApi {
   // Memoized per item so choices don't reshuffle on unrelated re-renders.
   const view = useMemo<Presentation | null>(() => {
     if (!current) return null
-    const st = statesRef.current.get(current.id)
-    const rmode = retrievalModeFor(current.kind, st?.stage ?? 0, { leech: st?.leech, seed: st?.lapses })
-    const choices = rmode === 'recall' ? undefined : buildChoices(current, rmode, poolsRef.current)
+    const rmode = resolveMode(current, statesRef.current.get(current.id))
+    // Recall and typed cards need no multiple-choice options.
+    const choices =
+      rmode === 'recall' || rmode === 'typed' ? undefined : buildChoices(current, rmode, poolsRef.current)
     return { reviewable: current, mode: rmode, choices }
   }, [current])
 

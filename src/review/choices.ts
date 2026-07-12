@@ -47,17 +47,17 @@ export function buildPools(content: Content): Pools {
 
 /** Retrieval modes available per kind, easiest → hardest — the leech variety cycle draws from here. */
 const MODES_BY_KIND: Record<CardKind, RetrievalMode[]> = {
-  vocab: ['recognition', 'production', 'recall'],
+  vocab: ['recognition', 'production', 'typed', 'recall'],
   kanji: ['recognition', 'production', 'recall'],
   sentence: ['recognition', 'recall'],
 }
 
 /**
- * Retrieval mode for a card, escalating with mastery: recognition while an item is new
- * (stage 0–1), production once it is sticking (2–3), free recall once mature (4+).
- * Sentences have no natural production form, so they use recognition in that band.
- * A leech (architecture §5) is forced into varied modes — cycling by `seed` — rather than
- * hammering the same failing drill.
+ * Retrieval mode for a card, escalating with mastery: recognition (stage 0–1) → production
+ * (2–3) → typed reading (4–5, vocab only) → free recall (6+). Kanji have no unambiguous typed
+ * answer (multiple on/kun readings) so they go straight to recall at 4+; sentences have no
+ * production/typed form and stay recognition until recall at 4+. A leech (architecture §5) is
+ * forced into varied modes — cycling by `seed` — rather than hammering the same failing drill.
  */
 export function retrievalModeFor(
   kind: CardKind,
@@ -70,6 +70,7 @@ export function retrievalModeFor(
   }
   if (stage <= 1) return 'recognition'
   if (stage <= 3) return kind === 'sentence' ? 'recognition' : 'production'
+  if (kind === 'vocab' && stage <= 5) return 'typed'
   return 'recall'
 }
 

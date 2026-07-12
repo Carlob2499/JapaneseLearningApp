@@ -18,10 +18,10 @@ describe('progress schemas', () => {
   })
 
   it('defines the retrieval modes and rejects an unknown one', () => {
-    for (const mode of ['recognition', 'production', 'recall']) {
+    for (const mode of ['recognition', 'production', 'typed', 'recall']) {
       expect(RetrievalMode.safeParse(mode).success).toBe(true)
     }
-    expect(RetrievalMode.safeParse('typed').success).toBe(false)
+    expect(RetrievalMode.safeParse('speed').success).toBe(false)
   })
 
   it('constrains JournalEntry.outcome to the review outcomes', () => {

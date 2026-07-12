@@ -12,7 +12,7 @@ export type Outcome = z.infer<typeof Outcome>
  * free-form string (older entries recorded the item kind), so this is a labelling vocabulary,
  * not a runtime constraint on the journal.
  */
-export const RetrievalMode = z.enum(['recognition', 'production', 'recall'])
+export const RetrievalMode = z.enum(['recognition', 'production', 'typed', 'recall'])
 export type RetrievalMode = z.infer<typeof RetrievalMode>
 
 /**

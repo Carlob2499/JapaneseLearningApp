@@ -1,4 +1,5 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { toHiragana, toKana } from 'wanakana'
 import type { KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import type { Choice } from '../review/choices'
 import StrokeViewer from './StrokeViewer'
@@ -162,6 +163,71 @@ export function ChoiceCard({
         <button className="next-btn" onClick={() => onGrade(selected.correct ? 'pass' : 'fail')}>
           Next →
         </button>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Typed production: the learner types the reading (romaji auto-converts to kana via wanakana),
+ * checks it against the verified reading, then advances. Correct → pass, wrong → fail. Grading
+ * normalises both sides to hiragana so kana or romaji input both work.
+ */
+export function TypedCard({
+  kind,
+  prompt,
+  answer,
+  onGrade,
+}: {
+  kind: string
+  prompt: ReactNode
+  answer: string
+  onGrade: (o: Outcome) => void
+}) {
+  const [value, setValue] = useState('')
+  const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  useEffect(() => inputRef.current?.focus(), [])
+
+  const target = toHiragana(answer).trim()
+  function check() {
+    if (result !== null || value.trim() === '') return
+    setResult(toHiragana(value).trim() === target ? 'correct' : 'wrong')
+  }
+
+  return (
+    <div className="study-card">
+      <span className="card-kind">{kind}</span>
+      <div className="card-front">{prompt}</div>
+      <p className="choice-q">Type the reading</p>
+      <input
+        ref={inputRef}
+        className={`typed-input${result ? ` ${result}` : ''}`}
+        value={value}
+        onChange={(e) => setValue(toKana(e.target.value, { IMEMode: true }))}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') check()
+        }}
+        disabled={result !== null}
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+        aria-label="Reading"
+        data-testid="typed-input"
+      />
+      {result === null ? (
+        <button className="next-btn" onClick={check} disabled={value.trim() === ''}>
+          Check
+        </button>
+      ) : (
+        <>
+          <p className={`typed-feedback ${result}`} data-testid="typed-feedback">
+            {result === 'correct' ? '正解 · correct' : `Answer: ${target}`}
+          </p>
+          <button className="next-btn" onClick={() => onGrade(result === 'correct' ? 'pass' : 'fail')}>
+            Next →
+          </button>
+        </>
       )}
     </div>
   )

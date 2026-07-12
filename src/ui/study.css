@@ -150,6 +150,40 @@
   cursor: pointer;
 }
 
+/* Typed production */
+.typed-input {
+  width: 100%;
+  max-width: 340px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 22px;
+  text-align: center;
+}
+.typed-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.typed-input.correct {
+  border-color: var(--ok);
+}
+.typed-input.wrong {
+  border-color: #b3402f;
+}
+.typed-feedback {
+  margin: 0;
+  font-size: 16px;
+}
+.typed-feedback.correct {
+  color: var(--ok);
+}
+.typed-feedback.wrong {
+  color: #b3402f;
+}
+
 /* Stroke viewer */
 .stroke-viewer {
   display: grid;

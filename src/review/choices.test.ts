@@ -72,14 +72,19 @@ const pools: Pools = {
 }
 
 describe('retrievalModeFor', () => {
-  it('escalates with stage, with a sentence fallback for the production band', () => {
+  it('escalates per kind: recognition → production → typed (vocab) → recall', () => {
+    // vocab has the full ladder
     expect(retrievalModeFor('vocab', 0)).toBe('recognition')
     expect(retrievalModeFor('vocab', 1)).toBe('recognition')
     expect(retrievalModeFor('vocab', 2)).toBe('production')
+    expect(retrievalModeFor('vocab', 4)).toBe('typed')
+    expect(retrievalModeFor('vocab', 5)).toBe('typed')
+    expect(retrievalModeFor('vocab', 6)).toBe('recall')
+    // kanji skip typed (ambiguous readings) → recall at 4+
     expect(retrievalModeFor('kanji', 3)).toBe('production')
-    expect(retrievalModeFor('vocab', 4)).toBe('recall')
-    expect(retrievalModeFor('vocab', 7)).toBe('recall')
-    expect(retrievalModeFor('sentence', 2)).toBe('recognition') // no production form
+    expect(retrievalModeFor('kanji', 4)).toBe('recall')
+    // sentences have no production/typed form
+    expect(retrievalModeFor('sentence', 2)).toBe('recognition')
     expect(retrievalModeFor('sentence', 5)).toBe('recall')
   })
 
