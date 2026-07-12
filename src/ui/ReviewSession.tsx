@@ -1,9 +1,17 @@
+import type { ReactNode } from 'react'
 import type { Outcome } from '@hikkoshi/schemas'
-import { useReview, type Reviewable } from '../review/useReview'
-import { KanjiCard, SentenceCard, VocabCard } from './cards'
+import { useReview, type Presentation, type Reviewable } from '../review/useReview'
+import { ChoiceCard, KanjiCard, SentenceCard, VocabCard } from './cards'
 import './study.css'
 
-function Card({ r, onGrade }: { r: Reviewable; onGrade: (o: Outcome) => void }) {
+const KIND_LABEL: Record<Reviewable['kind'], string> = {
+  vocab: 'Vocabulary',
+  kanji: 'Kanji',
+  sentence: 'Sentence',
+}
+
+/** Free-recall (mature items): reveal + self-grade, reusing the existing cards. */
+function RecallCard({ r, onGrade }: { r: Reviewable; onGrade: (o: Outcome) => void }) {
   switch (r.kind) {
     case 'vocab':
       return <VocabCard item={r.item} onGrade={onGrade} />
@@ -14,8 +22,44 @@ function Card({ r, onGrade }: { r: Reviewable; onGrade: (o: Outcome) => void }) 
   }
 }
 
+/** The prompt + question shown above the options, per kind and direction. */
+function multipleChoicePrompt(
+  r: Reviewable,
+  mode: 'recognition' | 'production',
+): { prompt: ReactNode; question: string } {
+  if (r.kind === 'vocab') {
+    return mode === 'production'
+      ? {
+          prompt: <span className="jp-lg">{r.item.senses[0]?.gloss[0] ?? r.item.expression}</span>,
+          question: 'Which word?',
+        }
+      : { prompt: <span className="jp-xl">{r.item.expression}</span>, question: 'Which meaning?' }
+  }
+  if (r.kind === 'kanji') {
+    return mode === 'production'
+      ? { prompt: <span className="jp-lg">{r.item.meanings[0]}</span>, question: 'Which kanji?' }
+      : { prompt: <span className="jp-xl">{r.item.literal}</span>, question: 'Which meaning?' }
+  }
+  return { prompt: <span className="jp-lg">{r.item.ja}</span>, question: 'Which translation?' }
+}
+
+function Card({ p, onGrade }: { p: Presentation; onGrade: (o: Outcome) => void }) {
+  const { reviewable: r, mode, choices } = p
+  if (mode === 'recall' || !choices) return <RecallCard r={r} onGrade={onGrade} />
+  const { prompt, question } = multipleChoicePrompt(r, mode)
+  return (
+    <ChoiceCard
+      kind={KIND_LABEL[r.kind]}
+      prompt={prompt}
+      question={question}
+      choices={choices}
+      onGrade={onGrade}
+    />
+  )
+}
+
 export default function ReviewSession({ onHome }: { onHome: () => void }) {
-  const { mode, current, remaining, reviewed, sessionSize, grade, practiceMore } = useReview()
+  const { mode, view, remaining, reviewed, sessionSize, grade, practiceMore } = useReview()
 
   if (mode === 'loading') {
     return (
@@ -58,9 +102,9 @@ export default function ReviewSession({ onHome }: { onHome: () => void }) {
           {mode === 'practice' ? 'Practice' : 'Review'} · {done}/{sessionSize}
         </span>
       </div>
-      {current && (
-        <div key={current.id} className="card-slot">
-          <Card r={current} onGrade={grade} />
+      {view && (
+        <div key={view.reviewable.id} className="card-slot">
+          <Card p={view} onGrade={grade} />
         </div>
       )}
     </main>

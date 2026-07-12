@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type {
   ItemState,
   KanjiItem,
   Outcome,
+  RetrievalMode,
   SentenceItem,
   StrokeItem,
   VocabItem,
@@ -10,11 +11,19 @@ import type {
 import { loadL1, type L1Content } from '../content/packs'
 import { appendJournal, getAllItemStates, putItemState } from '../store/db'
 import { applyReview, dueItems, newState, pickNewItems } from '../scheduler/srs'
+import { buildChoices, buildPools, retrievalModeFor, type Choice, type Pools } from './choices'
 
 export type Reviewable =
   | { id: string; kind: 'vocab'; item: VocabItem }
   | { id: string; kind: 'kanji'; item: KanjiItem; stroke?: StrokeItem }
   | { id: string; kind: 'sentence'; item: SentenceItem }
+
+/** What to show for the head-of-queue item: the item, its retrieval mode, and (for MC) the choices. */
+export interface Presentation {
+  reviewable: Reviewable
+  mode: RetrievalMode
+  choices?: Choice[]
+}
 
 export type Mode = 'loading' | 'review' | 'practice' | 'summary'
 
@@ -43,7 +52,7 @@ function buildPool(c: L1Content): Reviewable[] {
 
 export interface ReviewApi {
   mode: Mode
-  current: Reviewable | null
+  view: Presentation | null
   remaining: number
   reviewed: number
   sessionSize: number
@@ -59,6 +68,14 @@ export function useReview(): ReviewApi {
   const poolRef = useRef<Reviewable[]>([])
   const byIdRef = useRef<Map<string, Reviewable>>(new Map())
   const statesRef = useRef<Map<string, ItemState>>(new Map())
+  const poolsRef = useRef<Pools>({
+    vocabGloss: [],
+    vocabWord: [],
+    kanjiMeaning: [],
+    kanjiLiteral: [],
+    sentenceEn: [],
+  })
+  const shownAtRef = useRef<number>(Date.now())
 
   useEffect(() => {
     let alive = true
@@ -68,6 +85,7 @@ export function useReview(): ReviewApi {
       if (!alive) return
       const pool = buildPool(content)
       poolRef.current = pool
+      poolsRef.current = buildPools(content)
       byIdRef.current = new Map(pool.map((r) => [r.id, r]))
       statesRef.current = new Map(states.map((s) => [s.itemId, s]))
 
@@ -108,10 +126,13 @@ export function useReview(): ReviewApi {
         if (mode === 'review') {
           const now = Date.now()
           const prev = statesRef.current.get(cur.id) ?? newState(cur.id, now)
+          // Log the mode the user actually saw — derived from the pre-review stage.
+          const interaction = retrievalModeFor(cur.kind, prev.stage)
+          const latencyMs = Math.max(0, Math.round(now - shownAtRef.current))
           const next = applyReview(prev, outcome, now)
           statesRef.current.set(cur.id, next)
           void putItemState(next)
-          void appendJournal({ itemId: cur.id, ts: now, interaction: cur.kind, outcome })
+          void appendJournal({ itemId: cur.id, ts: now, interaction, outcome, latencyMs })
           setReviewed((r) => r + 1)
         }
         const rest = q.slice(1)
@@ -137,9 +158,26 @@ export function useReview(): ReviewApi {
     setMode('practice')
   }, [])
 
+  const current = queue[0] ?? null
+
+  // Presentation for the head item: mode by mastery, MC choices sourced from the pools.
+  // Memoized per item so choices don't reshuffle on unrelated re-renders.
+  const view = useMemo<Presentation | null>(() => {
+    if (!current) return null
+    const stage = statesRef.current.get(current.id)?.stage ?? 0
+    const rmode = retrievalModeFor(current.kind, stage)
+    const choices = rmode === 'recall' ? undefined : buildChoices(current, rmode, poolsRef.current)
+    return { reviewable: current, mode: rmode, choices }
+  }, [current])
+
+  // Reset the latency clock whenever a new card is shown.
+  useEffect(() => {
+    shownAtRef.current = Date.now()
+  }, [current])
+
   return {
     mode,
-    current: queue[0] ?? null,
+    view,
     remaining: queue.length,
     reviewed,
     sessionSize,
