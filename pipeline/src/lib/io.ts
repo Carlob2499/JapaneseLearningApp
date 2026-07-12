@@ -1,6 +1,8 @@
-import { execFile } from 'node:child_process'
+import { execFile, spawn } from 'node:child_process'
 import { promisify } from 'node:util'
 import { createHash } from 'node:crypto'
+import { createWriteStream } from 'node:fs'
+import { pipeline } from 'node:stream/promises'
 import { gunzipSync } from 'node:zlib'
 
 const execFileP = promisify(execFile)
@@ -28,4 +30,24 @@ export function sha256(buf: Buffer): string {
 
 export function gunzipIf(buf: Buffer, gzipped: boolean): Buffer {
   return gzipped ? gunzipSync(buf) : buf
+}
+
+/**
+ * Decompress a .bz2 file to `dest` by streaming through `bzip2 -dc` (Node has no
+ * built-in bzip2). Streaming keeps memory flat for the large English export.
+ */
+export async function bunzip2To(src: string, dest: string): Promise<void> {
+  const proc = spawn('bzip2', ['-dc', src])
+  const errChunks: Buffer[] = []
+  proc.stderr.on('data', (d: Buffer) => errChunks.push(d))
+  const [code] = await Promise.all([
+    new Promise<number>((resolve, reject) => {
+      proc.on('close', resolve)
+      proc.on('error', reject)
+    }),
+    pipeline(proc.stdout, createWriteStream(dest)),
+  ])
+  if (code !== 0) {
+    throw new Error(`bzip2 -dc ${src} exited ${code}: ${Buffer.concat(errChunks).toString()}`)
+  }
 }

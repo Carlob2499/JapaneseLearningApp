@@ -12,7 +12,7 @@ import type { Level } from '@hikkoshi/schemas'
  * first-party from EDRDG (CC BY-SA 4.0). See D-007.
  */
 
-export type Compression = 'gzip' | 'none'
+export type Compression = 'gzip' | 'bzip2' | 'none'
 
 export interface SourceSpec {
   readonly key: string
@@ -76,7 +76,57 @@ export const TAG_SOURCES: readonly SourceSpec[] = [
   },
 ]
 
-export const ALL_SOURCES: readonly SourceSpec[] = [...EDRDG_SOURCES, ...TAG_SOURCES]
+/**
+ * Tatoeba example sentences — minimal reachable set via the per_language/jpn subtree
+ * (avoids the 287 MB / 142 MB global dumps). Single-file `.tsv.bz2`, tab-separated.
+ * Default license CC BY 2.0 FR; the CC0 subset is segregated in its own file.
+ */
+const TATOEBA_ATTR =
+  'Example sentences from the Tatoeba Project (https://tatoeba.org), CC BY 2.0 FR; per-sentence author credited. A CC0 subset is identified separately.'
+export const TATOEBA_SOURCES: readonly SourceSpec[] = [
+  {
+    key: 'tatoeba-jpn-detailed',
+    name: 'Tatoeba Japanese sentences (detailed)',
+    url: 'https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences_detailed.tsv.bz2',
+    compression: 'bzip2',
+    outfile: 'jpn_sentences_detailed.tsv',
+    license: 'CC-BY-2.0-FR',
+    attribution: TATOEBA_ATTR,
+  },
+  {
+    key: 'tatoeba-jpn-eng-links',
+    name: 'Tatoeba jpn→eng translation links',
+    url: 'https://downloads.tatoeba.org/exports/per_language/jpn/jpn-eng_links.tsv.bz2',
+    compression: 'bzip2',
+    outfile: 'jpn-eng_links.tsv',
+    license: 'CC-BY-2.0-FR',
+    attribution: TATOEBA_ATTR,
+  },
+  {
+    key: 'tatoeba-eng',
+    name: 'Tatoeba English sentences',
+    url: 'https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2',
+    compression: 'bzip2',
+    outfile: 'eng_sentences.tsv',
+    license: 'CC-BY-2.0-FR',
+    attribution: TATOEBA_ATTR,
+  },
+  {
+    key: 'tatoeba-jpn-cc0',
+    name: 'Tatoeba Japanese CC0 subset',
+    url: 'https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences_CC0.tsv.bz2',
+    compression: 'bzip2',
+    outfile: 'jpn_sentences_CC0.tsv',
+    license: 'CC0-1.0',
+    attribution: 'Tatoeba CC0 sentence subset (https://tatoeba.org), public domain.',
+  },
+]
+
+export const ALL_SOURCES: readonly SourceSpec[] = [
+  ...EDRDG_SOURCES,
+  ...TAG_SOURCES,
+  ...TATOEBA_SOURCES,
+]
 
 /** EDRDG licence page — re-checked at fetch time so a license change fails the build. */
 export const EDRDG_LICENCE_URL = 'https://www.edrdg.org/edrdg/licence.html'

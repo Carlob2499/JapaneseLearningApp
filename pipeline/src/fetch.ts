@@ -6,7 +6,7 @@ import {
   EDRDG_LICENCE_URL,
   type SourceSpec,
 } from './config'
-import { curlDownload, curlText, gunzipIf, sha256 } from './lib/io'
+import { bunzip2To, curlDownload, curlText, gunzipIf, sha256 } from './lib/io'
 import { CONTENT_DIR, DOWNLOADS_DIR } from './lib/paths'
 
 interface LockEntry {
@@ -43,10 +43,18 @@ async function verifyEdrdgLicence(): Promise<void> {
 async function fetchSource(src: SourceSpec): Promise<LockEntry> {
   const rawPath = join(DOWNLOADS_DIR, `_raw_${src.key}`)
   await curlDownload(src.url, rawPath)
-  const raw = await readFile(rawPath)
-  const content = gunzipIf(raw, src.compression === 'gzip')
-  await writeFile(join(DOWNLOADS_DIR, src.outfile), content)
-  const text = src.compression === 'gzip' ? content.toString('utf8') : ''
+  const raw = await readFile(rawPath) // compressed artifact — hashed for provenance
+  const outPath = join(DOWNLOADS_DIR, src.outfile)
+  let text = ''
+  if (src.compression === 'gzip') {
+    const content = gunzipIf(raw, true)
+    await writeFile(outPath, content)
+    text = content.toString('utf8') // only EDRDG gzip carries an internal creation date
+  } else if (src.compression === 'bzip2') {
+    await bunzip2To(rawPath, outPath) // streamed — keeps memory flat for the 24 MB eng export
+  } else {
+    await writeFile(outPath, raw)
+  }
   return {
     key: src.key,
     name: src.name,
