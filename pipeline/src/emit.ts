@@ -1,6 +1,17 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import type { KanjiItem, Level, Manifest, ManifestEntry, Pack, Source, VocabItem } from '@hikkoshi/schemas'
+import type {
+  KanjiItem,
+  Level,
+  Manifest,
+  ManifestEntry,
+  Pack,
+  PackDomain,
+  SentenceItem,
+  Source,
+  StrokeItem,
+  VocabItem,
+} from '@hikkoshi/schemas'
 import { SCHEMA_VERSION } from '@hikkoshi/schemas'
 import { LEVELS_IN_ORDER } from './config'
 import { PACKS_DIR } from './lib/paths'
@@ -18,6 +29,9 @@ export interface LockSource {
   attribution: string
 }
 
+type Domain = 'vocab' | 'kanji' | 'sentence' | 'strokes'
+type AnyItem = VocabItem | KanjiItem | SentenceItem | StrokeItem
+
 const LEVEL_JLPT: Record<Level, string> = {
   L0: 'kana/survival',
   L1: '≈N5',
@@ -27,43 +41,80 @@ const LEVEL_JLPT: Record<Level, string> = {
   L5: '≈N1',
 }
 
+interface DomainMeta {
+  domain: Domain
+  titleWord: string
+  dataKeys: string[]
+  licenseSpdx: string
+  licenseNotes: string
+  levelTagSource?: string
+  verificationMethod: string
+}
+
+const DOMAIN_META: Record<Domain, DomainMeta> = {
+  vocab: {
+    domain: 'vocab',
+    titleWord: 'Vocabulary',
+    dataKeys: ['jmdict', 'jlpt-vocab-n5', 'jlpt-vocab-n4', 'jlpt-vocab-n3', 'jlpt-vocab-n2', 'jlpt-vocab-n1'],
+    licenseSpdx: 'CC-BY-SA-4.0',
+    licenseNotes: 'JMdict data is CC BY-SA 4.0; JLPT level tags are community estimates (CC BY, Jonathan Waller).',
+    levelTagSource: 'Jonathan Waller / tanos.co.uk via elzup/jlpt-word-list',
+    verificationMethod: 'JMdict expression+reading join (unmatched → review-queue.json)',
+  },
+  kanji: {
+    domain: 'kanji',
+    titleWord: 'Kanji',
+    dataKeys: ['kanjidic2', 'kanji-data'],
+    licenseSpdx: 'CC-BY-SA-4.0',
+    licenseNotes: 'KANJIDIC2 data is CC BY-SA 4.0; JLPT level tags are community estimates (CC BY, Jonathan Waller).',
+    levelTagSource: 'Jonathan Waller / tanos.co.uk via davidluzgouveia/kanji-data (jlpt_new)',
+    verificationMethod: 'KANJIDIC2 literal join',
+  },
+  sentence: {
+    domain: 'sentence',
+    titleWord: 'Example sentences',
+    dataKeys: ['tatoeba-jpn-detailed', 'tatoeba-jpn-eng-links', 'tatoeba-eng', 'tatoeba-jpn-cc0'],
+    licenseSpdx: 'CC-BY-2.0-FR',
+    licenseNotes:
+      'Tatoeba sentences are CC BY 2.0 FR (a CC0 subset is marked per item); level is a kanji-coverage estimate, not a JLPT tag.',
+    verificationMethod: 'Tatoeba jpn→eng pair + cumulative kanji-coverage leveling',
+  },
+  strokes: {
+    domain: 'strokes',
+    titleWord: 'Stroke order',
+    dataKeys: ['kanjivg'],
+    licenseSpdx: 'CC-BY-SA-3.0',
+    licenseNotes: 'KanjiVG stroke data © Ulrich Apel, CC BY-SA 3.0; ShareAlike applies to derived stroke data.',
+    verificationMethod: 'KanjiVG per-character SVG stroke extraction',
+  },
+}
+
 function toSource(s: LockSource): Source {
   return { name: s.name, url: s.url, retrieved: s.retrieved, license: s.license }
 }
 
-function buildPack(
-  domain: 'vocab' | 'kanji',
-  level: Level,
-  items: (VocabItem | KanjiItem)[],
-  lock: LockSource[],
-  date: string,
-): Pack {
-  const isVocab = domain === 'vocab'
-  const dataKeys = isVocab
-    ? ['jmdict', 'jlpt-vocab-n5', 'jlpt-vocab-n4', 'jlpt-vocab-n3', 'jlpt-vocab-n2', 'jlpt-vocab-n1']
-    : ['kanjidic2', 'kanji-data']
-  const sources = lock.filter((s) => dataKeys.includes(s.key)).map(toSource)
+function groupByLevel<T>(items: T[], levelOf: (t: T) => Level): Map<Level, T[]> {
+  const map = new Map<Level, T[]>()
+  for (const it of items) {
+    const level = levelOf(it)
+    const arr = map.get(level)
+    if (arr) arr.push(it)
+    else map.set(level, [it])
+  }
+  return map
+}
+
+function buildPack(meta: DomainMeta, level: Level, items: AnyItem[], lock: LockSource[], date: string): Pack {
+  const sources = lock.filter((s) => meta.dataKeys.includes(s.key)).map(toSource)
   return {
     schemaVersion: SCHEMA_VERSION,
-    packId: `${domain}.${level.toLowerCase()}.core`,
+    packId: `${meta.domain}.${level.toLowerCase()}.core`,
     packVersion: PACK_VERSION,
-    title: `${isVocab ? 'Vocabulary' : 'Kanji'} — ${level} (${LEVEL_JLPT[level]})`,
-    license: {
-      spdx: 'CC-BY-SA-4.0',
-      notes: `${isVocab ? 'JMdict' : 'KANJIDIC2'} data is CC BY-SA 4.0; JLPT level tags are community estimates (CC BY, Jonathan Waller).`,
-    },
+    title: `${meta.titleWord} — ${level} (${LEVEL_JLPT[level]})`,
+    license: { spdx: meta.licenseSpdx, notes: meta.licenseNotes },
     sources,
-    levelTagSource: isVocab
-      ? 'Jonathan Waller / tanos.co.uk via elzup/jlpt-word-list'
-      : 'Jonathan Waller / tanos.co.uk via davidluzgouveia/kanji-data (jlpt_new)',
-    levelTagLicense: 'CC-BY',
-    verification: {
-      status: 'dataset-verified',
-      method: isVocab
-        ? 'JMdict expression+reading join (unmatched → review-queue.json)'
-        : 'KANJIDIC2 literal join',
-      date,
-    },
+    ...(meta.levelTagSource ? { levelTagSource: meta.levelTagSource, levelTagLicense: 'CC-BY' } : {}),
+    verification: { status: 'dataset-verified', method: meta.verificationMethod, date },
     items,
   }
 }
@@ -90,38 +141,46 @@ function attribution(lock: LockSource[]): string {
     '  and Development Group. Used under CC BY-SA 4.0 (https://www.edrdg.org/edrdg/licence.html).',
     '- **JLPT level tags**: derived from Jonathan Waller’s JLPT Resources (https://www.tanos.co.uk/jlpt/),',
     '  CC BY. Level tags are estimates, not official.',
+    '- **Tatoeba**: example sentences from the Tatoeba Project (https://tatoeba.org), CC BY 2.0 FR;',
+    '  a CC0 subset is identified per item, and each sentence’s author is credited in item metadata.',
+    '- **KanjiVG**: kanji stroke-order data © Ulrich Apel / KanjiVG (https://kanjivg.tagaini.net),',
+    '  CC BY-SA 3.0. ShareAlike applies to derived stroke data.',
     '',
   )
   return lines.join('\n')
 }
 
-/** Emit per-level vocab & kanji packs, the manifest, and ATTRIBUTION.md. */
+/** Emit per-level vocab/kanji/sentence/strokes packs, the manifest, and ATTRIBUTION.md. */
 export async function emitPacks(
   vocab: VocabItem[],
   kanji: KanjiItem[],
+  sentences: SentenceItem[],
+  strokes: StrokeItem[],
   lock: LockSource[],
   date: string,
 ): Promise<Manifest> {
-  const entries: ManifestEntry[] = []
-  const domains: { domain: 'vocab' | 'kanji'; all: (VocabItem | KanjiItem)[] }[] = [
-    { domain: 'vocab', all: vocab },
-    { domain: 'kanji', all: kanji },
+  const groups: { meta: DomainMeta; byLevel: Map<Level, AnyItem[]> }[] = [
+    { meta: DOMAIN_META.vocab, byLevel: groupByLevel<AnyItem>(vocab, (i) => (i as VocabItem).level) },
+    { meta: DOMAIN_META.kanji, byLevel: groupByLevel<AnyItem>(kanji, (i) => (i as KanjiItem).level) },
+    { meta: DOMAIN_META.sentence, byLevel: groupByLevel<AnyItem>(sentences, (i) => (i as SentenceItem).levelEstimate) },
+    { meta: DOMAIN_META.strokes, byLevel: groupByLevel<AnyItem>(strokes, (i) => (i as StrokeItem).level) },
   ]
 
+  const entries: ManifestEntry[] = []
   for (const level of LEVELS_IN_ORDER) {
     await mkdir(join(PACKS_DIR, level.toLowerCase()), { recursive: true })
-    for (const { domain, all } of domains) {
-      const items = all.filter((it) => it.level === level)
+    for (const { meta, byLevel } of groups) {
+      const items = byLevel.get(level) ?? []
       if (items.length === 0) continue
-      const pack = buildPack(domain, level, items, lock, date)
+      const pack = buildPack(meta, level, items, lock, date)
       const body = JSON.stringify(pack) + '\n'
-      const relPath = `${level.toLowerCase()}/${domain}.json`
+      const relPath = `${level.toLowerCase()}/${meta.domain}.json`
       await writeFile(join(PACKS_DIR, relPath), body)
       entries.push({
         packId: pack.packId,
         path: relPath,
         level,
-        domain,
+        domain: meta.domain as PackDomain,
         packVersion: PACK_VERSION,
         itemCount: items.length,
         sha256: sha256(Buffer.from(body)), // hash of the exact file bytes

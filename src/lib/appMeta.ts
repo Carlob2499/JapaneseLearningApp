@@ -22,7 +22,7 @@ export function railChecklist(swSupported: boolean): RailStatus[] {
     { label: 'Installable PWA manifest', done: true },
     { label: 'Service worker & versioned precache', done: swSupported },
     {
-      label: `Content packs — ${items.toLocaleString()} dataset-verified vocab & kanji`,
+      label: `Content packs — ${items.toLocaleString()} dataset-verified vocab, kanji, sentences & stroke order`,
       done: items > 0,
     },
     { label: 'SRS scheduler & day loop', done: false },

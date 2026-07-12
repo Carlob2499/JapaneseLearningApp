@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-07-11",
+  "generatedAt": "2026-07-12",
   "packs": [
     {
       "packId": "vocab.l1.core",
@@ -9,7 +9,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 675,
-      "sha256": "a70656ff80eb46a4c48ecdc312e9e6832ae41554e3871e148b0a8179e49f14d7"
+      "sha256": "ab197ebbadd5cbda074406c9e81eb9b6e59616477e8aecb0b9226ce7b77a5f7c"
     },
     {
       "packId": "kanji.l1.core",
@@ -18,7 +18,25 @@
       "domain": "kanji",
       "packVersion": "0.1.0",
       "itemCount": 79,
-      "sha256": "c848f35c6622ca1e63217c3948868a6a0190538c81629e06e419043f4fa944c0"
+      "sha256": "af3b981e36d7275c258b8a26f732a66d66a376c62b17270cb369f353c972a409"
+    },
+    {
+      "packId": "sentence.l1.core",
+      "path": "l1/sentence.json",
+      "level": "L1",
+      "domain": "sentence",
+      "packVersion": "0.1.0",
+      "itemCount": 600,
+      "sha256": "252fc27a8be3c6345d85d0649481f8319b4db9d9e208d266287da96fcb15e31d"
+    },
+    {
+      "packId": "strokes.l1.core",
+      "path": "l1/strokes.json",
+      "level": "L1",
+      "domain": "strokes",
+      "packVersion": "0.1.0",
+      "itemCount": 79,
+      "sha256": "2184743de41a163f80a86d6d76b9f802137c860494bc9ae1caa6f1531a0dbdbc"
     },
     {
       "packId": "vocab.l2.core",
@@ -27,7 +45,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 596,
-      "sha256": "52e0625f6493db0d659990a9ef5ed5ed8f06b661995d7c1b248dfed4b8c9c80a"
+      "sha256": "8fd7afbf0a194c892925c6844ecce4fa4d586ae9d5f5e6883d7eae85d7de305d"
     },
     {
       "packId": "kanji.l2.core",
@@ -36,7 +54,25 @@
       "domain": "kanji",
       "packVersion": "0.1.0",
       "itemCount": 166,
-      "sha256": "469ca3555c06384347492e91d730b8e4c37d0ff429c5ec3473431795bc7f508e"
+      "sha256": "a6e6e382f107faaa8c0b1c809df36acf485458828f904089f2f1255a210c8580"
+    },
+    {
+      "packId": "sentence.l2.core",
+      "path": "l2/sentence.json",
+      "level": "L2",
+      "domain": "sentence",
+      "packVersion": "0.1.0",
+      "itemCount": 600,
+      "sha256": "2ca032743cdeef6a4e87d531c5bc191023ba14f5ab910f9f51af770026610148"
+    },
+    {
+      "packId": "strokes.l2.core",
+      "path": "l2/strokes.json",
+      "level": "L2",
+      "domain": "strokes",
+      "packVersion": "0.1.0",
+      "itemCount": 166,
+      "sha256": "a563fac025e187879f775aea18671938131b0b70ff0cee4a01ae8caa429b752c"
     },
     {
       "packId": "vocab.l3.core",
@@ -45,7 +81,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 2065,
-      "sha256": "805b24ca3f95eb01d384d80be50243bad9b8136f76da78ef56e0dd058837d00c"
+      "sha256": "919da10f6bd1a4090cc5dce9a8c2675e4ca7ea4f62227b441ee8f1e1378a7e73"
     },
     {
       "packId": "kanji.l3.core",
@@ -54,7 +90,25 @@
       "domain": "kanji",
       "packVersion": "0.1.0",
       "itemCount": 367,
-      "sha256": "6fd8ecc4a8af00dc3fbad7ec7384f484af176df5387213f947cfc7e4d49de8b5"
+      "sha256": "ad1dad7991ac40fa9d24e791a5fe3d49242db0a650182289d428412f4bf36be6"
+    },
+    {
+      "packId": "sentence.l3.core",
+      "path": "l3/sentence.json",
+      "level": "L3",
+      "domain": "sentence",
+      "packVersion": "0.1.0",
+      "itemCount": 600,
+      "sha256": "e33f6455e1deab1b745a13e4a7508195628cc2b499c6720813ca50be2fca43c3"
+    },
+    {
+      "packId": "strokes.l3.core",
+      "path": "l3/strokes.json",
+      "level": "L3",
+      "domain": "strokes",
+      "packVersion": "0.1.0",
+      "itemCount": 367,
+      "sha256": "1253e721b5c9d806e104e7df489f4d142681045dcb12cea68424c3aec55f70e5"
     },
     {
       "packId": "vocab.l4.core",
@@ -63,7 +117,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 1677,
-      "sha256": "b20013a73d97590f09f2be7551c8dc0a6a2fd28a2d2a4c952a51592eb4dbc8ed"
+      "sha256": "e16ee409f6ccbe2c60d91c2a0468938cff7c748dcbf425e41b423cb58ebd52c8"
     },
     {
       "packId": "kanji.l4.core",
@@ -72,7 +126,25 @@
       "domain": "kanji",
       "packVersion": "0.1.0",
       "itemCount": 367,
-      "sha256": "e3fdb94c70d410f2eb7e7008500d6cf6e93fcd9c47385f9058fa321828256126"
+      "sha256": "e7c54bf4de85b6568f63c4c82dc1d313a8f31fba230942a97f4b36a68f40e6cd"
+    },
+    {
+      "packId": "sentence.l4.core",
+      "path": "l4/sentence.json",
+      "level": "L4",
+      "domain": "sentence",
+      "packVersion": "0.1.0",
+      "itemCount": 600,
+      "sha256": "9dcdfb648b3cff3f7133a0fb48318a76ab08db8c3c9b17d5884f398d37766840"
+    },
+    {
+      "packId": "strokes.l4.core",
+      "path": "l4/strokes.json",
+      "level": "L4",
+      "domain": "strokes",
+      "packVersion": "0.1.0",
+      "itemCount": 367,
+      "sha256": "3552a6ccbe187adea54034bc78c631a7527a7ddb8ec9eb74de2ded0e13a8dfd1"
     },
     {
       "packId": "vocab.l5.core",
@@ -81,7 +153,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 2647,
-      "sha256": "d6a84ae554cb8f625c7a99f47101d4a6a895f19fa7b607e3d66db09390c85412"
+      "sha256": "0cd7d610d1a153897ca1891d53f5ee5911793fcdb36a77f1c9aa9b98b93d9df2"
     },
     {
       "packId": "kanji.l5.core",
@@ -90,7 +162,25 @@
       "domain": "kanji",
       "packVersion": "0.1.0",
       "itemCount": 1232,
-      "sha256": "11f1b01bff7f61ae46136d78a9ed402a3f7db24d7365e36c55bf90fc30ced296"
+      "sha256": "1124e7a4825fe6c15f25336d98a8d4633a8448ef9856a59c92c5b32811ce8fdc"
+    },
+    {
+      "packId": "sentence.l5.core",
+      "path": "l5/sentence.json",
+      "level": "L5",
+      "domain": "sentence",
+      "packVersion": "0.1.0",
+      "itemCount": 600,
+      "sha256": "6c17339c4435fb2dd77972e2d37cabdefb2304b485bedf1de91c65741e6b4920"
+    },
+    {
+      "packId": "strokes.l5.core",
+      "path": "l5/strokes.json",
+      "level": "L5",
+      "domain": "strokes",
+      "packVersion": "0.1.0",
+      "itemCount": 1232,
+      "sha256": "c3e67eb61945034139b48fa18fec9f7403b343016e90c8ec394a049e2cf01d14"
     }
   ]
 }

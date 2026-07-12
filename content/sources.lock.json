@@ -124,6 +124,17 @@
       "retrieved": "2026-07-12T03:20:47.098Z",
       "license": "CC0-1.0",
       "attribution": "Tatoeba CC0 sentence subset (https://tatoeba.org), public domain."
+    },
+    {
+      "key": "kanjivg",
+      "name": "KanjiVG",
+      "url": "https://github.com/KanjiVG/kanjivg (tag r20250816)",
+      "sha256": "d3585f084db0f40f7c97dcae4fc2fe960c78d59e2744a00f9762c07e418e6cdc",
+      "retrieved": "2026-07-12T03:20:47.098Z",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "Kanji stroke-order data © Ulrich Apel / KanjiVG (https://kanjivg.tagaini.net), CC BY-SA 3.0; ShareAlike applies to derived stroke data.",
+      "datasetTag": "r20250816",
+      "fileCount": 2211
     }
   ]
 }

@@ -80,3 +80,23 @@ to `content/review-queue.json`, never guessed. First run: vocab 97.6% resolved (
 192 queued), kanji 100% (2,211). Emitted output is deterministic (dates from fetch time).
 Tatoeba sentences and KanjiVG stroke assets are deferred to the next session.
 *Source: Session 4 build, 2026-07-11; approved plan + discovered egress constraint.*
+
+### D-008: Content pipeline v2 — Tatoeba sentences + KanjiVG strokes (finish the datasets)
+Completes the brief's "content pipeline first" datasets (user directive: include the out-of-scope
+KanjiVG work alongside Tatoeba). Both hosts are reachable through the egress proxy (verified), unlike
+github.com release assets.
+- **Tatoeba**: minimal ~29 MB set via `per_language/jpn` (jpn_sentences_detailed + jpn-eng_links +
+  eng_sentences + CC0 subset); bz2 via `bzip2 -dc`. `ja`/`en` copied verbatim (D-002). **Leveling is
+  tokenizer-free kanji-coverage** — lowest level whose cumulative known-kanji set covers every kanji
+  in the sentence (kana-only → L1; untaught kanji → excluded); disclosed in `coverage.knownRatioBasis`.
+  Grammar/vocab difficulty not modeled (future kuromoji pass). Filters: English pair required, length
+  4–50, dedupe, 600/level cap. Result: 3,000 sentences (600/level; cap binds), 99.2% links resolve.
+  License CC-BY-2.0-FR (CC0-1.0 subset marked per item).
+- **KanjiVG** (`StrokeItem` + `strokes` domain, per-level packs): release zip/codeload are egress-
+  blocked, so fetch per-character SVGs from `raw.githubusercontent.com/KanjiVG/kanjivg/r20250816/
+  kanji/{cp}.svg` (jsDelivr fallback), pool of 8 + retry + tag-keyed disk cache; extract ordered
+  stroke `d` paths + the 109×109 viewBox. Result: 2,211 kanji, 0 unmatched (100%). License
+  CC-BY-SA-3.0 (Apel; ShareAlike). Recorded in the lock by the build step.
+- **UI stroke rendering + precache wiring are out of scope** (build-order item 5). This session ships
+  the validated DATA: 20 packs / 15,082 items total.
+*Source: Session 5 build, 2026-07-11/12; approved plan + reachability recon.*

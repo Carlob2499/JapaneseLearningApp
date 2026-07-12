@@ -12,6 +12,8 @@ import { LEVELS_IN_ORDER } from './config'
 import { CONTENT_DIR, DOWNLOADS_DIR, INTERMEDIATES_DIR } from './lib/paths'
 import { parseCsv } from './lib/csv'
 import { emitPacks, type LockSource } from './emit'
+import { buildKnownKanjiByLevel, buildSentenceItems, loadTatoeba } from './sentences'
+import { buildStrokeItems } from './kanjivg'
 
 const JLPT_FILES = [
   { file: 'jlpt-vocab-n5.csv', jlpt: 'N5' },
@@ -63,6 +65,7 @@ async function main(): Promise<void> {
   const lock = JSON.parse(await readFile(join(CONTENT_DIR, 'sources.lock.json'), 'utf8')) as {
     generatedAt: string
     sources: LockSource[]
+    [key: string]: unknown
   }
   // Derive all emitted dates from the fetch time so rebuilds are deterministic:
   // output changes only when the data is re-fetched, not on every build run.
@@ -101,7 +104,34 @@ async function main(): Promise<void> {
       `(${kanji.items.length} matched, ${kanji.unmatched.length} queued)`,
   )
 
-  const manifest = await emitPacks(vocab.items, kanji.items, lock.sources, date)
+  // Sentences (Tatoeba) — leveled by cumulative kanji coverage.
+  const knownKanji = buildKnownKanjiByLevel(kanji.items)
+  const corpus = await loadTatoeba(DOWNLOADS_DIR)
+  const sentences = buildSentenceItems(corpus, knownKanji)
+  console.log('\nSentences by level:', sentences.statsByLevel)
+  console.log(
+    `  ${sentences.items.length} sentences kept; links resolve ${(100 * sentences.linkResolveRate).toFixed(1)}%; ` +
+      `excluded ${JSON.stringify(sentences.excluded)}`,
+  )
+  if (sentences.linkResolveRate < 0.9) {
+    throw new Error(`Tatoeba link resolve rate ${sentences.linkResolveRate} < 0.9 — check the jpn/eng/links inputs`)
+  }
+
+  // Stroke order (KanjiVG) — per-character SVGs for every taught kanji (fetched + cached during build).
+  const strokes = await buildStrokeItems(kanji.items, fetchedAt)
+  console.log(`Strokes: ${strokes.items.length} kanji; ${strokes.unmatched.length} without a KanjiVG SVG`)
+  // Record KanjiVG in the lock (fetched here, per-file; dedup by key) and persist.
+  lock.sources = [...lock.sources.filter((s) => s.key !== 'kanjivg'), strokes.lockEntry]
+  await writeFile(join(CONTENT_DIR, 'sources.lock.json'), JSON.stringify(lock, null, 2) + '\n')
+
+  const manifest = await emitPacks(
+    vocab.items,
+    kanji.items,
+    sentences.items,
+    strokes.items,
+    lock.sources,
+    date,
+  )
   console.log(`\nEmitted ${manifest.packs.length} packs → content/packs/ (+ manifest, ATTRIBUTION.md)`)
 }
 

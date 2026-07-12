@@ -55,9 +55,43 @@ published no official vocabulary or kanji lists since 2010 (decision D-005).
 - Source: https://raw.githubusercontent.com/davidluzgouveia/kanji-data/master/kanji.json
 - JLPT kanji level tags (jlpt_new): Jonathan Waller (CC BY) — via davidluzgouveia/kanji-data (MIT); kanji readings/meanings cross-checked against KANJIDIC2.
 
+### Tatoeba Japanese sentences (detailed)
+
+- License: CC-BY-2.0-FR
+- Source: https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences_detailed.tsv.bz2
+- Example sentences from the Tatoeba Project (https://tatoeba.org), CC BY 2.0 FR; per-sentence author credited. A CC0 subset is identified separately.
+
+### Tatoeba jpn→eng translation links
+
+- License: CC-BY-2.0-FR
+- Source: https://downloads.tatoeba.org/exports/per_language/jpn/jpn-eng_links.tsv.bz2
+- Example sentences from the Tatoeba Project (https://tatoeba.org), CC BY 2.0 FR; per-sentence author credited. A CC0 subset is identified separately.
+
+### Tatoeba English sentences
+
+- License: CC-BY-2.0-FR
+- Source: https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2
+- Example sentences from the Tatoeba Project (https://tatoeba.org), CC BY 2.0 FR; per-sentence author credited. A CC0 subset is identified separately.
+
+### Tatoeba Japanese CC0 subset
+
+- License: CC0-1.0
+- Source: https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences_CC0.tsv.bz2
+- Tatoeba CC0 sentence subset (https://tatoeba.org), public domain.
+
+### KanjiVG
+
+- License: CC-BY-SA-3.0
+- Source: https://github.com/KanjiVG/kanjivg (tag r20250816)
+- Kanji stroke-order data © Ulrich Apel / KanjiVG (https://kanjivg.tagaini.net), CC BY-SA 3.0; ShareAlike applies to derived stroke data.
+
 ## Required notices
 
 - **JMdict / KANJIDIC2**: © James William Breen and The Electronic Dictionary Research
   and Development Group. Used under CC BY-SA 4.0 (https://www.edrdg.org/edrdg/licence.html).
 - **JLPT level tags**: derived from Jonathan Waller’s JLPT Resources (https://www.tanos.co.uk/jlpt/),
   CC BY. Level tags are estimates, not official.
+- **Tatoeba**: example sentences from the Tatoeba Project (https://tatoeba.org), CC BY 2.0 FR;
+  a CC0 subset is identified per item, and each sentence’s author is credited in item metadata.
+- **KanjiVG**: kanji stroke-order data © Ulrich Apel / KanjiVG (https://kanjivg.tagaini.net),
+  CC BY-SA 3.0. ShareAlike applies to derived stroke data.
