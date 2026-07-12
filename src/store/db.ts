@@ -1,0 +1,36 @@
+import { openDB, type IDBPDatabase } from 'idb'
+import type { ItemState, JournalEntry } from '@hikkoshi/schemas'
+
+// Progress persistence lives in IndexedDB (D-001); settings would use localStorage.
+const DB_NAME = 'hikkoshi'
+const DB_VERSION = 1
+
+let dbPromise: Promise<IDBPDatabase> | null = null
+
+function db(): Promise<IDBPDatabase> {
+  if (!dbPromise) {
+    dbPromise = openDB(DB_NAME, DB_VERSION, {
+      upgrade(d) {
+        if (!d.objectStoreNames.contains('itemStates')) {
+          d.createObjectStore('itemStates', { keyPath: 'itemId' })
+        }
+        if (!d.objectStoreNames.contains('journal')) {
+          d.createObjectStore('journal', { autoIncrement: true })
+        }
+      },
+    })
+  }
+  return dbPromise
+}
+
+export async function getAllItemStates(): Promise<ItemState[]> {
+  return (await db()).getAll('itemStates') as Promise<ItemState[]>
+}
+
+export async function putItemState(state: ItemState): Promise<void> {
+  await (await db()).put('itemStates', state)
+}
+
+export async function appendJournal(entry: JournalEntry): Promise<void> {
+  await (await db()).add('journal', entry)
+}
