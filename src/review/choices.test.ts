@@ -82,6 +82,17 @@ describe('retrievalModeFor', () => {
     expect(retrievalModeFor('sentence', 2)).toBe('recognition') // no production form
     expect(retrievalModeFor('sentence', 5)).toBe('recall')
   })
+
+  it('forces varied modes for a leech, cycling by seed instead of the stage default', () => {
+    // A mature vocab leech would normally be recall; forced variety cycles the seed.
+    const seen = new Set(
+      [0, 1, 2, 3].map((seed) => retrievalModeFor('vocab', 6, { leech: true, seed })),
+    )
+    expect(seen.size).toBeGreaterThan(1) // not "more of the same"
+    // Sentences only have two modes to vary between.
+    expect(retrievalModeFor('sentence', 6, { leech: true, seed: 0 })).toBe('recognition')
+    expect(retrievalModeFor('sentence', 6, { leech: true, seed: 1 })).toBe('recall')
+  })
 })
 
 describe('buildChoices', () => {

@@ -45,12 +45,29 @@ export function buildPools(content: L1Content): Pools {
   }
 }
 
+/** Retrieval modes available per kind, easiest → hardest — the leech variety cycle draws from here. */
+const MODES_BY_KIND: Record<CardKind, RetrievalMode[]> = {
+  vocab: ['recognition', 'production', 'recall'],
+  kanji: ['recognition', 'production', 'recall'],
+  sentence: ['recognition', 'recall'],
+}
+
 /**
  * Retrieval mode for a card, escalating with mastery: recognition while an item is new
  * (stage 0–1), production once it is sticking (2–3), free recall once mature (4+).
  * Sentences have no natural production form, so they use recognition in that band.
+ * A leech (architecture §5) is forced into varied modes — cycling by `seed` — rather than
+ * hammering the same failing drill.
  */
-export function retrievalModeFor(kind: CardKind, stage: number): RetrievalMode {
+export function retrievalModeFor(
+  kind: CardKind,
+  stage: number,
+  opts: { leech?: boolean; seed?: number } = {},
+): RetrievalMode {
+  if (opts.leech) {
+    const modes = MODES_BY_KIND[kind]
+    return modes[(((opts.seed ?? 0) % modes.length) + modes.length) % modes.length]
+  }
   if (stage <= 1) return 'recognition'
   if (stage <= 3) return kind === 'sentence' ? 'recognition' : 'production'
   return 'recall'

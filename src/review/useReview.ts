@@ -9,8 +9,9 @@ import type {
   VocabItem,
 } from '@hikkoshi/schemas'
 import { loadL1, type L1Content } from '../content/packs'
-import { appendJournal, getAllItemStates, putItemState } from '../store/db'
-import { applyReview, dueItems, newState, pickNewItems } from '../scheduler/srs'
+import { appendJournal, getAllItemStates, getJournal, putItemState } from '../store/db'
+import { applyReview, dueItems, isLeech, newState, pickNewItems } from '../scheduler/srs'
+import { DEFAULT_DAILY_NEW, loadHistogram, shapeDueQueue, snapToLightestDay } from '../scheduler/loadShaper'
 import { buildChoices, buildPools, retrievalModeFor, type Choice, type Pools } from './choices'
 
 export type Reviewable =
@@ -27,7 +28,7 @@ export interface Presentation {
 
 export type Mode = 'loading' | 'review' | 'practice' | 'summary'
 
-const INTRO_CAP = 12
+const INTRO_CAP = DEFAULT_DAILY_NEW
 const PRACTICE_SIZE = 24
 
 /** Round-robin kanji/vocab/sentence so a fresh session's intro batch is varied (kanji first). */
@@ -76,12 +77,13 @@ export function useReview(): ReviewApi {
     sentenceEn: [],
   })
   const shownAtRef = useRef<number>(Date.now())
+  const failTsRef = useRef<Map<string, number[]>>(new Map())
 
   useEffect(() => {
     let alive = true
     void (async () => {
       const content = await loadL1()
-      const states = await getAllItemStates()
+      const [states, journal] = await Promise.all([getAllItemStates(), getJournal()])
       if (!alive) return
       const pool = buildPool(content)
       poolRef.current = pool
@@ -89,8 +91,24 @@ export function useReview(): ReviewApi {
       byIdRef.current = new Map(pool.map((r) => [r.id, r]))
       statesRef.current = new Map(states.map((s) => [s.itemId, s]))
 
+      // Fail history for leech detection (architecture §5), grouped per item.
+      const failTs = new Map<string, number[]>()
+      for (const e of journal) {
+        if (e.outcome !== 'fail') continue
+        const arr = failTs.get(e.itemId) ?? []
+        arr.push(e.ts)
+        failTs.set(e.itemId, arr)
+      }
+      failTsRef.current = failTs
+
       const now = Date.now()
-      const due = dueItems(now, states)
+      // Load-shape the due set: cap the session and slide the lowest-stakes overflow forward.
+      const { keep, slide } = shapeDueQueue(dueItems(now, states), now)
+      for (const s of slide) {
+        statesRef.current.set(s.itemId, s)
+        void putItemState(s)
+      }
+      const due = keep
         .map((s) => byIdRef.current.get(s.itemId))
         .filter((r): r is Reviewable => r !== undefined)
 
@@ -126,10 +144,22 @@ export function useReview(): ReviewApi {
         if (mode === 'review') {
           const now = Date.now()
           const prev = statesRef.current.get(cur.id) ?? newState(cur.id, now)
-          // Log the mode the user actually saw — derived from the pre-review stage.
-          const interaction = retrievalModeFor(cur.kind, prev.stage)
+          // Log the mode the user actually saw — pre-review stage, leech-aware.
+          const interaction = retrievalModeFor(cur.kind, prev.stage, {
+            leech: prev.leech,
+            seed: prev.lapses,
+          })
           const latencyMs = Math.max(0, Math.round(now - shownAtRef.current))
           const next = applyReview(prev, outcome, now)
+          // Track fail history and (re)flag leeches — 3 fails / 30 days (architecture §5).
+          if (outcome === 'fail') {
+            const arr = failTsRef.current.get(cur.id) ?? []
+            arr.push(now)
+            failTsRef.current.set(cur.id, arr)
+          }
+          next.leech = isLeech(failTsRef.current.get(cur.id) ?? [], now)
+          // Anti-clumping: snap the next due to the lightest nearby day.
+          next.due = snapToLightestDay(next.due, now, loadHistogram([...statesRef.current.values()], cur.id))
           statesRef.current.set(cur.id, next)
           void putItemState(next)
           void appendJournal({ itemId: cur.id, ts: now, interaction, outcome, latencyMs })
@@ -164,8 +194,8 @@ export function useReview(): ReviewApi {
   // Memoized per item so choices don't reshuffle on unrelated re-renders.
   const view = useMemo<Presentation | null>(() => {
     if (!current) return null
-    const stage = statesRef.current.get(current.id)?.stage ?? 0
-    const rmode = retrievalModeFor(current.kind, stage)
+    const st = statesRef.current.get(current.id)
+    const rmode = retrievalModeFor(current.kind, st?.stage ?? 0, { leech: st?.leech, seed: st?.lapses })
     const choices = rmode === 'recall' ? undefined : buildChoices(current, rmode, poolsRef.current)
     return { reviewable: current, mode: rmode, choices }
   }, [current])
