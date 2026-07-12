@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-07-11",
+  "packs": [
+    {
+      "packId": "vocab.l1.core",
+      "path": "l1/vocab.json",
+      "level": "L1",
+      "domain": "vocab",
+      "packVersion": "0.1.0",
+      "itemCount": 675,
+      "sha256": "a70656ff80eb46a4c48ecdc312e9e6832ae41554e3871e148b0a8179e49f14d7"
+    },
+    {
+      "packId": "kanji.l1.core",
+      "path": "l1/kanji.json",
+      "level": "L1",
+      "domain": "kanji",
+      "packVersion": "0.1.0",
+      "itemCount": 79,
+      "sha256": "c848f35c6622ca1e63217c3948868a6a0190538c81629e06e419043f4fa944c0"
+    },
+    {
+      "packId": "vocab.l2.core",
+      "path": "l2/vocab.json",
+      "level": "L2",
+      "domain": "vocab",
+      "packVersion": "0.1.0",
+      "itemCount": 596,
+      "sha256": "52e0625f6493db0d659990a9ef5ed5ed8f06b661995d7c1b248dfed4b8c9c80a"
+    },
+    {
+      "packId": "kanji.l2.core",
+      "path": "l2/kanji.json",
+      "level": "L2",
+      "domain": "kanji",
+      "packVersion": "0.1.0",
+      "itemCount": 166,
+      "sha256": "469ca3555c06384347492e91d730b8e4c37d0ff429c5ec3473431795bc7f508e"
+    },
+    {
+      "packId": "vocab.l3.core",
+      "path": "l3/vocab.json",
+      "level": "L3",
+      "domain": "vocab",
+      "packVersion": "0.1.0",
+      "itemCount": 2065,
+      "sha256": "805b24ca3f95eb01d384d80be50243bad9b8136f76da78ef56e0dd058837d00c"
+    },
+    {
+      "packId": "kanji.l3.core",
+      "path": "l3/kanji.json",
+      "level": "L3",
+      "domain": "kanji",
+      "packVersion": "0.1.0",
+      "itemCount": 367,
+      "sha256": "6fd8ecc4a8af00dc3fbad7ec7384f484af176df5387213f947cfc7e4d49de8b5"
+    },
+    {
+      "packId": "vocab.l4.core",
+      "path": "l4/vocab.json",
+      "level": "L4",
+      "domain": "vocab",
+      "packVersion": "0.1.0",
+      "itemCount": 1677,
+      "sha256": "b20013a73d97590f09f2be7551c8dc0a6a2fd28a2d2a4c952a51592eb4dbc8ed"
+    },
+    {
+      "packId": "kanji.l4.core",
+      "path": "l4/kanji.json",
+      "level": "L4",
+      "domain": "kanji",
+      "packVersion": "0.1.0",
+      "itemCount": 367,
+      "sha256": "e3fdb94c70d410f2eb7e7008500d6cf6e93fcd9c47385f9058fa321828256126"
+    },
+    {
+      "packId": "vocab.l5.core",
+      "path": "l5/vocab.json",
+      "level": "L5",
+      "domain": "vocab",
+      "packVersion": "0.1.0",
+      "itemCount": 2647,
+      "sha256": "d6a84ae554cb8f625c7a99f47101d4a6a895f19fa7b607e3d66db09390c85412"
+    },
+    {
+      "packId": "kanji.l5.core",
+      "path": "l5/kanji.json",
+      "level": "L5",
+      "domain": "kanji",
+      "packVersion": "0.1.0",
+      "itemCount": 1232,
+      "sha256": "11f1b01bff7f61ae46136d78a9ed402a3f7db24d7365e36c55bf90fc30ced296"
+    }
+  ]
+}

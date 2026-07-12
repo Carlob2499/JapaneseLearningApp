@@ -11,6 +11,7 @@ import {
 import { LEVELS_IN_ORDER } from './config'
 import { CONTENT_DIR, DOWNLOADS_DIR, INTERMEDIATES_DIR } from './lib/paths'
 import { parseCsv } from './lib/csv'
+import { emitPacks, type LockSource } from './emit'
 
 const JLPT_FILES = [
   { file: 'jlpt-vocab-n5.csv', jlpt: 'N5' },
@@ -59,6 +60,15 @@ async function main(): Promise<void> {
   const waller = await loadWaller()
   console.log(`  JMdict entries: ${jm.length}, KANJIDIC2 chars: ${kd.length}, Waller rows: ${waller.length}`)
 
+  const lock = JSON.parse(await readFile(join(CONTENT_DIR, 'sources.lock.json'), 'utf8')) as {
+    generatedAt: string
+    sources: LockSource[]
+  }
+  // Derive all emitted dates from the fetch time so rebuilds are deterministic:
+  // output changes only when the data is re-fetched, not on every build run.
+  const fetchedAt = lock.generatedAt
+  const date = fetchedAt.slice(0, 10)
+
   const vocab = joinVocab(jm, waller)
   const kanji = joinKanji(kd, kanjiData)
 
@@ -72,7 +82,7 @@ async function main(): Promise<void> {
   )
 
   const reviewQueue = {
-    generatedAt: new Date().toISOString(),
+    generatedAt: fetchedAt,
     note: 'Community-list entries that could not be resolved to a dataset entry — not dropped, not guessed (D-002).',
     vocab: { count: vocab.unmatched.length, entries: vocab.unmatched },
     kanji: { count: kanji.unmatched.length, entries: kanji.unmatched },
@@ -90,6 +100,9 @@ async function main(): Promise<void> {
       `kanji ${rate(kanji.items.length, kanji.unmatched.length)} ` +
       `(${kanji.items.length} matched, ${kanji.unmatched.length} queued)`,
   )
+
+  const manifest = await emitPacks(vocab.items, kanji.items, lock.sources, date)
+  console.log(`\nEmitted ${manifest.packs.length} packs → content/packs/ (+ manifest, ATTRIBUTION.md)`)
 }
 
 main().catch((err) => {
