@@ -120,3 +120,32 @@ Verified end-to-end with Playwright (home → review → 8-stroke kanji animatin
 persists across reload; zero page errors). Scope stays L1; full scheduler, multi-level offline, more
 retrieval modes, real-world scenes, TTS audio, and export/import UI are the next sessions.
 *Source: Session 6 build, 2026-07-12; approved plan + Playwright verification.*
+
+### D-010: Varied retrieval modes — the same item escalates as you learn it
+Attacks the brief's #1 constraint (maximum repetition without perceived repetition): the single
+Reveal→self-grade interaction is replaced by a retrieval **mode that escalates with mastery**,
+keyed to the SRS `stage` on `ItemState`.
+- **Bands** (`retrievalModeFor`): recognition (stage 0–1, cued: JP → meaning) → production (2–3,
+  harder: meaning → JP) → recall (4+, uncued: the existing reveal cards, kanji shows strokes).
+  Sentences have no natural production form, so they use recognition in that band. First session is
+  mostly recognition (all new items are stage 0); the escalation is a cross-session story.
+- **Multiple choice is objective**: correct → `pass`, wrong → `fail` (recall keeps the 3-way
+  Again/Partial/Good). Every option — correct answer *and* distractors — is a **verbatim string
+  harvested from other L1 items** (`buildPools` + `buildChoices`): vocab `senses[].gloss[0]` /
+  `expression`, kanji `meanings[0]` / `literal`, sentence `en`. Nothing is generated (**D-002**);
+  the item's own answers are excluded, with a normalized de-dupe and a thin-pool fallback. Kanji MC
+  uses meaning↔literal (never readings, which can be empty). Shuffle uses `Math.random` in the app;
+  the pure engine takes an injected rng so tests are deterministic.
+- **No scheduler change** — `applyReview` is mode-agnostic. **No schema-breaking change** —
+  `RetrievalMode` is a new enum, but `JournalEntry.interaction` stays free-form and is now populated
+  with the mode label (was the item kind) plus `latencyMs`. Journal is append-only / never read
+  back, so no migration.
+- **UI**: one kind-agnostic `ChoiceCard` (pick → see the answer, green correct / red wrong → Next);
+  `ReviewSession` dispatches recall to the reveal cards, MC otherwise. Scaffold-grade styling
+  (GSAP identity is still a later session).
+Verified end-to-end with Playwright: recognition (一, correct advance + wrong-answer feedback),
+production (下 seeded stage 2, "Which kanji?"), recall (電 seeded stage 5, 13-stroke animation);
+journal entries carry `recognition`/`production`/`recall` + `latencyMs`; zero page errors.
+Deferred: typed/kana production input, reading-based MC, TTS listening mode, tightening
+`interaction` to the enum with a migration, synonym-aware distractors.
+*Source: Session 7 build, 2026-07-12; approved plan + Playwright verification.*
