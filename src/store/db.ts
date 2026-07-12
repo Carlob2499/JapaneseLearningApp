@@ -34,3 +34,8 @@ export async function putItemState(state: ItemState): Promise<void> {
 export async function appendJournal(entry: JournalEntry): Promise<void> {
   await (await db()).add('journal', entry)
 }
+
+/** The full append-only review log — read for leech detection (fails in a trailing window). */
+export async function getJournal(): Promise<JournalEntry[]> {
+  return (await db()).getAll('journal') as Promise<JournalEntry[]>
+}

@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { applyReview, dueItems, newState, nudgeMultiplier, pickNewItems, STAGE_INTERVALS_MS } from './srs'
+import {
+  applyReview,
+  dueItems,
+  isLeech,
+  newState,
+  nudgeMultiplier,
+  pickNewItems,
+  STAGE_INTERVALS_MS,
+} from './srs'
 
 const NOW = 1_700_000_000_000
 const HOUR = 3_600_000
@@ -66,6 +74,14 @@ describe('srs', () => {
     const s = applyReview(at3, 'partial', NOW)
     expect(s.stage).toBe(3)
     expect(s.due).toBe(NOW + DAY)
+  })
+
+  it('flags a leech at 3 fails within 30 days, ignoring older fails', () => {
+    const now = 100 * DAY
+    const d = DAY
+    expect(isLeech([now - d, now - 2 * d], now)).toBe(false) // only 2 recent
+    expect(isLeech([now - d, now - 2 * d, now - 3 * d], now)).toBe(true) // 3 recent
+    expect(isLeech([now - 40 * d, now - 41 * d, now - 42 * d], now)).toBe(false) // all stale
   })
 
   it('dueItems returns only due items, soonest first', () => {

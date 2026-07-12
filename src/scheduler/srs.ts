@@ -59,6 +59,27 @@ export function applyReview(state: ItemState, outcome: Outcome, now: number): It
   return { ...state, stage, due: now + Math.round(STAGE_INTERVALS_MS[stage] * nudge), lastOutcomes }
 }
 
+export const LEECH_THRESHOLD = 3
+export const LEECH_WINDOW_MS = 30 * DAY
+
+/**
+ * Leech = at least `threshold` failures within the trailing 30-day window (architecture §5:
+ * "three lapses in 30 days → leech"). Reads fail timestamps from the append-only journal
+ * (a bare lapse counter can't express the window). A leech is routed to forced retrieval
+ * variety rather than more of the same.
+ */
+export function isLeech(
+  failTimestamps: readonly number[],
+  now: number,
+  windowMs = LEECH_WINDOW_MS,
+  threshold = LEECH_THRESHOLD,
+): boolean {
+  const cutoff = now - windowMs
+  let count = 0
+  for (const t of failTimestamps) if (t >= cutoff) count += 1
+  return count >= threshold
+}
+
 /** Items whose due time has arrived, soonest first. */
 export function dueItems(now: number, states: ItemState[]): ItemState[] {
   return states.filter((s) => s.due <= now).sort((a, b) => a.due - b.due)
