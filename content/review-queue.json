@@ -1,0 +1,1549 @@
+{
+  "generatedAt": "2026-07-12T00:05:14.836Z",
+  "note": "Community-list entries that could not be resolved to a dataset entry — not dropped, not guessed (D-002).",
+  "vocab": {
+    "count": 192,
+    "entries": [
+      {
+        "expression": "あなた",
+        "reading": "あなた",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "いつ",
+        "reading": "いつ",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "うち",
+        "reading": "うち",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "かかる",
+        "reading": "かかる",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "かける",
+        "reading": "かける",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "かばん",
+        "reading": "かばん",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "結婚",
+        "reading": "けっこん (する)",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ここ",
+        "reading": "ここ",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "こっち",
+        "reading": "こっち",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "この",
+        "reading": "この",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "コピーする",
+        "reading": "コピーする",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "散歩",
+        "reading": "さんぽ (する)",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "しかし",
+        "reading": "しかし",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～すぎ",
+        "reading": "～すぎ",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "する",
+        "reading": "する",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "掃除",
+        "reading": "そうじ (する)",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "そこ",
+        "reading": "そこ",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "その",
+        "reading": "その",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "そば",
+        "reading": "そば",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～だけ",
+        "reading": "～だけ",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～たち",
+        "reading": "～たち",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "たて",
+        "reading": "たて",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "つける",
+        "reading": "つける",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "できる",
+        "reading": "できる",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "十",
+        "reading": "(〜を) とお",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "どの",
+        "reading": "どの",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "はく",
+        "reading": "はく",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "勉強",
+        "reading": "べんきょう (する)",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ボタン",
+        "reading": "ボタン",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "また",
+        "reading": "また",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "やる",
+        "reading": "やる",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ゆっくりと",
+        "reading": "ゆっくりと",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "よく",
+        "reading": "よく",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ラジオカセ",
+        "reading": "ラジオカセ",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "りっぱ",
+        "reading": "りっぱ",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "練習",
+        "reading": "れんしゅう (する)",
+        "levels": [
+          "L1"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "とうとう",
+        "reading": "とうとう",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "うかがう",
+        "reading": "うかがう",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "運動",
+        "reading": "うんどうする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "心配",
+        "reading": "しんぱいする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "つもり",
+        "reading": "つもり",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ごみ",
+        "reading": "ごみ",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "うそ",
+        "reading": "嘘",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "パート (タイム)",
+        "reading": "パート (タイム)",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "出席",
+        "reading": "しゅっせきする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "さっき",
+        "reading": "さっき",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "いくら～ても",
+        "reading": "いくら～ても",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "けんかする",
+        "reading": "けんかする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "故障",
+        "reading": "こしょうする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ぶどう",
+        "reading": "ぶどう",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "準備",
+        "reading": "じゅんびする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～(て) しまう",
+        "reading": "～(て) しまう",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "くれる",
+        "reading": "くれる",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "いただく",
+        "reading": "頂く",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "けがする",
+        "reading": "けがする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～だす",
+        "reading": "～だす",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "あいさつする",
+        "reading": "挨拶",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "運転",
+        "reading": "うんてんする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "案内",
+        "reading": "あんないする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "招待",
+        "reading": "しょうたいする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "はず",
+        "reading": "はず",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "おる",
+        "reading": "おる",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "チェックする",
+        "reading": "チェックする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "遠慮",
+        "reading": "えんりょする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "入学",
+        "reading": "にゅうがくする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "いっぱい",
+        "reading": "一杯",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "生産",
+        "reading": "せいさんする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～やすい",
+        "reading": "～やすい",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "びっくりする",
+        "reading": "びっくりする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "うまい",
+        "reading": "うまい",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "計画",
+        "reading": "けいかくする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "こう",
+        "reading": "こう",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "支度",
+        "reading": "したくする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "まず",
+        "reading": "まず",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～まま",
+        "reading": "～まま",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～(に) よると",
+        "reading": "～(に) よると",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "あげる",
+        "reading": "あげる",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "放送",
+        "reading": "ほうそうする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "承知",
+        "reading": "しょうちする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "退院",
+        "reading": "たいいんする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～おき",
+        "reading": "～おき",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "世話",
+        "reading": "せわする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "かっこう",
+        "reading": "格好",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "出発",
+        "reading": "しゅっぱつする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "拝見",
+        "reading": "はいけんする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "スーパー (マーケット)",
+        "reading": "スーパー (マーケット)",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ひげ",
+        "reading": "ひげ",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～(に) ついて",
+        "reading": "～(に) ついて",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "経験",
+        "reading": "けいけんする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "入院",
+        "reading": "にゅういんする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "相談",
+        "reading": "そうだんする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "食事",
+        "reading": "しょくじする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "おかげ",
+        "reading": "お陰",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～にくい",
+        "reading": "～にくい",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "生活",
+        "reading": "せいかつする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "輸出",
+        "reading": "ゆしゅつする",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "すり",
+        "reading": "すり",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "うれしい",
+        "reading": "嬉しい",
+        "levels": [
+          "L2"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "しまった (かん)",
+        "reading": "しまった (かん)",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "すみません (かん)",
+        "reading": "すみません (かん)",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "いたずら",
+        "reading": "いたずら",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "いつか",
+        "reading": "いつか",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "うがい",
+        "reading": "うがい",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "おめでとう",
+        "reading": "おめでとう",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "こぼれる",
+        "reading": "こぼれる",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "よろしく (かん)",
+        "reading": "よろしく (かん)",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ただ",
+        "reading": "ただ",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "たとえ",
+        "reading": "たとえ",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ちょうだい",
+        "reading": "ちょうだい",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "なお",
+        "reading": "なお",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "はあ (かん)",
+        "reading": "はあ (かん)",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "はさみ",
+        "reading": "はさみ",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ふと",
+        "reading": "ふと",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ほぼ",
+        "reading": "ほぼ",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "まさに",
+        "reading": "まさに",
+        "levels": [
+          "L3"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "初～",
+        "reading": "しょ～",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "しわ (かおの～)",
+        "reading": "しわ (かおの～)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～沿い",
+        "reading": "～そい",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "それはいけませんね (かん)",
+        "reading": "それはいけませんね (かん)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "だいいち (とりわけ)",
+        "reading": "だいいち (とりわけ)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "お元気で",
+        "reading": "おげんきで",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "お世話になりました",
+        "reading": "おせわになりました",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "お待ちください",
+        "reading": "おまちください",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～歌",
+        "reading": "～か",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "かび (～がはえる)",
+        "reading": "かび (～がはえる)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～きる",
+        "reading": "～きる",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～国",
+        "reading": "～こく",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "〜 (まる) ごと",
+        "reading": "〜 (まる) ごと",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "(かさを～) さす",
+        "reading": "(かさを～) さす",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "しいんと (する)",
+        "reading": "しいんと (する)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "〜(日本) 式",
+        "reading": "～(にほん) しき",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "しつれいしました (かん)",
+        "reading": "しつれいしました (かん)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～おしまい (おわり)",
+        "reading": "～おしまい (おわり)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "しめた (かん)",
+        "reading": "しめた (かん)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～手",
+        "reading": "～しゅ",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "じゅうたん (カーペット)",
+        "reading": "じゅうたん (カーペット)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "あいまい",
+        "reading": "あいまい",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "あくび",
+        "reading": "あくび",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～いち (にほんいち)",
+        "reading": "～いち (にほんいち)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "一段と",
+        "reading": "いちだんと",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "行っていらっしゃい",
+        "reading": "いっていらっしゃい",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "どういたしまして (かん)",
+        "reading": "どういたしまして (かん)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～ところ",
+        "reading": "～ところ",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "はい (かん)",
+        "reading": "はい (かん)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "×",
+        "reading": "ばつ",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "へそ",
+        "reading": "へそ",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～ほう (ひかく)",
+        "reading": "～ほう (ひかく)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "防～",
+        "reading": "ぼう～",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ミリ (メートル)",
+        "reading": "ミリ (メートル)",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "やかん",
+        "reading": "やかん",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "やたらに",
+        "reading": "やたらに",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ちぎる",
+        "reading": "ちぎる",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ついで",
+        "reading": "ついで",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～遣い",
+        "reading": "～づかい",
+        "levels": [
+          "L4"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～光",
+        "reading": "～こう",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "煌々と",
+        "reading": "こうこうと",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ございます (かん)",
+        "reading": "ございます (かん)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "こす (みずを～)",
+        "reading": "こす (みずを～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "こつ (をつかむ)",
+        "reading": "こつ (をつかむ)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ごらんなさい (かん)",
+        "reading": "ごらんなさい (かん)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "コンタクト (レンズ)",
+        "reading": "コンタクト (レンズ)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "さきに (いぜん)",
+        "reading": "さきに (いぜん)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "さぞ (さぞや。さぞかし)",
+        "reading": "さぞ (さぞや。さぞかし)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "さっぱりする",
+        "reading": "さっぱりする",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "さらう (こどもを～)",
+        "reading": "さらう (こどもを～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "とげ (をさす)",
+        "reading": "とげ (をさす)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～営",
+        "reading": "～えい",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "おおい (かん)",
+        "reading": "おおい (かん)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "おおまかな",
+        "reading": "おおまかな",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "おごる (ゆうしょくを～)",
+        "reading": "おごる (ゆうしょくを～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "かく (はじを)",
+        "reading": "かく (はじを)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～きり",
+        "reading": "～きり",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "くじ (～をひく)",
+        "reading": "くじ (～をひく)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "あざ",
+        "reading": "あざ",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "あせる (こえが～)",
+        "reading": "あせる (こえが～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～合せ",
+        "reading": "～あわせ",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "(花を〜) 生ける, 活ける",
+        "reading": "(はなを～) いける",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "すくう (みずを～)",
+        "reading": "すくう (みずを～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "そらす",
+        "reading": "そらす",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "そり (～にのる)",
+        "reading": "そり (～にのる)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "だと",
+        "reading": "だと",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "つじつま (はなしの～)",
+        "reading": "つじつま (はなしの～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "つぶる (めを～)",
+        "reading": "つぶる (めを～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "てっぺん",
+        "reading": "てっぺん",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～増し",
+        "reading": "～増し",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "またがる (うまを～)",
+        "reading": "またがる (うまを～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "まちまち",
+        "reading": "まちまち",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "まと",
+        "reading": "まと",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "～油",
+        "reading": "～ゆ",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "よし (かん)",
+        "reading": "よし (かん)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "よって (よりどころ)",
+        "reading": "よって (よりどころ)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      },
+      {
+        "expression": "ひび (かべの～)",
+        "reading": "ひび (かべの～)",
+        "levels": [
+          "L5"
+        ],
+        "reason": "no JMdict entry"
+      }
+    ]
+  },
+  "kanji": {
+    "count": 0,
+    "entries": []
+  }
+}
