@@ -61,3 +61,22 @@ the same engine. Known accepted trade-off (recorded from the comparison matrix):
 art/scene authoring bill of the three — mitigation via template scenes and a stylized
 fixed-perspective look; scene variety must outpace the "wears thin" failure mode (P1).
 *Source: user selection at Session 3 gate, 2026-07-11.*
+
+### D-007: Content pipeline — data source & tag-join policy (Session 4 build)
+Ingestion adapts judgment-call #1 of the approved plan: the pipeline imports the **canonical
+EDRDG XML** (JMdict_e.gz, kanjidic2.xml.gz) directly rather than scriptin/jmdict-simplified
+JSON. Reason: jmdict-simplified data ships only as github.com release assets, which are
+egress-blocked in this build environment (ftp.edrdg.org is reachable). Reading the raw,
+unexpanded XML also sidesteps the entity trap — POS short codes (`&n;`→`n`) are literal in
+the file. Net effect: more first-party provenance, no XML-entity risk, Node built-ins only
+(tar/jmdict-simplified deps dropped). Data is CC BY-SA 4.0 (Breen/EDRDG); the EDRDG licence
+page is re-verified at fetch time and fails the build on change.
+
+Tag-join direction (D-002-sound): the community JLPT list drives pack membership + estimated
+level (elzup vocab CSVs; davidluzgouveia `jlpt_new` kanji; N5→L1 … N1→L5); JMdict/KANJIDIC2
+supply the verified reading/senses/meanings. Match is exact on expression+reading (expanding
+`A; B` / `～` list variants to clean forms) then unique reading-only; anything unresolved goes
+to `content/review-queue.json`, never guessed. First run: vocab 97.6% resolved (7,660 items,
+192 queued), kanji 100% (2,211). Emitted output is deterministic (dates from fetch time).
+Tatoeba sentences and KanjiVG stroke assets are deferred to the next session.
+*Source: Session 4 build, 2026-07-11; approved plan + discovered egress constraint.*

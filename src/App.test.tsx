@@ -37,9 +37,9 @@ describe('railChecklist', () => {
     expect(withoutSW.find((s) => s.label.includes('Service worker'))?.done).toBe(false)
   })
 
-  it('keeps future milestones honest (not done)', () => {
+  it('marks content packs done now that packs are committed, keeps SRS honest', () => {
     const steps = railChecklist(true)
-    expect(steps.find((s) => s.label.includes('Content packs'))?.done).toBe(false)
+    expect(steps.find((s) => s.label.includes('Content packs'))?.done).toBe(true)
     expect(steps.find((s) => s.label.includes('SRS'))?.done).toBe(false)
   })
 })
