@@ -92,3 +92,52 @@
   font-size: 13px;
   color: var(--muted);
 }
+
+/* Playable slice: home CTA, session, summary */
+.home-cta {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  text-align: center;
+}
+.start-btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  background: var(--accent);
+  cursor: pointer;
+}
+.session-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.progress-text {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+.card-slot {
+  display: block;
+}
+.summary {
+  display: grid;
+  gap: 14px;
+  text-align: center;
+  justify-items: center;
+}
+.summary-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.loading {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 0;
+}

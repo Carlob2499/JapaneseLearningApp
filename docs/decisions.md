@@ -100,3 +100,23 @@ github.com release assets.
 - **UI stroke rendering + precache wiring are out of scope** (build-order item 5). This session ships
   the validated DATA: 20 packs / 15,082 items total.
 *Source: Session 5 build, 2026-07-11/12; approved plan + reachability recon.*
+
+### D-009: Playable vertical slice — first interactive study loop (L1)
+The app now loads real content and is usable (user asked "can I try it?"). Decisions:
+- **Pack delivery = dynamic `import()` of the L1 JSON packs** (Option A) — Rollup code-splits each into
+  a hashed async chunk the existing workbox glob auto-precaches (offline works; precache 775 KB).
+  Higher levels migrate to fetch+runtime-cache when the "download for offline" UX lands.
+- **Runtime `Pack.parse` validation** of loaded packs (D-002 enforced at runtime); `zod` enters the app bundle.
+- **SRS = the architecture §5 stage ladder, simple**: `src/scheduler/srs.ts` pure functions
+  (pass +1 / fail −2 min 1 + lapse / partial holds; ladder 4h→…→5mo). Nudge/load-shaper/leech and the
+  golden 180-day tests are deferred to the full-scheduler session.
+- **Store = `idb`** (direct dep): `itemStates` + append-only `journal` in IndexedDB (progress on-device;
+  D-001). **Nav = `useState`** view switch (no router yet).
+- **One Review flow** (due + ~12 newly-introduced, interleaved) with an untracked "practice more"
+  fallback so it's satisfying on first open. **Stroke animation = dependency-free CSS** (`pathLength=1`
+  + staggered `stroke-dashoffset`); GSAP identity is a later session.
+- **In-app D-002/D-005 disclosure + attribution** ship in the About panel (required).
+Verified end-to-end with Playwright (home → review → 8-stroke kanji animating → summary; IndexedDB
+persists across reload; zero page errors). Scope stays L1; full scheduler, multi-level offline, more
+retrieval modes, real-world scenes, TTS audio, and export/import UI are the next sessions.
+*Source: Session 6 build, 2026-07-12; approved plan + Playwright verification.*
