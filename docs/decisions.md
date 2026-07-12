@@ -149,3 +149,53 @@ journal entries carry `recognition`/`production`/`recall` + `latencyMs`; zero pa
 Deferred: typed/kana production input, reading-based MC, TTS listening mode, tightening
 `interaction` to the enum with a migration, synonym-aware distractors.
 *Source: Session 7 build, 2026-07-12; approved plan + Playwright verification.*
+
+### D-011: Full scheduler — nudge, load shaper, leech (architecture §5)
+Completes the deferred §5 scheduler; `applyReview` stays mode-agnostic (D-010).
+- **Nudge** (`srs.ts` `nudgeMultiplier`): bounded `[0.8, 1.3]` from the last 4 packed outcome bits
+  (`0.8 + passes/4 × 0.5`), applied to the pass/fail interval; partial stays a fixed 1-day hold.
+  Bounded by construction — no Anki-style ease runaway. Formula was our judgment (doc fixes only the
+  range).
+- **Load shaper** (`loadShaper.ts`): `snapToLightestDay` moves a due date to the lightest day within
+  ±15% of the ideal gap (ceil/floor bounds so it never exceeds tolerance, keeps time-of-day);
+  `shapeDueQueue` caps a session at `DEFAULT_DUE_CEILING=60`, keeping the most fragile (lowest-stage)
+  and sliding the rest +1 day; intro cap is the doc default **10** (`DEFAULT_DAILY_NEW`, was 12).
+- **Leech** (3 fails / 30 days → `leech:true`): needs timestamps, so a `getJournal()` reader was
+  added (the journal is otherwise write-only; `lapses` is untimestamped). `isLeech` reads a trailing
+  30-day window; a leech gets **forced retrieval-mode variety** (cycled by `lapses` in
+  `retrievalModeFor`) rather than more of the same.
+- **Golden test**: a seeded 180-day trajectory (`golden.test.ts`) asserts load ceilings hold, nothing
+  starves, learnable items mature, and chronic-fail items become leeches without maturing.
+- **Wiring** (`useReview`): the due set is pool-restricted then load-shaped at session build; each
+  grade re-flags the leech from journal-backed fail history and snaps its next due (anti-clumping).
+Deferred: `provisional` fast-track placement; speed/context retrieval bands; settings-tunable caps.
+*Source: Session 8 build, 2026-07-12; architecture §5 + golden/Playwright verification.*
+
+### D-012: Multi-level content (L1–L5) + level selector + offline
+Unlocks all 20 packs / 15,082 items (was L1 only).
+- **Delivery**: L1 stays bundled via static dynamic imports (precached, offline day-one). L2–L5 are
+  served as static JSON by a zero-dep Vite plugin (`contentPacks()` — dev middleware + a `closeBundle`
+  copy of `content/packs → dist/packs`, keeping `content/packs` the single source of truth) and
+  fetched at runtime via `import.meta.env.BASE_URL`. A **StaleWhileRevalidate** workbox route
+  (`hikkoshi-packs`) makes a level offline-capable after its first online visit — avoids the ~6 MB
+  precache that bundling every level would cost. `packs.loadLevels(levels)` merges selected levels
+  into the existing content shape (`L1Content` → `Content`; `loadL1` is now a thin wrapper).
+- **Selection**: levels persist in `localStorage` (`settings.ts`, D-001 — first localStorage use);
+  Home shows chips (per-level JLPT label + count). `useReview(levels)` loads them and shows a friendly
+  error if an uncached level is opened offline.
+- **Continuity**: item ids are unique per level (community list assigns one level each); the load
+  shaper is restricted to the active pool so deselected-level states never starve a session.
+*Source: Session 8 build, 2026-07-12; approved plan + Playwright (L2 fetch + offline) verification.*
+
+### D-013: Typed production input — type the reading
+Adds a harder retrieval rung between MC-production and free recall.
+- **Mode**: `typed` added to `RetrievalMode`. Ladder is now per-kind — vocab: recognition (0–1) →
+  production (2–3) → **typed reading (4–5)** → recall (6+); kanji skip typed (ambiguous on/kun
+  readings) → recall at 4+; sentences stay recognition → recall.
+- **Input/grading**: `wanakana` converts romaji → kana live (`toKana` IME mode); grading normalises
+  both sides to hiragana (`toHiragana`) so kana or romaji both match the **verified** reading (D-002 —
+  we check against dataset readings, nothing generated). A runtime guard downgrades typed → recall for
+  non-hiragana (katakana) readings, where romaji long-vowel input is too fiddly. Journal logs `typed`
+  + `latencyMs`.
+Deferred: typed for kanji readings, sentence cloze, and a "close enough" tolerance.
+*Source: Session 8 build, 2026-07-12; approved plan + Playwright (会う → あう) verification.*

@@ -125,8 +125,9 @@ export function useReview(levels: Level[]): ReviewApi {
       failTsRef.current = failTs
 
       const now = Date.now()
-      // Load-shape the due set: cap the session and slide the lowest-stakes overflow forward.
-      const { keep, slide } = shapeDueQueue(dueItems(now, states), now)
+      // Only shape items in the active levels — states from deselected levels stay untouched.
+      const dueInPool = dueItems(now, states).filter((s) => byIdRef.current.has(s.itemId))
+      const { keep, slide } = shapeDueQueue(dueInPool, now)
       for (const s of slide) {
         statesRef.current.set(s.itemId, s)
         void putItemState(s)
