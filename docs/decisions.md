@@ -341,3 +341,75 @@ still worked unchanged afterward; zero page errors. `pipeline:validate` green (2
 Deferred (Phase 2+): the day loop/life-stage frame that makes errands the primary entry point; produce/
 speed/context beats; more scene kinds (transit, cityhall); the full app-wide visual/motion system.
 *Source: Session 12 build, 2026-07-13; roadmap Phase 1 + Playwright verification.*
+
+### D-018: The day loop — Today panel, life-stage frame, module unlock, Diary
+Roadmap Phase 2 (see the approved roadmap; named in architecture.md §9 build-order item 6 and deferred
+by D-017's closing line): Phase 1 shipped one real errand, hardcoded as `App.tsx`'s only route into it.
+This session turns that single errand into a reason to come back tomorrow — a "Today" plan (review +
+errand tasks), a life-stage narrative over real coverage, and a capped end-of-day Diary reading pass.
+`DayPlan`/`LifeStage`/`DiaryEntry` are ephemeral — always recomputed from already-validated `ItemState`/
+`JournalEntry`/`Content`, never persisted or exported — so, per this codebase's Zod-for-trust-boundaries
+convention, they're plain TypeScript types in the new `src/day/`, not schema or pipeline changes.
+- **`DayPlan` is an honest task list, never padded.** `buildDayPlan` reports `dueCount`/`introCount` on
+  the review task verbatim (real numbers, e.g. `pickNewItems(...).length` — never the raw budget, which
+  could overstate availability once a pool is exhausted) and adds one errand task per unlocked scene
+  candidate; with one scene shipped, a day has ≤2 tasks — real, not a fabricated "2–4." A day with
+  nothing due, introducible, or unlocked yet renders an honest empty list, not invented busywork.
+- **`LifeStage` is six named stages over contiguous cleared-level coverage.** `computeLifeStage`'s stage
+  is the length of the *contiguous* cleared-level prefix (L1→L5) — a gap caps progress rather than being
+  skipped over. "Cleared" = **70%** of a level's reviewable pool (vocab+kanji+grammar+sentence; mind
+  `SentenceItem.levelEstimate` vs. every other domain's `.level` — `appMeta.ts`'s `reviewablePoolIds`
+  centralizes this so the gotcha can't silently recur) carries an `ItemState`. 70% is a documented,
+  adjustable judgment call — curriculum.md §5 P5 specifies no number. Names are the canonical wording
+  from design-options.md:64: Tourist → Resident → Part-timer → Employee → Senior staff → "You handle it
+  for someone else." An empty/unloaded pool is "not cleared," never a vacuous 100%.
+- **Module/scene unlock is a real coverage mechanism, `M2_konbini` pinned open.**
+  `MODULE_UNLOCK_THRESHOLD` (absent = 0 = always unlocked) gates whether a scene appears as a candidate,
+  not whether its vocabulary is reviewable — a module's tagged vocab is always in the ordinary level
+  review pool, so `moduleCoverage` rises through normal study regardless of whether the module's own
+  scene is locked. Konbini is curriculum's own "entry N5" module and the only one with tagged vocab
+  today, so gating it now would regress Phase 1's always-available errand for zero benefit. Multi-module
+  scenes gate conjunctively — `isSceneUnlocked` requires every tagged module to individually clear.
+- **Scene staleness is a sort preference, never a filter.** `deriveSceneHistory` reads each scene's
+  last-shown day straight from the journal's existing `sceneId` field (Phase 1, D-017) — no new
+  persisted storage. `buildDayPlan` sorts unlocked candidates stalest-first (never-shown ahead of any
+  shown scene) but never drops one: a stale-but-only candidate still surfaces, the same regression class
+  the module-unlock guarantee already protects against, applied consistently.
+- **Diary is a genuine, capped reading pass, deliberately grey-box.** `pickDiaryEntries` takes today's
+  distinct reviewed vocab ids (deduped across scene and flashcard review alike; defensively re-sorted
+  rather than trusting the journal store's iteration order) and, for each, finds the first already-loaded
+  sentence whose `.ja` contains that vocab's `.expression` — the exact substring technique
+  `pipeline/src/grammar.ts`'s `linkExamples` already uses server-side, now client-side. An item with no
+  matching sentence is skipped — never fabricated — and skipping it doesn't consume the 5-entry cap.
+  Tapping a word reveals its gloss and logs one `{interaction:'context', outcome:'pass'}` journal entry
+  (recognition credit, reusing the already-defined `'context'` value); a repeat tap is a no-op, not a
+  second entry. The illustrated pass over this surface is Phase 3 (D-003) — this phase reuses
+  `.card`/`.start-btn`/`.ghost-btn` rather than inventing new visual language early.
+- **Home becomes self-fetching, and a light Onboarding gates it once.** `useToday(levels)` mirrors
+  `useScene`'s loading pattern — loads content/states/journal once, derives everything — but **never
+  calls `putItemState`**: its due/intro counts are a strictly read-only preview of `useReview`'s own
+  shaping (same `dueItems`+`shapeDueQueue`, `pickNewItems`+`introBudget` primitives), not a session; the
+  real session's persistence still only happens when `useReview` actually runs. The two old static CTAs
+  are replaced by one Today panel; the level-picker keeps its own section rather than being dropped.
+  `onStartScene` now takes a `sceneId` so `DayTask.errand.sceneId` means something, instead of routing to
+  one hardcoded errand. A new, deliberately narrow `Onboarding` screen (a `settings.ts` `onboarded` flag,
+  following `getAutoPlay`'s exact boolean shape) introduces the app once before Home ever renders — no
+  level-picking or placement logic there; that's build-order item 7, later and separate.
+- **`fake-indexeddb` lands as test infrastructure.** jsdom ships no IndexedDB implementation, and this
+  repo had zero test coverage of any store-touching code before this session (`ReviewSession`/`SceneView`/
+  `useReview`/`useScene` were verified only via Playwright). `useToday` is the first hook with direct
+  vitest coverage, including the critical guarantee that merely loading it never writes a row.
+Verified: 34 new unit tests across `src/day/` (life-stage boundaries, module-unlock thresholds, day-plan
+honesty/cap/staleness-sort, diary matching/dedup/cap) plus hook-level `useToday` tests (fresh-store shape,
+seeded-coverage stage transition, idempotent reveal, no-writes-on-load) and updated `App.test.tsx`
+(onboarding gate, life-stage label) — 163 tests total, green; typecheck/lint/build clean. Playwright,
+live: onboarding → Continue → Home's Today panel shows "Tourist" + real due/intro counts + the konbini
+errand, unlocked from zero; a review session completes normally; the errand still works and logs
+`sceneId`; once due and intro both hit zero the panel honestly shows no review task rather than a fake
+one; after an errand pass, a Diary row appeared (円/えん matched into a loaded sentence), tap revealed the
+gloss and English, and a repeat tap did not duplicate it; zero page errors throughout.
+Deferred (Phase 3+): the placement probe (build-order item 7); more scene kinds, so the day-plan cap and
+scene-history sort actually bind against real competition (Phase 5); the illustrated visual pass over
+Today/Diary (Phase 3); `ProgressExport` still lacks `lifeStage`/`settingsHash` (not touched — these are
+ephemeral/recomputed, not exported state).
+*Source: Session 13 build, 2026-07-13; approved plan + Playwright verification.*
