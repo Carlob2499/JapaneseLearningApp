@@ -3,7 +3,7 @@ import type { Level, Outcome } from '@hikkoshi/schemas'
 import { useReview, type Presentation, type Reviewable } from '../review/useReview'
 import { useAudio } from '../audio/useAudio'
 import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
-import { ChoiceCard, KanjiCard, SentenceCard, TypedCard, VocabCard } from './cards'
+import { ChoiceCard, KanjiCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
 
 const KIND_LABEL: Record<Reviewable['kind'], string> = {
@@ -50,7 +50,17 @@ function multipleChoicePrompt(
       ? { prompt: <span className="jp-lg">{r.item.meanings[0]}</span>, question: 'Which kanji?' }
       : { prompt: <span className="jp-xl">{r.item.literal}</span>, question: 'Which meaning?' }
   }
-  return { prompt: <span className="jp-lg">{r.item.ja}</span>, question: 'Which translation?' }
+  // Sentences carry their register on both the recognition prompt (read here first) and the
+  // recall card, so politeness is felt from the first encounter, not only when mature.
+  return {
+    prompt: (
+      <div className="sentence-front">
+        <RegisterChip register={r.item.register} />
+        <span className="jp-lg">{r.item.ja}</span>
+      </div>
+    ),
+    question: 'Which translation?',
+  }
 }
 
 function Card({
