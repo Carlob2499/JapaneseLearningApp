@@ -27,7 +27,7 @@
       "domain": "sentence",
       "packVersion": "0.1.0",
       "itemCount": 600,
-      "sha256": "252fc27a8be3c6345d85d0649481f8319b4db9d9e208d266287da96fcb15e31d"
+      "sha256": "52f947fd27d98fcad2382716297d2bd28809c526584150e5a51c87377cf359d2"
     },
     {
       "packId": "strokes.l1.core",
@@ -63,7 +63,7 @@
       "domain": "sentence",
       "packVersion": "0.1.0",
       "itemCount": 600,
-      "sha256": "2ca032743cdeef6a4e87d531c5bc191023ba14f5ab910f9f51af770026610148"
+      "sha256": "0a8ea6b3d7a75ef766c13503c401e220c6959bf4852794c21045f2d733746757"
     },
     {
       "packId": "strokes.l2.core",
@@ -99,7 +99,7 @@
       "domain": "sentence",
       "packVersion": "0.1.0",
       "itemCount": 600,
-      "sha256": "e33f6455e1deab1b745a13e4a7508195628cc2b499c6720813ca50be2fca43c3"
+      "sha256": "1ae8998a948f1d0265c6215c2063916d947a9a1f0f44a0aa2d69921806ddca50"
     },
     {
       "packId": "strokes.l3.core",
@@ -135,7 +135,7 @@
       "domain": "sentence",
       "packVersion": "0.1.0",
       "itemCount": 600,
-      "sha256": "9dcdfb648b3cff3f7133a0fb48318a76ab08db8c3c9b17d5884f398d37766840"
+      "sha256": "0f10949118ebd58b2b94ea8259e30e2d5d2b1fabc673d962f427dbfdf4ef9c68"
     },
     {
       "packId": "strokes.l4.core",
@@ -171,7 +171,7 @@
       "domain": "sentence",
       "packVersion": "0.1.0",
       "itemCount": 600,
-      "sha256": "6c17339c4435fb2dd77972e2d37cabdefb2304b485bedf1de91c65741e6b4920"
+      "sha256": "ead88ff52d80a9072e87b55a48626bf2af46c0b0da2e118e62e7ba1c735e6fa8"
     },
     {
       "packId": "strokes.l5.core",

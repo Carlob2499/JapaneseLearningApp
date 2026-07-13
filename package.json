@@ -18,6 +18,7 @@
     "icons": "node tools/gen-icons.mjs",
     "pipeline:fetch": "tsx pipeline/src/fetch.ts",
     "pipeline:build": "tsx pipeline/src/build.ts",
+    "pipeline:build-sentences": "tsx pipeline/src/build-sentences.ts",
     "pipeline:validate": "tsx pipeline/src/validate.ts"
   },
   "dependencies": {

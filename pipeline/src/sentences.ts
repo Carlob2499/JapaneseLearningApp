@@ -2,8 +2,9 @@ import { readFile } from 'node:fs/promises'
 import { createReadStream } from 'node:fs'
 import { createInterface } from 'node:readline'
 import { join } from 'node:path'
-import type { KanjiItem, Level, SentenceItem } from '@hikkoshi/schemas'
-import { LEVELS_IN_ORDER } from './config'
+import type { KanjiItem, Level, Register, SentenceItem } from '@hikkoshi/schemas'
+import { LEVELS_IN_ORDER, REGISTER_TARGETS, type RegisterMix } from './config'
+import { classifyRegister } from './register'
 import { parseTsv } from './lib/tsv'
 
 const KNOWN_RATIO_BASIS =
@@ -40,6 +41,19 @@ function sentenceLevel(kanji: string[], known: Map<Level, Set<string>>): Level |
   return null
 }
 
+type RegGroup = keyof RegisterMix // 'polite' | 'plain' | 'casual' | 'keigo'
+const REG_GROUPS: readonly RegGroup[] = ['polite', 'plain', 'casual', 'keigo']
+
+/** Collapse the six-value register into the four quota groups (keigo = respectful+humble+service). */
+function registerGroup(r: Register): RegGroup {
+  return r === 'polite' || r === 'plain' || r === 'casual' ? r : 'keigo'
+}
+
+/** Higher = a more complete sentence: prefer a 。 ending and a mid length over bare fragments. */
+function quality(ja: string, len: number): number {
+  return (/[。．]$/.test(ja) ? 2 : 0) + (len >= 7 && len <= 28 ? 1 : 0) - (len < 6 ? 1 : 0)
+}
+
 /** Normalized Tatoeba corpus (jpn↔eng pairs + authorship + CC0 set). */
 export interface TatoebaCorpus {
   jpn: Map<number, { text: string; author: string }>
@@ -57,6 +71,8 @@ export interface SentenceOptions {
 export interface SentenceResult {
   items: SentenceItem[]
   statsByLevel: Record<string, number>
+  /** Achieved register mix per level (counts) — for the honesty log vs REGISTER_TARGETS. */
+  registerByLevel: Record<string, Record<RegGroup, number>>
   excluded: { noEnglish: number; unknownKanji: number; length: number; duplicate: number }
   linkResolveRate: number
 }
@@ -83,6 +99,8 @@ export function buildSentenceItems(
     license: 'CC-BY-2.0-FR' | 'CC0-1.0'
     level: Level
     len: number
+    register: Register
+    q: number
   }
   const candidates: Cand[] = []
   const seenJa = new Set<string>()
@@ -134,18 +152,52 @@ export function buildSentenceItems(
       license: corpus.cc0.has(jpnId) ? 'CC0-1.0' : 'CC-BY-2.0-FR',
       level,
       len,
+      register: classifyRegister(ja),
+      q: quality(ja, len),
     })
   }
 
   const items: SentenceItem[] = []
   const statsByLevel: Record<string, number> = {}
+  const registerByLevel: Record<string, Record<RegGroup, number>> = {}
+  const byQuality = (a: Cand, b: Cand) =>
+    b.q - a.q || Math.abs(a.len - 12) - Math.abs(b.len - 12) || a.jpnId - b.jpnId
+
   for (const level of LEVELS_IN_ORDER) {
-    const list = candidates
-      .filter((c) => c.level === level)
-      .sort((a, b) => a.len - b.len || a.jpnId - b.jpnId)
-      .slice(0, cap)
-    statsByLevel[level] = list.length
-    for (const c of list) {
+    const levelCands = candidates.filter((c) => c.level === level)
+    const buckets: Record<RegGroup, Cand[]> = { polite: [], plain: [], casual: [], keigo: [] }
+    for (const c of levelCands) buckets[registerGroup(c.register)].push(c)
+    for (const g of REG_GROUPS) buckets[g].sort(byQuality)
+
+    const target = REGISTER_TARGETS[level]
+    const chosen = new Set<Cand>()
+    const picked: Cand[] = []
+    // 1. Fill each register group toward its quota, best-quality first — the scaffold shape.
+    for (const g of REG_GROUPS) {
+      let want = Math.floor(cap * target[g])
+      for (const c of buckets[g]) {
+        if (want <= 0 || picked.length >= cap) break
+        picked.push(c)
+        chosen.add(c)
+        want--
+      }
+    }
+    // 2. Backfill to the cap from the best remaining, but never from a zero-target register
+    //    (keigo stays 0% at L1). If supply is thin the level simply has fewer than `cap`.
+    if (picked.length < cap) {
+      const backfillable = levelCands
+        .filter((c) => !chosen.has(c) && target[registerGroup(c.register)] > 0)
+        .sort(byQuality)
+      for (const c of backfillable) {
+        if (picked.length >= cap) break
+        picked.push(c)
+        chosen.add(c)
+      }
+    }
+
+    const regCount: Record<RegGroup, number> = { polite: 0, plain: 0, casual: 0, keigo: 0 }
+    for (const c of picked) {
+      regCount[registerGroup(c.register)]++
       items.push({
         kind: 'sentence',
         id: `sentence:${c.jpnId}`,
@@ -154,14 +206,18 @@ export function buildSentenceItems(
         en: c.en,
         attribution: { author: c.author, license: c.license },
         levelEstimate: c.level,
+        register: c.register,
         coverage: { knownRatioBasis: KNOWN_RATIO_BASIS },
       })
     }
+    statsByLevel[level] = picked.length
+    registerByLevel[level] = regCount
   }
 
   return {
     items,
     statsByLevel,
+    registerByLevel,
     excluded,
     linkResolveRate: corpus.jpn.size === 0 ? 1 : resolvableLinks / corpus.jpn.size,
   }

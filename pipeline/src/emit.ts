@@ -193,3 +193,36 @@ export async function emitPacks(
   await writeFile(join(PACKS_DIR, '..', 'ATTRIBUTION.md'), attribution(lock))
   return manifest
 }
+
+/**
+ * Re-emit ONLY the per-level sentence packs (targeted rebuild) and return their manifest
+ * entries. The caller splices these into the existing manifest, leaving vocab/kanji/stroke
+ * packs byte-identical. Reuses `buildPack` + `DOMAIN_META.sentence` so bytes match `emitPacks`.
+ */
+export async function emitSentencePacks(
+  sentences: SentenceItem[],
+  lock: LockSource[],
+  date: string,
+): Promise<ManifestEntry[]> {
+  const byLevel = groupByLevel<AnyItem>(sentences, (i) => (i as SentenceItem).levelEstimate)
+  const entries: ManifestEntry[] = []
+  for (const level of LEVELS_IN_ORDER) {
+    const items = byLevel.get(level) ?? []
+    if (items.length === 0) continue
+    await mkdir(join(PACKS_DIR, level.toLowerCase()), { recursive: true })
+    const pack = buildPack(DOMAIN_META.sentence, level, items, lock, date)
+    const body = JSON.stringify(pack) + '\n'
+    const relPath = `${level.toLowerCase()}/sentence.json`
+    await writeFile(join(PACKS_DIR, relPath), body)
+    entries.push({
+      packId: pack.packId,
+      path: relPath,
+      level,
+      domain: 'sentence',
+      packVersion: PACK_VERSION,
+      itemCount: items.length,
+      sha256: sha256(Buffer.from(body)),
+    })
+  }
+  return entries
+}

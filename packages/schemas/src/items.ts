@@ -74,6 +74,8 @@ export const SentenceItem = z.object({
     license: z.enum(['CC-BY-2.0-FR', 'CC0-1.0']),
   }),
   levelEstimate: Level,
+  /** Politeness register, estimated from the sentence's grammatical ending (heuristic, D-005). */
+  register: Register,
   coverage: z.object({ knownRatioBasis: z.string().min(1) }),
 })
 export type SentenceItem = z.infer<typeof SentenceItem>

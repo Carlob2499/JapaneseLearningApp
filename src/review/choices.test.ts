@@ -58,6 +58,7 @@ function sentence(id: string, ja: string, en: string): Extract<Reviewable, { kin
       en,
       attribution: { author: 'x', license: 'CC-BY-2.0-FR' },
       levelEstimate: 'L1',
+      register: 'polite',
       coverage: { knownRatioBasis: 'test' },
     },
   }

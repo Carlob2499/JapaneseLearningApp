@@ -142,3 +142,24 @@ export const JLPT_TO_LEVEL: Readonly<Record<'N5' | 'N4' | 'N3' | 'N2' | 'N1', Le
 }
 
 export const LEVELS_IN_ORDER = ['L1', 'L2', 'L3', 'L4', 'L5'] as const satisfies readonly Level[]
+
+/**
+ * Target sentence register mix per level (D-015 "authentic balance"): polite-majority
+ * production from L1, with real casual exposure throughout and keigo introduced from L2/L3
+ * (GENKI polite→plain→keigo, extended by Quartet). `keigo` = respectful + humble + service.
+ * Aspirational — the selector fills to target where Tatoeba supply allows and logs shortfalls.
+ */
+export interface RegisterMix {
+  polite: number
+  plain: number
+  casual: number
+  keigo: number
+}
+export const REGISTER_TARGETS: Readonly<Record<Level, RegisterMix>> = {
+  L0: { polite: 0.5, plain: 0.3, casual: 0.2, keigo: 0 },
+  L1: { polite: 0.55, plain: 0.25, casual: 0.2, keigo: 0 },
+  L2: { polite: 0.4, plain: 0.25, casual: 0.3, keigo: 0.05 },
+  L3: { polite: 0.3, plain: 0.2, casual: 0.3, keigo: 0.2 },
+  L4: { polite: 0.25, plain: 0.2, casual: 0.3, keigo: 0.25 },
+  L5: { polite: 0.2, plain: 0.25, casual: 0.3, keigo: 0.25 },
+}

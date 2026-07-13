@@ -103,6 +103,33 @@ describe('buildSentenceItems', () => {
     void multi
   })
 
+  it('classifies and attaches a register to each item', () => {
+    const { items } = buildSentenceItems(corpus(), known)
+    expect(items[0].register).toBe('polite') // 水をください。
+  })
+
+  it('scaffolds register per level: L1 is polite-majority with no keigo', () => {
+    const jpn = new Map<number, { text: string; author: string }>()
+    const links = new Map<number, number[]>()
+    const engText = new Map<number, string>()
+    let id = 100
+    const add = (text: string) => {
+      jpn.set(id, { text, author: 'a' })
+      links.set(id, [id + 1000])
+      engText.set(id + 1000, 'x')
+      id++
+    }
+    const v = 'あいうえおかきくけこ'
+    for (let i = 0; i < 8; i++) add(`これはことし${v[i]}です。`) // polite
+    for (let i = 0; i < 8; i++) add(`はやく${v[i]}してよ。`) // casual
+    for (let i = 0; i < 4; i++) add(`いらっしゃいませ${v[i]}。`) // keigo
+    const c: TatoebaCorpus = { jpn, links, engText, cc0: new Set() }
+    const { registerByLevel } = buildSentenceItems(c, known, { perLevelCap: 12 })
+    const l1 = registerByLevel.L1
+    expect(l1.polite).toBeGreaterThanOrEqual(l1.casual) // polite-majority (D-015 scaffold)
+    expect(l1.keigo).toBe(0) // L1 keigo target is 0 — backfill excludes zero-target registers
+  })
+
   it('dedupes identical ja text and enforces length bounds', () => {
     const dup = corpus({
       jpn: new Map([

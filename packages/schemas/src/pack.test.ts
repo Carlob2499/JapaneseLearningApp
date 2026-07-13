@@ -1,5 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { Pack, VocabItem, KanjiItem, StrokeItem } from './index'
+import { Pack, VocabItem, KanjiItem, SentenceItem, StrokeItem } from './index'
+
+const sentence = {
+  kind: 'sentence',
+  id: 'sentence:1',
+  tatoebaId: 1,
+  ja: '水をください。',
+  en: 'Water, please.',
+  attribution: { author: 'alice', license: 'CC-BY-2.0-FR' },
+  levelEstimate: 'L1',
+  register: 'polite',
+  coverage: { knownRatioBasis: 'kanji-coverage proxy' },
+}
 
 const vocab = {
   kind: 'vocab',
@@ -60,6 +72,13 @@ describe('item schemas', () => {
 
   it('rejects a vocab item with no senses (no verified meaning)', () => {
     expect(VocabItem.safeParse({ ...vocab, senses: [] }).success).toBe(false)
+  })
+
+  it('accepts a sentence item with a register and rejects one missing it', () => {
+    expect(SentenceItem.safeParse(sentence).success).toBe(true)
+    const { register: _omit, ...noRegister } = sentence
+    expect(SentenceItem.safeParse(noRegister).success).toBe(false)
+    expect(SentenceItem.safeParse({ ...sentence, register: 'shouting' }).success).toBe(false)
   })
 
   it('accepts a KanjiVG stroke item and rejects one with no strokes', () => {
