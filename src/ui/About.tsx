@@ -17,6 +17,13 @@ export default function About() {
           pronunciation where your device has a Japanese voice. Visuals are still placeholder. Progress
           is stored on this device only.
         </p>
+        <p>
+          <strong>Politeness register is scaffolded, GENKI-style.</strong> Each sentence carries a small
+          label — polite (です/ます), plain, casual, or keigo — and every level mixes them deliberately, so
+          you learn to <em>produce</em> polite Japanese first while <em>hearing</em> casual and keigo speech
+          from early on. The register is a heuristic estimate read from the sentence’s ending, not a hand
+          annotation.
+        </p>
         <p className="attribution">
           Language data:{' '}
           <span>JMdict &amp; KANJIDIC2 © James William Breen / EDRDG (CC BY-SA 4.0)</span>;{' '}

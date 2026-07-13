@@ -23,6 +23,26 @@ export function SpeakButton({ text }: { text: string }) {
   )
 }
 
+/** How each register is labelled and tinted on a card — the felt, taught dimension of the scaffold. */
+const REGISTER_META: Record<SentenceItem['register'], { label: string; group: string; title: string }> = {
+  polite: { label: 'polite', group: 'polite', title: '丁寧語 (teineigo) — です/ます. The polite default you learn to produce first.' },
+  plain: { label: 'plain', group: 'plain', title: '常体 (futsūtai) — plain / dictionary form.' },
+  casual: { label: 'casual', group: 'casual', title: 'くだけた話し方 — informal speech among friends.' },
+  keigo_respectful: { label: 'keigo', group: 'keigo', title: '尊敬語 (sonkeigo) — respectful language that raises the other person.' },
+  keigo_humble: { label: 'keigo', group: 'keigo', title: '謙譲語 (kenjōgo) — humble language that lowers yourself.' },
+  service_script: { label: 'formal', group: 'keigo', title: '接客・丁重語 — service-industry formal speech (でございます, いらっしゃいませ).' },
+}
+
+/** Small register label on a sentence — a heuristic estimate from the sentence's ending (D-015). */
+export function RegisterChip({ register }: { register: SentenceItem['register'] }) {
+  const m = REGISTER_META[register]
+  return (
+    <span className="register-chip" data-reg={m.group} title={m.title} data-testid="register-chip">
+      {m.label}
+    </span>
+  )
+}
+
 function GradeBar({ onGrade }: { onGrade: (o: Outcome) => void }) {
   return (
     <div className="grade-bar">
@@ -148,9 +168,12 @@ export function SentenceCard({ item, onGrade }: { item: SentenceItem; onGrade: (
     <StudyCard
       kind="Sentence"
       front={
-        <span className="jp-lg">
-          {item.ja} <SpeakButton text={item.ja} />
-        </span>
+        <div className="sentence-front">
+          <RegisterChip register={item.register} />
+          <span className="jp-lg">
+            {item.ja} <SpeakButton text={item.ja} />
+          </span>
+        </div>
       }
       onGrade={onGrade}
       back={<div className="en">{item.en}</div>}

@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { ChoiceCard, SpeakButton, TypedCard } from './cards'
+import { ChoiceCard, SentenceCard, SpeakButton, TypedCard } from './cards'
 import type { Choice } from '../review/choices'
+import type { SentenceItem } from '@hikkoshi/schemas'
 
 afterEach(cleanup)
 
@@ -69,6 +70,36 @@ describe('TypedCard', () => {
     expect(screen.getByTestId('typed-feedback').textContent).toContain('たべる')
     fireEvent.click(screen.getByText('Next →'))
     expect(onGrade).toHaveBeenCalledWith('fail')
+  })
+})
+
+describe('SentenceCard', () => {
+  function sentence(register: SentenceItem['register']): SentenceItem {
+    return {
+      kind: 'sentence',
+      id: 'sentence:1',
+      tatoebaId: 1,
+      ja: '水をください。',
+      en: 'Water, please.',
+      attribution: { author: 'x', license: 'CC-BY-2.0-FR' },
+      levelEstimate: 'L1',
+      register,
+      coverage: { knownRatioBasis: 'test' },
+    }
+  }
+
+  it('shows a register chip labelling the sentence politeness (polite → "polite")', () => {
+    render(<SentenceCard item={sentence('polite')} onGrade={() => {}} />)
+    const chip = screen.getByTestId('register-chip')
+    expect(chip.textContent).toBe('polite')
+    expect(chip.getAttribute('data-reg')).toBe('polite')
+  })
+
+  it('collapses the two keigo values + service script to a "keigo"/"formal" group tint', () => {
+    render(<SentenceCard item={sentence('keigo_humble')} onGrade={() => {}} />)
+    const chip = screen.getByTestId('register-chip')
+    expect(chip.textContent).toBe('keigo')
+    expect(chip.getAttribute('data-reg')).toBe('keigo')
   })
 })
 
