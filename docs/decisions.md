@@ -219,3 +219,38 @@ reading (a user gesture, so browser autoplay policy allows it); a 🔊/🔇 togg
 Playwright-verified: reveal auto-plays, mute suppresses the next auto-play, manual override still fires.
 Deferred: kanji reading audio; per-reading playback; sentence-front autoplay (blocked pre-gesture).
 *Source: Session 9 build, 2026-07-13; own-preference iteration + Playwright verification.*
+
+### D-015: Register scaffold — deliberate polite → plain → casual → keigo (GENKI/Quartet-modeled)
+User directive: the app surfaced too much casual Japanese; introduce formal/informal **register**
+deliberately and scaffolded like GENKI/Quartet so a learner transitions seamlessly, and make that
+curriculum structuring an explicit **goal** (curriculum §3.6). Root cause was a selection bug, not a
+content one — `buildSentenceItems` selected shortest-first-then-cap, and です/ます add mora, so polite
+sentences sorted behind casual fragments and fell past the cap (measured L1 ≈ 8.5% polite / 91% casual /
+0% keigo). User-chosen profile: **"authentic balance"** — polite-majority *production* from day one,
+real casual/keigo *exposure* throughout (two register clocks; reconciled with the receptive M5/M7
+modules in §3.6).
+- **Register is derived, never generated (D-002-safe).** `pipeline/src/register.ts` `classifyRegister(ja)`
+  reads each verbatim Tatoeba sentence's grammatical ending + lexical keigo markers → a `Register`
+  (`plain | polite | keigo_respectful | keigo_humble | casual | service_script`). It *classifies* dataset
+  text; it never authors or edits it. An honest heuristic like the kanji-coverage leveling (D-008),
+  disclosed in-app and per item.
+- **`SentenceItem.register` is required**, landed atomically with the re-emit (an interim state where the
+  schema requires a field the packs lack would fail `Pack.parse`/validate/app).
+- **Selection = register quotas per level** (`REGISTER_TARGETS`, curriculum §3.6 table: L1 55/25/20/0 …
+  L5 20/25/30/25 polite/plain/casual/keigo). The selector fills each level's buckets best-complete-
+  sentence-first (a quality sort that also drains the ！/？ micro-fragment skew), then backfills to the
+  cap from non-zero-target registers only (keigo stays 0% at L1). Targets are aspirational; Tatoeba
+  availability constrains and **shortfalls are logged, never silently capped** (§1 honesty rule).
+- **Targeted sentence-only re-emit** (no vocab/kanji/stroke churn): `pipeline:build-sentences` re-fetches
+  only Tatoeba, reuses the committed kanji packs for the known-kanji sets, re-emits `l*/sentence.json`
+  + the sentence rows of `manifest.json`; `lock.generatedAt` and all other packs stay byte-identical.
+  `emit.ts` factors out a reusable `emitSentencePacks()` so re-emitted bytes match a full build.
+- **Register is visible**: `SentenceCard` shows a small tinted register chip (polite/casual/keigo/plain);
+  About + curriculum §3.6 disclose the scaffold and the heuristic.
+Result [counted this build]: L1 55% polite / 20% casual (was ~8.5% / ~91%); genuine 尊敬語/謙譲語 from L2,
+25% keigo by L4–L5; validate green (20 packs / 15,082 items, sha256-matched, vocab/kanji/strokes
+unchanged). GENKI sequence verified against the St. Olaf Genki I & II grammar index (です L1 → ます L3 →
+て-form L6 → short/plain L8 → 尊敬語 L19 → 謙譲語 L20); Quartet ≈ N3→N2.
+Deferred: the "conjugate into register" production retrieval mode (E2 keigo/casual transforms); per-sense
+vocab register; grammar-point register curation (D-005). Tatoeba lock date kept stable to scope the diff.
+*Source: Session 10 build, 2026-07-13; approved plan + re-emit/validate verification.*

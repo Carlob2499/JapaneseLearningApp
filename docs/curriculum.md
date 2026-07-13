@@ -93,7 +93,27 @@ Sources: [JLPT Sensei grammar lists](https://jlptsensei.com/jlpt-n5-grammar-list
 
 ### 3.5 What each level *means* (official can-do anchors)
 
-The official level summaries ([jlpt.jp](https://www.jlpt.jp/e/about/levelsummary.html)) define levels by reading/listening can-dos only — N5 "basic Japanese," N3 "Japanese used in everyday situations to a certain degree," N1 "Japanese used in a broad range of circumstances," with N1 listening at "natural speed" in "a broad range of settings." Two structural facts drive our design: **the JLPT tests no speaking or writing** ("the JLPT does not include sections to measure speaking or writing proficiency directly" — [jlpt.jp](https://www.jlpt.jp/e/about/points.html)), and register (casual vs. formal vs. service) is never a defined test dimension. That is the gap the real-world modules fill.
+The official level summaries ([jlpt.jp](https://www.jlpt.jp/e/about/levelsummary.html)) define levels by reading/listening can-dos only — N5 "basic Japanese," N3 "Japanese used in everyday situations to a certain degree," N1 "Japanese used in a broad range of circumstances," with N1 listening at "natural speed" in "a broad range of settings." Two structural facts drive our design: **the JLPT tests no speaking or writing** ("the JLPT does not include sections to measure speaking or writing proficiency directly" — [jlpt.jp](https://www.jlpt.jp/e/about/points.html)), and register (casual vs. formal vs. service) is never a defined test dimension. That is the gap the real-world modules fill — and the axis §3.6 makes an explicit curriculum goal.
+
+### 3.6 Register progression — the productive scaffold (deliberate polite → plain → casual → keigo)
+
+§3.5 names the gap: the JLPT grades reading/listening can-dos and **never makes register a test dimension**, so a tag-driven corpus inherits whatever politeness its sentences happen to carry. Left unmanaged that skews *casual* — short casual utterances dominate example corpora — which is the opposite of how a learner should be taught to *speak*. **Design goal (user directive, enshrined here as a first-class curriculum axis): register is deliberate and scaffolded, modeled on GENKI/Quartet, so a learner moves from safe polite Japanese to plain, casual, and keigo without a cliff.**
+
+**The mainstream sequence is polite-first, and GENKI is the canonical anchor** [verified against the St. Olaf College Japanese program's [Genki I & II grammar index](https://wp.stolaf.edu/japanese/grammar-index/genki-i-ii-grammar-index/)]: です copula (Genki I L1) → polite ます-form (L3) → て-form (L6) → **short / plain form (L8)** and plain-past + casual usage (L9) → **honorific 尊敬語 (Genki II L19) → humble 謙譲語 (L20)**. **Quartet** continues the ramp into formal register at the N3→N2 boundary (Vol. 1 ≈ N3, Vol. 2 ≈ N2 — [Tofugu review](https://www.tofugu.com/reviews/quartet-vol1/); [Japan Times publisher](https://store.jtpublishing.co.jp/en/pages/quartet)). The dissenting immersion tradition teaches **plain-first** (Tae Kim's *Guide to Japanese Grammar*, on the argument that plain form is grammatically primary); we follow the classroom/safety consensus — a learner who can only speak plain risks rudeness, whereas polite is never *wrong*, only sometimes stiff.
+
+**Our scaffold — per-level target register mix** (keigo = 尊敬語 + 謙譲語 + service 丁重語; percentages are of each level's example-sentence pack):
+
+| Level | JLPT | polite | plain | casual | keigo | GENKI/Quartet anchor |
+|---|---|---|---|---|---|---|
+| L1 | N5 | 55% | 25% | 20% | 0%  | Genki I L1–5 (です/ます) |
+| L2 | N4 | 40% | 25% | 30% | 5%  | Genki I L6–12 (て-form, plain form) |
+| L3 | N3 | 30% | 20% | 30% | 20% | Genki II L19–20 + Quartet I |
+| L4 | N2 | 25% | 20% | 30% | 25% | Quartet II (formal) |
+| L5 | N1 | 20% | 25% | 30% | 25% | full command |
+
+**Productive scaffold vs. receptive exposure — the reconciliation.** These targets govern the *core example corpus*: what the learner is guided to read and produce, polite-majority from day one. They are deliberately *not* an exposure cap. The real-world modules front-load casual (M5, entry N4) and service-keigo (M7, entry N4 recognition) as things you *hear and decode* well before you produce them. The design therefore carries **two register clocks**: *production* rises polite → plain → casual → keigo along the GENKI ramp above, while *reception* is mixed from L1 (you hear casual and service speech immediately, as in real life). This matches both the input evidence (§5) and the project's own escalation trace (design-options §"Escalating stakes": polite customer-side output, casual/keigo input from the start, staff-side keigo production only by L4).
+
+**How it is enforced (recorded as D-015).** A rule-based classifier (`pipeline/src/register.ts`) reads each verbatim Tatoeba sentence's grammatical ending and lexical keigo markers → one of `plain | polite | keigo_respectful | keigo_humble | casual | service_script`; the sentence selector fills each level toward the target mix, best-complete-sentence first (which also drains the ！/？ micro-fragment skew), and **logs shortfalls rather than silently capping** — keigo is genuinely rare in Tatoeba, so the §1 honesty rule applies. Register is a **heuristic estimate** (in the same spirit as the kanji-coverage leveling of §3.4 / D-008), disclosed in-app and carried per item — it *classifies* dataset text, it never authors it (D-002). Re-emit result: L1 moved from a measured **~8.5% polite / ~91% casual** to a scaffolded **55% polite / 20% casual** [counted this build]; genuine 尊敬語/謙譲語 appear from L2 and reach 25% by L4–L5.
 
 ---
 
