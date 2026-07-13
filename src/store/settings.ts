@@ -52,3 +52,24 @@ export function setAutoPlay(on: boolean): boolean {
   }
   return on
 }
+
+const ONBOARDED_KEY = 'hikkoshi:onboarded'
+
+/** Whether the learner has completed the first-run onboarding screen. Defaults off. */
+export function getOnboarded(): boolean {
+  try {
+    return localStorage.getItem(ONBOARDED_KEY) === 'on'
+  } catch {
+    return false
+  }
+}
+
+/** Persist the onboarded flag and return it. */
+export function setOnboarded(on: boolean): boolean {
+  try {
+    localStorage.setItem(ONBOARDED_KEY, on ? 'on' : 'off')
+  } catch {
+    // best-effort
+  }
+  return on
+}

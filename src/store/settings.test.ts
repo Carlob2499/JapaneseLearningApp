@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getActiveLevels, getAutoPlay, setActiveLevels, setAutoPlay } from './settings'
+import { getActiveLevels, getAutoPlay, getOnboarded, setActiveLevels, setAutoPlay, setOnboarded } from './settings'
 
 beforeEach(() => localStorage.clear())
 
@@ -33,5 +33,15 @@ describe('auto-play setting', () => {
     expect(getAutoPlay()).toBe(false)
     setAutoPlay(true)
     expect(getAutoPlay()).toBe(true)
+  })
+})
+
+describe('onboarded flag', () => {
+  it('defaults off and round-trips on/off', () => {
+    expect(getOnboarded()).toBe(false)
+    expect(setOnboarded(true)).toBe(true)
+    expect(getOnboarded()).toBe(true)
+    setOnboarded(false)
+    expect(getOnboarded()).toBe(false)
   })
 })
