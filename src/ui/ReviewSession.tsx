@@ -1,6 +1,8 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import type { Level, Outcome } from '@hikkoshi/schemas'
 import { useReview, type Presentation, type Reviewable } from '../review/useReview'
+import { useAudio } from '../audio/useAudio'
+import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
 import { ChoiceCard, KanjiCard, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
 
@@ -11,10 +13,18 @@ const KIND_LABEL: Record<Reviewable['kind'], string> = {
 }
 
 /** Free-recall (mature items): reveal + self-grade, reusing the existing cards. */
-function RecallCard({ r, onGrade }: { r: Reviewable; onGrade: (o: Outcome) => void }) {
+function RecallCard({
+  r,
+  onGrade,
+  autoPlay,
+}: {
+  r: Reviewable
+  onGrade: (o: Outcome) => void
+  autoPlay?: boolean
+}) {
   switch (r.kind) {
     case 'vocab':
-      return <VocabCard item={r.item} onGrade={onGrade} />
+      return <VocabCard item={r.item} onGrade={onGrade} autoPlay={autoPlay} />
     case 'kanji':
       return <KanjiCard item={r.item} stroke={r.stroke} onGrade={onGrade} />
     case 'sentence':
@@ -43,7 +53,15 @@ function multipleChoicePrompt(
   return { prompt: <span className="jp-lg">{r.item.ja}</span>, question: 'Which translation?' }
 }
 
-function Card({ p, onGrade }: { p: Presentation; onGrade: (o: Outcome) => void }) {
+function Card({
+  p,
+  onGrade,
+  autoPlay,
+}: {
+  p: Presentation
+  onGrade: (o: Outcome) => void
+  autoPlay?: boolean
+}) {
   const { reviewable: r, mode, choices } = p
   if (mode === 'typed') {
     return r.kind === 'vocab' ? (
@@ -52,12 +70,13 @@ function Card({ p, onGrade }: { p: Presentation; onGrade: (o: Outcome) => void }
         prompt={<span className="jp-xl">{r.item.expression}</span>}
         answer={r.item.reading}
         onGrade={onGrade}
+        autoPlay={autoPlay}
       />
     ) : (
-      <RecallCard r={r} onGrade={onGrade} />
+      <RecallCard r={r} onGrade={onGrade} autoPlay={autoPlay} />
     )
   }
-  if (mode === 'recall' || !choices) return <RecallCard r={r} onGrade={onGrade} />
+  if (mode === 'recall' || !choices) return <RecallCard r={r} onGrade={onGrade} autoPlay={autoPlay} />
   const { prompt, question } = multipleChoicePrompt(r, mode)
   return (
     <ChoiceCard
@@ -72,6 +91,8 @@ function Card({ p, onGrade }: { p: Presentation; onGrade: (o: Outcome) => void }
 
 export default function ReviewSession({ levels, onHome }: { levels: Level[]; onHome: () => void }) {
   const { mode, view, remaining, reviewed, sessionSize, error, grade, practiceMore } = useReview(levels)
+  const { available: audioAvailable } = useAudio()
+  const [autoPlay, setAutoPlay] = useState<boolean>(() => getAutoPlay())
 
   if (mode === 'loading') {
     return (
@@ -130,10 +151,20 @@ export default function ReviewSession({ levels, onHome }: { levels: Level[]; onH
         <span className="progress-text">
           {mode === 'practice' ? 'Practice' : 'Review'} · {done}/{sessionSize}
         </span>
+        {audioAvailable && (
+          <button
+            className="ghost-btn"
+            aria-pressed={!autoPlay}
+            aria-label={autoPlay ? 'Turn off auto-play audio' : 'Turn on auto-play audio'}
+            onClick={() => setAutoPlay(saveAutoPlay(!autoPlay))}
+          >
+            {autoPlay ? '🔊' : '🔇'}
+          </button>
+        )}
       </div>
       {view && (
         <div key={view.reviewable.id} className="card-slot">
-          <Card p={view} onGrade={grade} />
+          <Card p={view} onGrade={grade} autoPlay={autoPlay} />
         </div>
       )}
     </main>

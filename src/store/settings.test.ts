@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getActiveLevels, setActiveLevels } from './settings'
+import { getActiveLevels, getAutoPlay, setActiveLevels, setAutoPlay } from './settings'
 
 beforeEach(() => localStorage.clear())
 
@@ -23,5 +23,15 @@ describe('level settings', () => {
   it('survives a corrupt stored value', () => {
     localStorage.setItem('hikkoshi:levels', 'not json')
     expect(getActiveLevels()).toEqual(['L1'])
+  })
+})
+
+describe('auto-play setting', () => {
+  it('defaults on and round-trips off/on', () => {
+    expect(getAutoPlay()).toBe(true)
+    expect(setAutoPlay(false)).toBe(false)
+    expect(getAutoPlay()).toBe(false)
+    setAutoPlay(true)
+    expect(getAutoPlay()).toBe(true)
   })
 })

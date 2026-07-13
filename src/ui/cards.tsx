@@ -45,11 +45,13 @@ function StudyCard({
   front,
   back,
   onGrade,
+  onReveal,
 }: {
   kind: string
   front: ReactNode
   back: ReactNode
   onGrade: (o: Outcome) => void
+  onReveal?: () => void
 }) {
   const [revealed, setRevealed] = useState(false)
   return (
@@ -62,7 +64,13 @@ function StudyCard({
           <GradeBar onGrade={onGrade} />
         </>
       ) : (
-        <button className="reveal-btn" onClick={() => setRevealed(true)}>
+        <button
+          className="reveal-btn"
+          onClick={() => {
+            setRevealed(true)
+            onReveal?.()
+          }}
+        >
           Reveal
         </button>
       )}
@@ -70,12 +78,24 @@ function StudyCard({
   )
 }
 
-export function VocabCard({ item, onGrade }: { item: VocabItem; onGrade: (o: Outcome) => void }) {
+export function VocabCard({
+  item,
+  onGrade,
+  autoPlay,
+}: {
+  item: VocabItem
+  onGrade: (o: Outcome) => void
+  autoPlay?: boolean
+}) {
+  const { available, speak } = useAudio()
   return (
     <StudyCard
       kind="Vocabulary"
       front={<span className="jp-xl">{item.expression}</span>}
       onGrade={onGrade}
+      onReveal={() => {
+        if (autoPlay && available) speak(item.reading)
+      }}
       back={
         <>
           <div className="reading">
@@ -202,21 +222,25 @@ export function TypedCard({
   prompt,
   answer,
   onGrade,
+  autoPlay,
 }: {
   kind: string
   prompt: ReactNode
   answer: string
   onGrade: (o: Outcome) => void
+  autoPlay?: boolean
 }) {
   const [value, setValue] = useState('')
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const { available, speak } = useAudio()
   useEffect(() => inputRef.current?.focus(), [])
 
   const target = toHiragana(answer).trim()
   function check() {
     if (result !== null || value.trim() === '') return
     setResult(toHiragana(value).trim() === target ? 'correct' : 'wrong')
+    if (autoPlay && available) speak(target) // hear the correct reading
   }
 
   return (

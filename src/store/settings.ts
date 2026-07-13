@@ -31,3 +31,24 @@ export function setActiveLevels(levels: readonly Level[]): Level[] {
   }
   return next
 }
+
+const AUTOPLAY_KEY = 'hikkoshi:autoplay'
+
+/** Whether to auto-play pronunciation on reveal/answer. Defaults on (opt-out). */
+export function getAutoPlay(): boolean {
+  try {
+    return localStorage.getItem(AUTOPLAY_KEY) !== 'off'
+  } catch {
+    return true
+  }
+}
+
+/** Persist the auto-play preference and return it. */
+export function setAutoPlay(on: boolean): boolean {
+  try {
+    localStorage.setItem(AUTOPLAY_KEY, on ? 'on' : 'off')
+  } catch {
+    // best-effort
+  }
+  return on
+}

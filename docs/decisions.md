@@ -213,5 +213,9 @@ dataset-verified reading / sentence — it generates nothing; no TTS dependency 
   (ambiguous on/kun readings). Manual tap only — no autoplay this pass.
 - Verified with Playwright by injecting a fake `ja-JP` voice (button dispatches `{text:'あう',
   lang:'ja-JP'}`) and confirming a voiceless context shows the reading but no button.
-Deferred: auto-play-on-reveal + a mute setting; kanji reading audio; per-reading playback.
+**Auto-play (v2)**: revealing a vocab recall card, or checking a typed answer, auto-speaks the
+reading (a user gesture, so browser autoplay policy allows it); a 🔊/🔇 toggle in the session bar
+(persisted via `settings.getAutoPlay`) opts out. Manual 🔊 buttons still work when auto-play is off.
+Playwright-verified: reveal auto-plays, mute suppresses the next auto-play, manual override still fires.
+Deferred: kanji reading audio; per-reading playback; sentence-front autoplay (blocked pre-gesture).
 *Source: Session 9 build, 2026-07-13; own-preference iteration + Playwright verification.*
