@@ -365,6 +365,72 @@
   color: var(--muted);
 }
 
+/* Today panel + diary (Phase 2 — grey-box; the illustrated pass is Phase 3, D-003) */
+.onboarding-card,
+.today-card,
+.levels-card {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  text-align: center;
+}
+.life-stage-badge {
+  margin: 0;
+  display: inline-block;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.today-tasks {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  justify-items: center;
+}
+.today-task {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+}
+
+.diary-card {
+  display: grid;
+  gap: 4px;
+}
+.diary-row {
+  display: grid;
+  gap: 4px;
+}
+.diary-row + .diary-row {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: 6px;
+}
+.diary-ja {
+  margin: 0;
+  font-size: 17px;
+}
+.diary-word {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.diary-gloss {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.diary-en {
+  font-style: italic;
+}
+
 /* About disclosure */
 .about {
   font-size: 13px;
