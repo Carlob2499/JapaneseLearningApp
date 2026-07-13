@@ -14,8 +14,16 @@ export default function About() {
         <p>
           <strong>Early build.</strong> N5–N1 content with a spaced-repetition scheduler and several
           retrieval modes (recognition, production, typed reading, free recall). Tap 🔊 to hear
-          pronunciation where your device has a Japanese voice. Visuals are still placeholder. Progress
-          is stored on this device only.
+          pronunciation where your device has a Japanese voice. The flashcard reviewer is still
+          scaffold-grade — a full visual pass is a later session. Progress is stored on this device only.
+        </p>
+        <p>
+          <strong>Errands are the same items, in a real moment.</strong> The konbini checkout puts
+          vocabulary you're already studying into an actual exchange with a clerk — the clerk's lines
+          are documented real-world Japanese (cited to convenience-store-Japanese guides and a
+          government register survey), never invented, and the item you're asked about is drawn live
+          from your own due and known words. It uses the same spaced-repetition tracking as review, so
+          practicing there counts too.
         </p>
         <p>
           <strong>Politeness register is scaffolded, GENKI-style.</strong> Each sentence carries a small

@@ -286,3 +286,58 @@ sentence/stroke packs byte-identical). `pipeline:build-grammar` re-emits grammar
 inventory; the E2 register-transform production mode (needs `TransformRule`, undefined); grammar as a
 scene-beat interaction; grammar↔vocab/kanji linking.
 *Source: Session 11 build, 2026-07-13; approved plan + build-grammar/validate + Playwright verification.*
+
+### D-017: The scene engine — first real-world errand (konbini), designed not grey-boxed
+Roadmap Phase 1 (see the approved roadmap): the game layer (D-006 Concept A · Hikkoshi) had zero code —
+`SceneTemplate`/`Beat` existed only on paper (architecture.md §4), `ModuleTag`/`PhraseTemplate` were
+schema stubs populated by nothing. This session builds the spine end-to-end: schema → curated content →
+pipeline emit → `SceneRunner` → UI, and — on explicit user direction ("ensure use of any available
+skills for graphic design and UI/UX… do NOT make this a generic AI tool") — ships with real design craft
+on the scene surface rather than the scaffold styling the rest of the app still carries. This pulls a
+slice of Phase 3 (D-003 visual identity) forward for this one surface; the full app-wide token/motion
+system remains a later session.
+- **Schema**: `Beat` (`interaction: recognize|recall|produce|speed|context`, `slotIds` — logical labels,
+  not item ids) + `SceneTemplate` (`beats` + `framing`, each framing entry optionally naming a `beatId`
+  and a cited `phraseId`) added to the `Item` union; `PhraseTemplate` gained the `level` field emission
+  needs. Beat.interaction is deliberately its own vocabulary, distinct from the flashcard `RetrievalMode`
+  — a future produce/speed/context beat (Phase 4) isn't a flashcard mode retrofitted onto a scene.
+- **D-002 held exactly like grammar/D-016**: a scene's item slots are **resolved at runtime** from
+  dataset-verified vocabulary (never authored); the clerk's lines are cited `PhraseTemplate`s copied
+  verbatim from the same M2 sources curriculum.md §4 already vetted (Coto Academy, LIVE JAPAN, Go! Go!
+  Nihon, and the Bunkachō FY2013 baito-keigo survey — the exact disputed lines「お会計の方、1万円になります」
+  /「千円からお預かりします」); only the English framing narration is model-written. `phrase`/`scene` are
+  `curated-cited` domains (the per-domain status mechanism from D-016), with a pack-level `sources`
+  pointer to "see per-item citations" (`emit.ts` `curatedOnly` — no `sources.lock.json` entry exists for
+  hand-cited web guides, so borrowing the dataset-lock mechanism would misrepresent provenance).
+  `validateSceneReferences` rejects any scene whose framing names a phrase id that doesn't resolve —
+  no dangling reference ships.
+- **`ModuleTag` activated.** Defined in the schema since Session 4, populated by nothing until now:
+  `pipeline/src/moduleTags.ts` applies a curated expression+reading → tag list
+  (`content/curated/modules/m2_konbini.json`, 32 real L1–L3 vocab items — 店/買う/食べ物/お金/暖かい/…
+  at L1 up through 弁当/袋/カード/会計/暖める at L3) against the **already-committed** vocab packs and
+  re-emits only the levels that changed (`pipeline:build-modules`; verified L1–L3 vocab.json changed,
+  L4–L5 byte-identical). This means the same konbini errand naturally deepens as a learner's active
+  levels expand — L1-only sees everyday words; unlocking L3 adds the specific checkout nouns.
+- **`SceneRunner`** (`src/scenes/sceneRunner.ts`, pure + unit-tested; `src/scenes/useScene.ts`, the hook):
+  `buildSceneSteps` flattens a scene's `framing` into an ordered walk (narration steps vs. beat steps);
+  `pickSlotItem` resolves each beat's item from the scene's module pool — **due item first (earliest
+  due), else a known item, else a fresh introduction** (curriculum §5 P1/P3: the SRS decides *what*, the
+  scene decides *where*), never repeating an item within a run. Grading reuses the **exact same path** as
+  the flashcard review — `buildChoices`/`applyReview`/`putItemState`/`appendJournal` — now writing
+  `sceneId` (the schema field existed since the progress schemas landed, never written until today).
+  `recognize`→`recognition` mode, `recall`→`production` mode (the closest existing harder direction;
+  a dedicated typed/produce beat is Phase 4).
+- **Designed, not grey-box**: a hand-authored flat-vector SVG konbini counter (wood counter, receding
+  shelf rows, a noren banner, an abstract geometric clerk — deliberately not a face render), a
+  visual-novel-style dialogue box (nameplate + cited JP line), and a receipt-styled scene-complete recap
+  (monospace, dashed rules, OK/MISS) — reusing `ChoiceCard` unmodified via CSS scoped under `.scene-view`.
+  Extended the palette with two purposeful tokens (`--accent-2` noren indigo, `--paper`/`--wood` warm
+  tones), informed by real research (shironeri washi-paper white, aizome indigo, cozy-game tactile UI)
+  rather than a generic default. `App.tsx` gains a third `'scene'` view; Home gets an "Errands" CTA.
+Verified end-to-end (Playwright, real IndexedDB): a fresh L1 run surfaced 暖かい/熱い/売る/円 (real,
+un-repeated, module-tagged items) across recognize/recall beats with cited clerk dialogue; graded both
+pass and fail; 4 real journal entries landed with `sceneId:'scene:l1:konbini'`; the flashcard review
+still worked unchanged afterward; zero page errors. `pipeline:validate` green (27 packs / 15,189 items).
+Deferred (Phase 2+): the day loop/life-stage frame that makes errands the primary entry point; produce/
+speed/context beats; more scene kinds (transit, cityhall); the full app-wide visual/motion system.
+*Source: Session 12 build, 2026-07-13; roadmap Phase 1 + Playwright verification.*
