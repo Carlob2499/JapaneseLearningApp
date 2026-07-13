@@ -9,7 +9,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 675,
-      "sha256": "ab197ebbadd5cbda074406c9e81eb9b6e59616477e8aecb0b9226ce7b77a5f7c"
+      "sha256": "2b58cd843ddd01ef25aa48a013126616657db6cfa5c87dd9f1aa3cad4d048572"
     },
     {
       "packId": "kanji.l1.core",
@@ -45,7 +45,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 596,
-      "sha256": "8fd7afbf0a194c892925c6844ecce4fa4d586ae9d5f5e6883d7eae85d7de305d"
+      "sha256": "8a8798db3180fb515ba40adc7d25e4716391f544b146c30c2b3c5efe45af1c2f"
     },
     {
       "packId": "kanji.l2.core",
@@ -81,7 +81,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 2065,
-      "sha256": "919da10f6bd1a4090cc5dce9a8c2675e4ca7ea4f62227b441ee8f1e1378a7e73"
+      "sha256": "81f627bf42f37e40b09d58aeccf73621f0ef933cd9b103eea8e0f2bfcc39da13"
     },
     {
       "packId": "kanji.l3.core",
@@ -226,6 +226,24 @@
       "packVersion": "0.1.0",
       "itemCount": 14,
       "sha256": "d54677d47041746e2efe6fb00d5aa1bc760b4c476d52a1202ffeace192f7d85f"
+    },
+    {
+      "packId": "phrase.l1.core",
+      "path": "l1/phrase.json",
+      "level": "L1",
+      "domain": "phrase",
+      "packVersion": "0.1.0",
+      "itemCount": 8,
+      "sha256": "db391e7b6a7a1c3c4d89e3f8e24f660da543d41fbf44c558670a0674b3cfc58a"
+    },
+    {
+      "packId": "scene.l1.core",
+      "path": "l1/scene.json",
+      "level": "L1",
+      "domain": "scene",
+      "packVersion": "0.1.0",
+      "itemCount": 1,
+      "sha256": "bb1087efd3ec090d527ecdba3b540cfda4181ffec9dbc05687759d5d017f2227"
     }
   ]
 }

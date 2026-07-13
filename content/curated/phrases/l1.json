@@ -1,0 +1,136 @@
+[
+  {
+    "kind": "phrase",
+    "id": "phrase:m2:irasshaimase",
+    "level": "L1",
+    "module": "M2_konbini",
+    "register": "service_script",
+    "pattern": "いらっしゃいませ。",
+    "citations": [
+      {
+        "name": "Coto Academy — Convenience Store Japanese",
+        "url": "https://cotoacademy.com/convenience-store-japanese/",
+        "retrieved": "2026-07-13",
+        "license": "editorial reference — documents this as the standard entry greeting, phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m2:atatamemasu-ka",
+    "level": "L1",
+    "module": "M2_konbini",
+    "register": "polite",
+    "pattern": "温めますか。",
+    "citations": [
+      {
+        "name": "Coto Academy — Convenience Store Japanese",
+        "url": "https://cotoacademy.com/convenience-store-japanese/",
+        "retrieved": "2026-07-13",
+        "license": "editorial reference — the documented checkout warming question (curriculum.md M2)"
+      },
+      {
+        "name": "LIVE JAPAN — konbini survival phrases",
+        "url": "https://livejapan.com/en/article-a0001719/",
+        "retrieved": "2026-07-13",
+        "license": "editorial reference — corroborating documented usage"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m2:reji-bukuro",
+    "level": "L1",
+    "module": "M2_konbini",
+    "register": "polite",
+    "pattern": "レジ袋はご利用ですか。",
+    "citations": [
+      {
+        "name": "Coto Academy — Convenience Store Japanese",
+        "url": "https://cotoacademy.com/convenience-store-japanese/",
+        "retrieved": "2026-07-13",
+        "license": "editorial reference — the documented bag question (curriculum.md M2)"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m2:point-card",
+    "level": "L1",
+    "module": "M2_konbini",
+    "register": "polite",
+    "pattern": "ポイントカードはお持ちですか。",
+    "citations": [
+      {
+        "name": "Go! Go! Nihon — Japanese for the convenience store",
+        "url": "https://gogonihon.com/en/blog/japanese-for-the-convenience-store/",
+        "retrieved": "2026-07-13",
+        "license": "editorial reference — the documented point-card question (curriculum.md M2)"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m2:kaikei-ichiman",
+    "level": "L1",
+    "module": "M2_konbini",
+    "register": "service_script",
+    "pattern": "お会計の方、1万円になります。",
+    "citations": [
+      {
+        "name": "Bunkachō FY2013 national-language public-opinion survey (baito-keigo)",
+        "url": "https://www.bunka.go.jp/tokei_hakusho_shuppan/tokeichosa/kokugo_yoronchosa/pdf/h25_chosa_kekka.pdf",
+        "retrieved": "2026-07-13",
+        "license": "government survey PDF — this exact line is item-tested; 63.5% of respondents found it bothersome (curriculum.md M2)"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m2:sen-en-kara",
+    "level": "L1",
+    "module": "M2_konbini",
+    "register": "service_script",
+    "pattern": "千円からお預かりします。",
+    "citations": [
+      {
+        "name": "Bunkachō FY2013 national-language public-opinion survey (baito-keigo)",
+        "url": "https://www.bunka.go.jp/tokei_hakusho_shuppan/tokeichosa/kokugo_yoronchosa/pdf/h25_chosa_kekka.pdf",
+        "retrieved": "2026-07-13",
+        "license": "government survey PDF — this exact line is item-tested; 55.0% of respondents found it bothersome (curriculum.md M2)"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m2:arigatou-gozaimashita",
+    "level": "L1",
+    "module": "M2_konbini",
+    "register": "polite",
+    "pattern": "ありがとうございました。",
+    "citations": [
+      {
+        "name": "Coto Academy — Convenience Store Japanese",
+        "url": "https://cotoacademy.com/convenience-store-japanese/",
+        "retrieved": "2026-07-13",
+        "license": "editorial reference — the documented closing thanks (curriculum.md M2)"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m2:mata-okoshi-kudasaimase",
+    "level": "L1",
+    "module": "M2_konbini",
+    "register": "keigo_respectful",
+    "pattern": "またお越しくださいませ。",
+    "citations": [
+      {
+        "name": "LIVE JAPAN — konbini survival phrases",
+        "url": "https://livejapan.com/en/article-a0001719/",
+        "retrieved": "2026-07-13",
+        "license": "editorial reference — the documented closing respectful invitation to return"
+      }
+    ]
+  }
+]

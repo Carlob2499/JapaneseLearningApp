@@ -20,6 +20,8 @@
     "pipeline:build": "tsx pipeline/src/build.ts",
     "pipeline:build-sentences": "tsx pipeline/src/build-sentences.ts",
     "pipeline:build-grammar": "tsx pipeline/src/build-grammar.ts",
+    "pipeline:build-modules": "tsx pipeline/src/build-modules.ts",
+    "pipeline:build-scenes": "tsx pipeline/src/build-scenes.ts",
     "pipeline:validate": "tsx pipeline/src/validate.ts"
   },
   "dependencies": {

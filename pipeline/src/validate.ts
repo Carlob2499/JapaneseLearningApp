@@ -12,7 +12,11 @@ import { sha256 } from './lib/io'
  */
 // Curated domains attest 'curated-cited' (D-005: original prose + citations); dataset domains
 // attest 'dataset-verified'. Both still pass the Pack provenance gate (sources + citations).
-const EXPECTED_STATUS: Partial<Record<ManifestEntry['domain'], string>> = { grammar: 'curated-cited' }
+const EXPECTED_STATUS: Partial<Record<ManifestEntry['domain'], string>> = {
+  grammar: 'curated-cited',
+  phrase: 'curated-cited',
+  scene: 'curated-cited',
+}
 
 export function checkPack(entry: ManifestEntry, bytes: Buffer): string[] {
   const errs: string[] = []

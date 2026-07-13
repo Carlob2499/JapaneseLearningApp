@@ -8,6 +8,8 @@ import type {
   ManifestEntry,
   Pack,
   PackDomain,
+  PhraseTemplate,
+  SceneTemplate,
   SentenceItem,
   Source,
   StrokeItem,
@@ -31,8 +33,8 @@ export interface LockSource {
   attribution: string
 }
 
-type Domain = 'vocab' | 'kanji' | 'grammar' | 'sentence' | 'strokes'
-type AnyItem = VocabItem | KanjiItem | GrammarPoint | SentenceItem | StrokeItem
+type Domain = 'vocab' | 'kanji' | 'grammar' | 'sentence' | 'strokes' | 'phrase' | 'scene'
+type AnyItem = VocabItem | KanjiItem | GrammarPoint | SentenceItem | StrokeItem | PhraseTemplate | SceneTemplate
 
 const LEVEL_JLPT: Record<Level, string> = {
   L0: 'kana/survival',
@@ -51,9 +53,17 @@ interface DomainMeta {
   licenseNotes: string
   levelTagSource?: string
   verificationMethod: string
-  /** Defaults to 'dataset-verified'; curated domains (grammar) declare 'curated-cited'. */
+  /** Defaults to 'dataset-verified'; curated domains (grammar, phrase, scene) declare 'curated-cited'. */
   verificationStatus?: VerificationStatus
+  /**
+   * Domains with no fetched-dataset dependency (phrase, scene): every fact is cited on the
+   * item itself, so the pack-level `sources` is a single pointer to that per-item provenance
+   * rather than a `sources.lock.json` lookup (there is nothing in the lock to look up).
+   */
+  curatedOnly?: boolean
 }
+
+const REPO_DOCS_URL = 'https://github.com/Carlob2499/JapaneseLearningApp/blob/main/docs/curriculum.md'
 
 const DOMAIN_META: Record<Domain, DomainMeta> = {
   vocab: {
@@ -102,6 +112,28 @@ const DOMAIN_META: Record<Domain, DomainMeta> = {
     licenseNotes: 'KanjiVG stroke data © Ulrich Apel, CC BY-SA 3.0; ShareAlike applies to derived stroke data.',
     verificationMethod: 'KanjiVG per-character SVG stroke extraction',
   },
+  phrase: {
+    domain: 'phrase',
+    titleWord: 'Scene phrases',
+    dataKeys: [],
+    curatedOnly: true,
+    licenseSpdx: 'CC-BY-SA-4.0',
+    licenseNotes:
+      'Each phrase is a documented real-world service/register line, cited to the guide or government survey that records it (curriculum.md §4) — never generated (D-002).',
+    verificationStatus: 'curated-cited',
+    verificationMethod: 'curated real-world phrase, cited to a documented-usage source per item',
+  },
+  scene: {
+    domain: 'scene',
+    titleWord: 'Real-world scenes',
+    dataKeys: [],
+    curatedOnly: true,
+    licenseSpdx: 'CC-BY-SA-4.0',
+    licenseNotes:
+      'Scene structure + English framing are original (curated); item slots are resolved at runtime from dataset-verified vocabulary tagged into the scene’s modules, and NPC lines resolve to cited PhraseTemplates — no scene ships with generated Japanese.',
+    verificationStatus: 'curated-cited',
+    verificationMethod: 'curated scene template (beats + module-tagged item slots + cited phrase references)',
+  },
 }
 
 function toSource(s: LockSource): Source {
@@ -120,7 +152,16 @@ function groupByLevel<T>(items: T[], levelOf: (t: T) => Level): Map<Level, T[]> 
 }
 
 function buildPack(meta: DomainMeta, level: Level, items: AnyItem[], lock: LockSource[], date: string): Pack {
-  const sources = lock.filter((s) => meta.dataKeys.includes(s.key)).map(toSource)
+  const sources = meta.curatedOnly
+    ? [
+        {
+          name: 'Curated content (see per-item citations)',
+          url: REPO_DOCS_URL,
+          retrieved: date,
+          license: 'N/A — original/derived content; every fact is cited on its own item',
+        },
+      ]
+    : lock.filter((s) => meta.dataKeys.includes(s.key)).map(toSource)
   return {
     schemaVersion: SCHEMA_VERSION,
     packId: `${meta.domain}.${level.toLowerCase()}.core`,
@@ -165,7 +206,49 @@ function attribution(lock: LockSource[]): string {
   return lines.join('\n')
 }
 
-/** Emit per-level vocab/kanji/grammar/sentence/strokes packs, the manifest, and ATTRIBUTION.md. */
+/** Write one already-grouped domain's packs for a single level and return its manifest entry. */
+async function writeLevelPack(
+  meta: DomainMeta,
+  level: Level,
+  items: AnyItem[],
+  lock: LockSource[],
+  date: string,
+): Promise<ManifestEntry> {
+  const pack = buildPack(meta, level, items, lock, date)
+  const body = JSON.stringify(pack) + '\n'
+  const relPath = `${level.toLowerCase()}/${meta.domain}.json`
+  await writeFile(join(PACKS_DIR, relPath), body)
+  return {
+    packId: pack.packId,
+    path: relPath,
+    level,
+    domain: meta.domain as PackDomain,
+    packVersion: PACK_VERSION,
+    itemCount: items.length,
+    sha256: sha256(Buffer.from(body)), // hash of the exact file bytes
+  }
+}
+
+/** Write one domain's per-level packs and return their manifest entries (shared by every emitXPacks). */
+async function emitDomainPacks(
+  meta: DomainMeta,
+  items: AnyItem[],
+  levelOf: (i: AnyItem) => Level,
+  lock: LockSource[],
+  date: string,
+): Promise<ManifestEntry[]> {
+  const byLevel = groupByLevel<AnyItem>(items, levelOf)
+  const entries: ManifestEntry[] = []
+  for (const level of LEVELS_IN_ORDER) {
+    const its = byLevel.get(level) ?? []
+    if (its.length === 0) continue
+    await mkdir(join(PACKS_DIR, level.toLowerCase()), { recursive: true })
+    entries.push(await writeLevelPack(meta, level, its, lock, date))
+  }
+  return entries
+}
+
+/** Emit per-level vocab/kanji/grammar/sentence/strokes/phrase/scene packs, manifest, ATTRIBUTION.md. */
 export async function emitPacks(
   vocab: VocabItem[],
   kanji: KanjiItem[],
@@ -174,6 +257,8 @@ export async function emitPacks(
   lock: LockSource[],
   date: string,
   grammar: GrammarPoint[] = [],
+  phrases: PhraseTemplate[] = [],
+  scenes: SceneTemplate[] = [],
 ): Promise<Manifest> {
   const groups: { meta: DomainMeta; byLevel: Map<Level, AnyItem[]> }[] = [
     { meta: DOMAIN_META.vocab, byLevel: groupByLevel<AnyItem>(vocab, (i) => (i as VocabItem).level) },
@@ -181,6 +266,8 @@ export async function emitPacks(
     { meta: DOMAIN_META.grammar, byLevel: groupByLevel<AnyItem>(grammar, (i) => (i as GrammarPoint).level) },
     { meta: DOMAIN_META.sentence, byLevel: groupByLevel<AnyItem>(sentences, (i) => (i as SentenceItem).levelEstimate) },
     { meta: DOMAIN_META.strokes, byLevel: groupByLevel<AnyItem>(strokes, (i) => (i as StrokeItem).level) },
+    { meta: DOMAIN_META.phrase, byLevel: groupByLevel<AnyItem>(phrases, (i) => (i as PhraseTemplate).level) },
+    { meta: DOMAIN_META.scene, byLevel: groupByLevel<AnyItem>(scenes, (i) => (i as SceneTemplate).level) },
   ]
 
   const entries: ManifestEntry[] = []
@@ -189,19 +276,7 @@ export async function emitPacks(
     for (const { meta, byLevel } of groups) {
       const items = byLevel.get(level) ?? []
       if (items.length === 0) continue
-      const pack = buildPack(meta, level, items, lock, date)
-      const body = JSON.stringify(pack) + '\n'
-      const relPath = `${level.toLowerCase()}/${meta.domain}.json`
-      await writeFile(join(PACKS_DIR, relPath), body)
-      entries.push({
-        packId: pack.packId,
-        path: relPath,
-        level,
-        domain: meta.domain as PackDomain,
-        packVersion: PACK_VERSION,
-        itemCount: items.length,
-        sha256: sha256(Buffer.from(body)), // hash of the exact file bytes
-      })
+      entries.push(await writeLevelPack(meta, level, items, lock, date))
     }
   }
 
@@ -213,35 +288,11 @@ export async function emitPacks(
 
 /**
  * Re-emit ONLY the per-level sentence packs (targeted rebuild) and return their manifest
- * entries. The caller splices these into the existing manifest, leaving vocab/kanji/stroke
- * packs byte-identical. Reuses `buildPack` + `DOMAIN_META.sentence` so bytes match `emitPacks`.
+ * entries. The caller splices these into the existing manifest, leaving other domains' packs
+ * byte-identical. Reuses `buildPack` + `DOMAIN_META.sentence` so bytes match `emitPacks`.
  */
-export async function emitSentencePacks(
-  sentences: SentenceItem[],
-  lock: LockSource[],
-  date: string,
-): Promise<ManifestEntry[]> {
-  const byLevel = groupByLevel<AnyItem>(sentences, (i) => (i as SentenceItem).levelEstimate)
-  const entries: ManifestEntry[] = []
-  for (const level of LEVELS_IN_ORDER) {
-    const items = byLevel.get(level) ?? []
-    if (items.length === 0) continue
-    await mkdir(join(PACKS_DIR, level.toLowerCase()), { recursive: true })
-    const pack = buildPack(DOMAIN_META.sentence, level, items, lock, date)
-    const body = JSON.stringify(pack) + '\n'
-    const relPath = `${level.toLowerCase()}/sentence.json`
-    await writeFile(join(PACKS_DIR, relPath), body)
-    entries.push({
-      packId: pack.packId,
-      path: relPath,
-      level,
-      domain: 'sentence',
-      packVersion: PACK_VERSION,
-      itemCount: items.length,
-      sha256: sha256(Buffer.from(body)),
-    })
-  }
-  return entries
+export function emitSentencePacks(sentences: SentenceItem[], lock: LockSource[], date: string): Promise<ManifestEntry[]> {
+  return emitDomainPacks(DOMAIN_META.sentence, sentences, (i) => (i as SentenceItem).levelEstimate, lock, date)
 }
 
 /**
@@ -249,30 +300,24 @@ export async function emitSentencePacks(
  * for the caller to splice into the existing manifest (curated grammar iterates independently of
  * the dataset build). Reuses `buildPack` + `DOMAIN_META.grammar` so bytes match `emitPacks`.
  */
-export async function emitGrammarPacks(
-  grammar: GrammarPoint[],
-  lock: LockSource[],
-  date: string,
-): Promise<ManifestEntry[]> {
-  const byLevel = groupByLevel<AnyItem>(grammar, (i) => (i as GrammarPoint).level)
-  const entries: ManifestEntry[] = []
-  for (const level of LEVELS_IN_ORDER) {
-    const items = byLevel.get(level) ?? []
-    if (items.length === 0) continue
-    await mkdir(join(PACKS_DIR, level.toLowerCase()), { recursive: true })
-    const pack = buildPack(DOMAIN_META.grammar, level, items, lock, date)
-    const body = JSON.stringify(pack) + '\n'
-    const relPath = `${level.toLowerCase()}/grammar.json`
-    await writeFile(join(PACKS_DIR, relPath), body)
-    entries.push({
-      packId: pack.packId,
-      path: relPath,
-      level,
-      domain: 'grammar',
-      packVersion: PACK_VERSION,
-      itemCount: items.length,
-      sha256: sha256(Buffer.from(body)),
-    })
-  }
-  return entries
+export function emitGrammarPacks(grammar: GrammarPoint[], lock: LockSource[], date: string): Promise<ManifestEntry[]> {
+  return emitDomainPacks(DOMAIN_META.grammar, grammar, (i) => (i as GrammarPoint).level, lock, date)
+}
+
+/** Re-emit ONLY the per-level phrase packs (targeted rebuild) — mirrors `emitGrammarPacks`. */
+export function emitPhrasePacks(phrases: PhraseTemplate[], lock: LockSource[], date: string): Promise<ManifestEntry[]> {
+  return emitDomainPacks(DOMAIN_META.phrase, phrases, (i) => (i as PhraseTemplate).level, lock, date)
+}
+
+/** Re-emit ONLY the per-level scene packs (targeted rebuild) — mirrors `emitGrammarPacks`. */
+export function emitScenePacks(scenes: SceneTemplate[], lock: LockSource[], date: string): Promise<ManifestEntry[]> {
+  return emitDomainPacks(DOMAIN_META.scene, scenes, (i) => (i as SceneTemplate).level, lock, date)
+}
+
+/**
+ * Re-emit ONLY the per-level vocab packs (targeted rebuild) — e.g. after a module-tagging pass
+ * that only changes some items' `modules` array. Mirrors `emitGrammarPacks`.
+ */
+export function emitVocabPacks(vocab: VocabItem[], lock: LockSource[], date: string): Promise<ManifestEntry[]> {
+  return emitDomainPacks(DOMAIN_META.vocab, vocab, (i) => (i as VocabItem).level, lock, date)
 }

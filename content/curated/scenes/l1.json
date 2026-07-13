@@ -1,0 +1,61 @@
+[
+  {
+    "kind": "scene",
+    "id": "scene:l1:konbini",
+    "sceneKind": "konbini",
+    "level": "L1",
+    "modules": ["M2_konbini"],
+    "beats": [
+      { "id": "beat:warm", "interaction": "recognize", "slotIds": ["item-warm"] },
+      { "id": "beat:bag", "interaction": "recall", "slotIds": ["item-bag"] },
+      { "id": "beat:card", "interaction": "recognize", "slotIds": ["item-card"] },
+      { "id": "beat:pay", "interaction": "recall", "slotIds": ["item-pay"] }
+    ],
+    "framing": [
+      {
+        "text": "You step up to the register with your basket. The clerk looks up.",
+        "phraseId": "phrase:m2:irasshaimase",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:warm",
+        "text": "The clerk holds up your bento, gesturing toward the microwave.",
+        "phraseId": "phrase:m2:atatamemasu-ka",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:bag",
+        "text": "Next, the clerk nods toward a stack of plastic bags by the register.",
+        "phraseId": "phrase:m2:reji-bukuro",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:card",
+        "text": "The clerk taps the little card reader mounted on the counter.",
+        "phraseId": "phrase:m2:point-card",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:pay",
+        "text": "The register beeps and displays your total.",
+        "phraseId": "phrase:m2:kaikei-ichiman",
+        "modelWritten": true
+      },
+      {
+        "text": "The clerk counts out your change, note by note.",
+        "phraseId": "phrase:m2:sen-en-kara",
+        "modelWritten": true
+      },
+      {
+        "text": "You gather your bags. The clerk gives a small bow.",
+        "phraseId": "phrase:m2:arigatou-gozaimashita",
+        "modelWritten": true
+      },
+      {
+        "text": "The automatic door slides open behind you.",
+        "phraseId": "phrase:m2:mata-okoshi-kudasaimase",
+        "modelWritten": true
+      }
+    ]
+  }
+]

@@ -15,6 +15,8 @@ import { emitPacks, type LockSource } from './emit'
 import { buildKnownKanjiByLevel, buildSentenceItems, loadTatoeba } from './sentences'
 import { buildStrokeItems } from './kanjivg'
 import { linkExamples, loadCuratedGrammar } from './grammar'
+import { applyModuleTags, loadCuratedModuleTags } from './moduleTags'
+import { loadCuratedPhrases, loadCuratedScenes, validateSceneReferences } from './scenes'
 
 const JLPT_FILES = [
   { file: 'jlpt-vocab-n5.csv', jlpt: 'N5' },
@@ -73,8 +75,16 @@ async function main(): Promise<void> {
   const fetchedAt = lock.generatedAt
   const date = fetchedAt.slice(0, 10)
 
-  const vocab = joinVocab(jm, waller)
+  let vocab = joinVocab(jm, waller)
   const kanji = joinKanji(kd, kanjiData)
+
+  // Real-world module tags (D-017) — activates VocabItem.modules by curated expression+reading match.
+  const moduleTags = await loadCuratedModuleTags(join(CONTENT_DIR, 'curated', 'modules'))
+  if (moduleTags.length > 0) {
+    const tagged = applyModuleTags(vocab.items, moduleTags)
+    vocab = { ...vocab, items: tagged.items }
+    console.log(`\nModule tags: matched ${tagged.matched}/${moduleTags.length}; unmatched: ${tagged.unmatched.length}`)
+  }
 
   await writeFile(
     join(INTERMEDIATES_DIR, 'tagged-vocab.json'),
@@ -135,6 +145,14 @@ async function main(): Promise<void> {
     }
   }
 
+  // Scenes + phrases (curated, D-017) — every framing phraseId must resolve to a cited phrase.
+  const phrases = await loadCuratedPhrases(join(CONTENT_DIR, 'curated', 'phrases'))
+  const scenes = await loadCuratedScenes(join(CONTENT_DIR, 'curated', 'scenes'))
+  if (scenes.length > 0) validateSceneReferences(scenes, phrases)
+  if (phrases.length > 0 || scenes.length > 0) {
+    console.log(`\nCurated: ${phrases.length} phrase(s), ${scenes.length} scene(s)`)
+  }
+
   const manifest = await emitPacks(
     vocab.items,
     kanji.items,
@@ -143,6 +161,8 @@ async function main(): Promise<void> {
     lock.sources,
     date,
     grammar.items,
+    phrases,
+    scenes,
   )
   console.log(`\nEmitted ${manifest.packs.length} packs → content/packs/ (+ manifest, ATTRIBUTION.md)`)
 }
