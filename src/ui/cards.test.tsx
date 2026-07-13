@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { ChoiceCard, TypedCard } from './cards'
+import { ChoiceCard, SpeakButton, TypedCard } from './cards'
 import type { Choice } from '../review/choices'
 
 afterEach(cleanup)
@@ -69,5 +69,44 @@ describe('TypedCard', () => {
     expect(screen.getByTestId('typed-feedback').textContent).toContain('たべる')
     fireEvent.click(screen.getByText('Next →'))
     expect(onGrade).toHaveBeenCalledWith('fail')
+  })
+})
+
+describe('SpeakButton', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
+  class FakeUtterance {
+    text: string
+    lang = ''
+    constructor(text: string) {
+      this.text = text
+    }
+  }
+
+  function stubVoices(voices: Array<{ lang: string }>) {
+    const speakFn = vi.fn()
+    vi.stubGlobal('SpeechSynthesisUtterance', FakeUtterance)
+    vi.stubGlobal('speechSynthesis', {
+      getVoices: () => voices,
+      speak: speakFn,
+      cancel: vi.fn(),
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    })
+    return speakFn
+  }
+
+  it('renders nothing when the device has no Japanese voice', () => {
+    stubVoices([{ lang: 'en-US' }])
+    render(<SpeakButton text="たべる" />)
+    expect(screen.queryByTestId('speak')).toBeNull()
+  })
+
+  it('voices the text when clicked and a Japanese voice is present', () => {
+    const speakFn = stubVoices([{ lang: 'ja-JP' }])
+    render(<SpeakButton text="たべる" />)
+    fireEvent.click(screen.getByTestId('speak'))
+    expect(speakFn).toHaveBeenCalledTimes(1)
+    expect(speakFn.mock.calls[0][0].text).toBe('たべる')
   })
 })

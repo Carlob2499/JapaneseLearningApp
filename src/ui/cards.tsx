@@ -2,8 +2,26 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { toHiragana, toKana } from 'wanakana'
 import type { KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import type { Choice } from '../review/choices'
+import { useAudio } from '../audio/useAudio'
 import StrokeViewer from './StrokeViewer'
 import './study.css'
+
+/** A 🔊 button that voices Japanese text; renders nothing where the device has no Japanese voice. */
+export function SpeakButton({ text }: { text: string }) {
+  const { available, speak } = useAudio()
+  if (!available) return null
+  return (
+    <button
+      type="button"
+      className="speak-btn"
+      aria-label="Play pronunciation"
+      onClick={() => speak(text)}
+      data-testid="speak"
+    >
+      🔊
+    </button>
+  )
+}
 
 function GradeBar({ onGrade }: { onGrade: (o: Outcome) => void }) {
   return (
@@ -60,7 +78,9 @@ export function VocabCard({ item, onGrade }: { item: VocabItem; onGrade: (o: Out
       onGrade={onGrade}
       back={
         <>
-          <div className="reading">{item.reading}</div>
+          <div className="reading">
+            {item.reading} <SpeakButton text={item.reading} />
+          </div>
           <ul className="glosses">
             {item.senses.slice(0, 3).map((s, i) => (
               <li key={i}>
@@ -107,7 +127,11 @@ export function SentenceCard({ item, onGrade }: { item: SentenceItem; onGrade: (
   return (
     <StudyCard
       kind="Sentence"
-      front={<span className="jp-lg">{item.ja}</span>}
+      front={
+        <span className="jp-lg">
+          {item.ja} <SpeakButton text={item.ja} />
+        </span>
+      }
       onGrade={onGrade}
       back={<div className="en">{item.en}</div>}
     />
@@ -222,7 +246,7 @@ export function TypedCard({
       ) : (
         <>
           <p className={`typed-feedback ${result}`} data-testid="typed-feedback">
-            {result === 'correct' ? '正解 · correct' : `Answer: ${target}`}
+            {result === 'correct' ? '正解 · correct' : `Answer: ${target}`} <SpeakButton text={target} />
           </p>
           <button className="next-btn" onClick={() => onGrade(result === 'correct' ? 'pass' : 'fail')}>
             Next →

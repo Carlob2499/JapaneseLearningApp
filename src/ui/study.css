@@ -184,6 +184,21 @@
   color: #b3402f;
 }
 
+/* Audio */
+.speak-btn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.7em;
+  line-height: 1;
+  padding: 2px 6px;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+.speak-btn:hover {
+  opacity: 1;
+}
+
 /* Stroke viewer */
 .stroke-viewer {
   display: grid;

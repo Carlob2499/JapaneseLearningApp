@@ -199,3 +199,19 @@ Adds a harder retrieval rung between MC-production and free recall.
   + `latencyMs`.
 Deferred: typed for kanji readings, sentence cloze, and a "close enough" tolerance.
 *Source: Session 8 build, 2026-07-12; approved plan + Playwright (会う → あう) verification.*
+
+### D-014: Audio — tap-to-hear pronunciation (Web Speech API)
+Fills the "no audio yet" gap the About panel called out. `src/audio/tts.ts` voices Japanese via the
+browser's `speechSynthesis` (a `ja-JP` voice, rate 0.9). **D-002-safe**: it speaks the already
+dataset-verified reading / sentence — it generates nothing; no TTS dependency or dataset is added.
+- **Graceful degradation is the core rule**: `hasJapaneseVoice()` gates all audio UI, and `speak()`
+  is a no-op without a voice. `useAudio()` (a hook) flips `available` true once voices load
+  (`voiceschanged`), so the 🔊 button appears only where it will actually work and is simply absent
+  otherwise — no broken control on voiceless devices.
+- **Surfaces**: `SpeakButton` sits next to the vocab reading, the sentence (its front, for listening
+  before revealing the translation), and the typed-answer feedback. Kanji-in-isolation is skipped
+  (ambiguous on/kun readings). Manual tap only — no autoplay this pass.
+- Verified with Playwright by injecting a fake `ja-JP` voice (button dispatches `{text:'あう',
+  lang:'ja-JP'}`) and confirming a voiceless context shows the reading but no button.
+Deferred: auto-play-on-reveal + a mute setting; kanji reading audio; per-reading playback.
+*Source: Session 9 build, 2026-07-13; own-preference iteration + Playwright verification.*

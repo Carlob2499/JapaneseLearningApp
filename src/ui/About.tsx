@@ -12,9 +12,10 @@ export default function About() {
           lists. Example-sentence levels are a kanji-coverage estimate, not a graded reading level.
         </p>
         <p>
-          <strong>Early build.</strong> This is a first playable slice: L1 (≈N5) content only, a simple
-          spaced-repetition scheduler, no audio yet, and placeholder visuals. Progress is stored on this
-          device only.
+          <strong>Early build.</strong> N5–N1 content with a spaced-repetition scheduler and several
+          retrieval modes (recognition, production, typed reading, free recall). Tap 🔊 to hear
+          pronunciation where your device has a Japanese voice. Visuals are still placeholder. Progress
+          is stored on this device only.
         </p>
         <p className="attribution">
           Language data:{' '}
