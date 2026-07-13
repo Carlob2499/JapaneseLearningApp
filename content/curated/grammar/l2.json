@@ -1,0 +1,266 @@
+[
+  {
+    "kind": "grammar", "id": "grammar:l2:potential", "name": "〜られる・〜える (可能形)", "level": "L2",
+    "gloss": "potential — can / be able to",
+    "summary": "The potential form expresses ability or possibility. Ru-verbs take られる; u-verbs shift the final sound to the e-row + る (話す→話せる).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 13 }],
+    "patterns": ["話せます", "読めます", "書けます", "使えます", "泳げます", "作れます", "飲めます", "聞けます", "乗れます", "話せる", "食べられます"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:sou-appearance", "name": "〜そうです (様態)", "level": "L2",
+    "gloss": "looks like / seems (appearance)",
+    "summary": "Attached to a verb stem or adjective stem, そうです reports how something looks or seems from direct impression (it looks delicious).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 13 }],
+    "patterns": ["そうに", "そうな", "そうです。"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:nara", "name": "〜なら", "level": "L2",
+    "gloss": "if it is the case that",
+    "summary": "なら presents a condition based on what was just said or a given topic (if that's the case, …), often giving advice.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 13 }],
+    "patterns": ["なら、", "ならば"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:ageru-kureru-morau", "name": "あげる・くれる・もらう", "level": "L2",
+    "gloss": "giving and receiving",
+    "summary": "あげる (give, from the speaker's side), くれる (give, toward the speaker), and もらう (receive) mark the direction of a transfer between people.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 14 }],
+    "patterns": ["くれました", "もらいました", "あげました", "くれた。", "もらった。"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:kamoshirenai", "name": "〜かもしれません", "level": "L2",
+    "gloss": "might / maybe",
+    "summary": "かもしれません follows a plain form to express that something is possible but uncertain (it might be …).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 14 }],
+    "patterns": ["かもしれません", "かもしれない", "かもしれん"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:te-ageru", "name": "〜てあげる", "level": "L2",
+    "gloss": "do something for someone",
+    "summary": "The て-form + あげる expresses doing an action as a favour for someone else.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 16 }],
+    "patterns": ["てあげます", "てあげる", "であげる", "てあげた"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:te-kureru", "name": "〜てくれる", "level": "L2",
+    "gloss": "someone does something for me",
+    "summary": "The て-form + くれる expresses that someone does an action as a favour toward the speaker.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 16 }],
+    "patterns": ["てくれました", "てくれる", "てくれた", "てくれて"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:te-morau", "name": "〜てもらう", "level": "L2",
+    "gloss": "have someone do something",
+    "summary": "The て-form + もらう expresses receiving the favour of someone doing an action (I had someone do …).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 16 }],
+    "patterns": ["てもらいました", "てもらう", "てもらった", "てもらって"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:teoku", "name": "〜ておく", "level": "L2",
+    "gloss": "do in advance / leave as is",
+    "summary": "The て-form + おく expresses doing something ahead of time in preparation, or leaving something in a state.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 15 }],
+    "patterns": ["ておきます", "ておく", "ておいた", "でおく", "でおきます"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:volitional", "name": "〜よう・〜おう (意向形)", "level": "L2",
+    "gloss": "let's / I think I'll (volitional)",
+    "summary": "The volitional form expresses intention or a suggestion; with と思う it states what the speaker intends to do.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 15 }],
+    "patterns": ["ようと思", "おうと思", "ようとした"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:tara", "name": "〜たら", "level": "L2",
+    "gloss": "if / when (conditional)",
+    "summary": "The past plain form + ら sets up a condition or a point in time after which something happens (if/when … then …).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 17 }],
+    "patterns": ["たら、", "だら、", "たらどう", "かったら"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:nakutemoii", "name": "〜なくてもいいです", "level": "L2",
+    "gloss": "don't have to",
+    "summary": "The negative て-form (なくて) + もいいです expresses that it is not necessary to do something.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 17 }],
+    "patterns": ["なくてもいい", "なくても"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:mitai", "name": "〜みたいです", "level": "L2",
+    "gloss": "seems like / resembles",
+    "summary": "みたい expresses a resemblance or an inference from evidence (it seems like …, it's like a …).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 17 }],
+    "patterns": ["みたいです", "みたいな", "みたいに", "みたいだ"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:te-kara", "name": "〜てから", "level": "L2",
+    "gloss": "after doing",
+    "summary": "The て-form + から sequences actions: after doing the first, the second happens.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 17 }],
+    "patterns": ["てから", "でから"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:mae-ni", "name": "〜まえに", "level": "L2",
+    "gloss": "before doing",
+    "summary": "The dictionary form + まえに (or a noun + の前に) expresses that something happens before another action or event.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 17 }],
+    "patterns": ["まえに", "前に"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:teshimau", "name": "〜てしまう", "level": "L2",
+    "gloss": "do completely / do by mistake",
+    "summary": "The て-form + しまう marks an action as completed, or done regrettably or accidentally. Casually contracts to ちゃう/じゃう.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 18 }],
+    "patterns": ["てしまいました", "てしまう", "てしまった", "ちゃった", "じゃった"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:nagara", "name": "〜ながら", "level": "L2",
+    "gloss": "while doing (simultaneously)",
+    "summary": "The verb stem + ながら expresses doing two actions at the same time by the same person.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 18 }],
+    "patterns": ["ながら"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:hazu", "name": "〜はずです", "level": "L2",
+    "gloss": "supposed to be / expected to",
+    "summary": "はず expresses a confident expectation based on reasoning (it should be the case that …).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 19 }],
+    "patterns": ["はずです", "はずだ", "はずが", "はずは"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:keigo-sonkeigo", "name": "尊敬語 (honorific keigo)", "level": "L2",
+    "gloss": "respectful language (raises the other)",
+    "summary": "Honorific verbs and the お〜になる / 〜れる pattern elevate the person you are speaking about, out of respect.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 19 }],
+    "patterns": ["いらっしゃい", "なさいます", "召し上が", "ご覧", "くださいます"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:keigo-kenjougo", "name": "謙譲語 (humble keigo)", "level": "L2",
+    "gloss": "humble language (lowers oneself)",
+    "summary": "Humble verbs and the お〜する pattern lower the speaker's own actions to show deference to the listener.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 20 }],
+    "patterns": ["いたします", "参ります", "申します", "伺い", "拝見"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:yasui-nikui", "name": "〜やすい・〜にくい", "level": "L2",
+    "gloss": "easy to / hard to do",
+    "summary": "The verb stem + やすい means something is easy to do; + にくい means it is hard to do.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 20 }],
+    "patterns": ["やすいです", "にくいです", "やすい。", "にくい。"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:noni", "name": "〜のに", "level": "L2",
+    "gloss": "even though / although",
+    "summary": "のに joins two clauses to express that the result is contrary to what the first clause would lead you to expect (even though …).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 21 }],
+    "patterns": ["のに、", "のに。"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:ba", "name": "〜ば (条件形)", "level": "L2",
+    "gloss": "if (provisional conditional)",
+    "summary": "The provisional ば-form states a general or hypothetical condition (if …, then …).",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 22 }],
+    "patterns": ["ければ", "えばいい", "れば、", "れば。"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:causative", "name": "〜させる (使役)", "level": "L2",
+    "gloss": "make / let someone do (causative)",
+    "summary": "The causative form expresses making or letting someone do something. Ru-verbs take させる; u-verbs take せる.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 22 }],
+    "patterns": ["させます", "させる", "させた", "させて"]
+  }
+]

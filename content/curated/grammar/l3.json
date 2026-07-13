@@ -1,0 +1,192 @@
+[
+  {
+    "kind": "grammar", "id": "grammar:l3:you-ni-naru", "name": "〜ようになる", "level": "L3",
+    "gloss": "come to / reach the point where",
+    "summary": "The dictionary or potential form + ようになる expresses a gradual change reaching a new state or ability (came to be able to …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ようになりました", "ようになる", "ようになった", "ようになって"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:koto-ni-suru", "name": "〜ことにする", "level": "L3",
+    "gloss": "decide to do",
+    "summary": "The dictionary or ない-form + ことにする expresses the speaker's own decision to do (or not do) something.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ことにしました", "ことにする", "ことにした", "ことにして"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:koto-ni-naru", "name": "〜ことになる", "level": "L3",
+    "gloss": "it has been decided that",
+    "summary": "The dictionary or ない-form + ことになる expresses a decision or outcome reached by circumstances or others, not the speaker alone.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ことになりました", "ことになる", "ことになった", "ことになって"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:tame-ni", "name": "〜ために", "level": "L3",
+    "gloss": "in order to / for the sake of",
+    "summary": "ために expresses purpose (in order to) after a verb, or benefit (for the sake of) after a noun + の.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ために、", "ための", "ためです"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:rashii", "name": "〜らしい", "level": "L3",
+    "gloss": "apparently / seems (from what I heard)",
+    "summary": "らしい expresses an inference or hearsay based on external information (apparently …); after a noun it can mean 'typical of / -like'.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["らしいです", "らしい。", "らしく"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:beki", "name": "〜べきだ", "level": "L3",
+    "gloss": "should / ought to",
+    "summary": "The dictionary form + べきだ expresses a strong opinion that something is the right thing to do (should …). する becomes すべき.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["べきだ", "べきです", "べきではない", "べきじゃない"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:you-to-suru", "name": "〜ようとする", "level": "L3",
+    "gloss": "try to / be about to",
+    "summary": "The volitional form + とする expresses an attempt to do something, or being on the verge of doing it.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ようとして", "ようとした", "ようとする", "おうとして"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:tokoro", "name": "〜ところ", "level": "L3",
+    "gloss": "about to / in the middle of / just did",
+    "summary": "ところ with the dictionary form means about to do; with ている, in the middle of doing; with the past form, just finished doing.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ところです", "ところだ", "ているところ", "たところ"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:okage-de", "name": "〜おかげで", "level": "L3",
+    "gloss": "thanks to (positive cause)",
+    "summary": "おかげで attributes a good result to a cause, expressing gratitude (thanks to …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["おかげで", "おかげです"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:sei-de", "name": "〜せいで", "level": "L3",
+    "gloss": "because of (negative cause / blame)",
+    "summary": "せいで attributes a bad result to a cause, assigning blame (because of …, it is …'s fault).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["せいで", "せいだ", "せいです"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:mama", "name": "〜まま", "level": "L3",
+    "gloss": "as it is / unchanged",
+    "summary": "まま expresses that a state is left unchanged while another action occurs (leaving it as it is, …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ままで", "たまま", "のまま", "まま、"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:uchi-ni", "name": "〜うちに", "level": "L3",
+    "gloss": "while / before (a state ends)",
+    "summary": "うちに expresses doing something within a period of time, before a state changes (while it is still …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["うちに"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:bakari", "name": "〜ばかり", "level": "L3",
+    "gloss": "just / only / nothing but",
+    "summary": "ばかり expresses 'only / nothing but' after a noun, or 'just did' after the past form (たばかり).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ばかり", "たばかり"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:toshite", "name": "〜として", "level": "L3",
+    "gloss": "as (a role / capacity)",
+    "summary": "として marks the role, function, or capacity in which someone or something acts (as a …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["として、", "としては", "としても", "としての"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:ni-tsuite", "name": "〜について", "level": "L3",
+    "gloss": "about / concerning",
+    "summary": "について marks the topic that a statement, thought, or investigation is about (concerning …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["について", "についての", "については"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:ni-yotte", "name": "〜によって", "level": "L3",
+    "gloss": "by means of / depending on",
+    "summary": "によって expresses the means or agent of an action, or that something varies depending on a factor.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["によって", "により", "による"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:zu-ni", "name": "〜ずに", "level": "L3",
+    "gloss": "without doing",
+    "summary": "The ない-stem + ずに expresses doing something without doing another action (a formal equivalent of ないで). する becomes せずに.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ずに", "せずに"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:te-hoshii", "name": "〜てほしい", "level": "L3",
+    "gloss": "want someone to do",
+    "summary": "The て-form + ほしい expresses wanting another person to do something.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["てほしい", "てほしかった", "でほしい"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:wake-dewa-nai", "name": "〜わけではない", "level": "L3",
+    "gloss": "it doesn't mean that / not necessarily",
+    "summary": "わけではない partially negates a conclusion, saying it is not entirely or necessarily the case.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["わけではない", "わけじゃない", "わけではありません"]
+  }
+]

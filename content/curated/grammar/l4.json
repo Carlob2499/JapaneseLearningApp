@@ -1,0 +1,162 @@
+[
+  {
+    "kind": "grammar", "id": "grammar:l4:wake-da", "name": "〜わけだ", "level": "L4",
+    "gloss": "no wonder / that means",
+    "summary": "わけだ presents a logical conclusion or explanation that follows naturally from the context (that's why …, so it means …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["わけだ", "わけです", "わけですね"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:ni-chigainai", "name": "〜に違いない", "level": "L4",
+    "gloss": "must be / no doubt",
+    "summary": "に違いない expresses the speaker's strong conviction that something is certainly the case (there is no doubt that …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["に違いない", "にちがいない", "に違いありません"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:dokoroka", "name": "〜どころか", "level": "L4",
+    "gloss": "far from / let alone",
+    "summary": "どころか contradicts an expectation, presenting the opposite or a stronger case (far from …, on the contrary …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["どころか"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:mono-da", "name": "〜ものだ", "level": "L4",
+    "gloss": "used to / it is that (general truth)",
+    "summary": "ものだ expresses a general truth, a strong feeling, or nostalgic recollection of how things used to be.",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ものだ", "ものです", "ものではない"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:tsutsu-aru", "name": "〜つつある", "level": "L4",
+    "gloss": "in the process of / gradually",
+    "summary": "The verb stem + つつある expresses that a change is steadily in progress (is gradually becoming …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["つつある"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:ni-oite", "name": "〜において", "level": "L4",
+    "gloss": "in / at / regarding (formal)",
+    "summary": "において marks a formal setting, time, or field in which something takes place (a written equivalent of で).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["において", "における", "においては"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:ni-kanshite", "name": "〜に関して", "level": "L4",
+    "gloss": "regarding / concerning (formal)",
+    "summary": "に関して marks the subject matter under discussion in a formal register (with regard to …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["に関して", "に関する", "に関しては"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:ni-totte", "name": "〜にとって", "level": "L4",
+    "gloss": "for / from the standpoint of",
+    "summary": "にとって presents the viewpoint from which an evaluation is made (for …, to …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["にとって", "にとっては", "にとっての"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:ni-taishite", "name": "〜に対して", "level": "L4",
+    "gloss": "toward / in contrast to",
+    "summary": "に対して marks the target of an attitude or action, or contrasts two things (toward …; in contrast to …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["に対して", "に対する", "に対しては"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:kara-niwa", "name": "〜からには", "level": "L4",
+    "gloss": "now that / since",
+    "summary": "からには expresses that, given a certain fact, a natural consequence or resolve follows (now that …, of course …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["からには", "からは、"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:monono", "name": "〜ものの", "level": "L4",
+    "gloss": "although / even though",
+    "summary": "ものの concedes a fact, then states something contrary to what it would suggest (although …, still …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ものの、"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:no-amari", "name": "〜あまり", "level": "L4",
+    "gloss": "so much that / out of (excess)",
+    "summary": "あまり expresses that an extreme degree of something causes a result (so … that …, out of too much …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["のあまり", "あまり、"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:zaru-o-enai", "name": "〜ざるを得ない", "level": "L4",
+    "gloss": "have no choice but to",
+    "summary": "The ない-stem + ざるを得ない expresses being compelled to do something against one's wishes (cannot help but …). する becomes せざるを得ない.",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["ざるを得ない", "ざるをえない", "ざるを得ません"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:ni-motozuite", "name": "〜に基づいて", "level": "L4",
+    "gloss": "based on",
+    "summary": "に基づいて expresses that an action or judgement is grounded on a standard, rule, or information (based on …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["に基づいて", "に基づく", "にもとづいて"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:osore-ga-aru", "name": "〜おそれがある", "level": "L4",
+    "gloss": "there is a risk / fear that",
+    "summary": "おそれがある warns that there is a danger or risk of something undesirable happening.",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["おそれがある", "恐れがある", "おそれがあります"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:ippou-de", "name": "〜一方で", "level": "L4",
+    "gloss": "on the other hand / while",
+    "summary": "一方で presents two contrasting or simultaneous aspects of a situation (on one hand … on the other …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "patterns": ["一方で", "一方、"]
+  }
+]
