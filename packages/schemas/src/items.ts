@@ -48,17 +48,41 @@ export const KanjiItem = z.object({
 })
 export type KanjiItem = z.infer<typeof KanjiItem>
 
-/** Grammar point — curated, each with ≥1 citation (D-005). Defined now; populated later. */
+/**
+ * A verbatim Tatoeba sentence attached to a grammar point as an example (D-002:
+ * examples are dataset-verified, never authored — only the point's own prose is written).
+ */
+export const GrammarExample = z.object({
+  ja: z.string().min(1),
+  en: z.string().min(1),
+  tatoebaId: z.number().int(),
+  attribution: z.object({
+    author: z.string(),
+    license: z.enum(['CC-BY-2.0-FR', 'CC0-1.0']),
+  }),
+})
+export type GrammarExample = z.infer<typeof GrammarExample>
+
+/**
+ * Grammar point — curated (D-005). The `name` (pattern), short `gloss`, and fuller `summary`
+ * are original prose (the D-005 exception: no importable open grammar inventory exists), each
+ * with ≥1 `citation` cross-referencing public inventories and a textbook anchor. `examples`
+ * are drawn verbatim from Tatoeba at build time (D-002) — every shipped point has ≥1.
+ */
 export const GrammarPoint = z.object({
   kind: z.literal('grammar'),
   id: z.string().min(1),
   name: z.string().min(1),
   level: Level,
+  /** Short English function label, for MC options and compact display (e.g. "permission — it's OK to …"). */
+  gloss: z.string().min(1),
+  /** Fuller original-prose explanation shown on the recall card. */
   summary: z.string().min(1),
   citations: z.array(Source).min(1),
   textbookAnchors: z
     .array(z.object({ book: z.string().min(1), chapter: z.number().int() }))
     .optional(),
+  examples: z.array(GrammarExample).min(1),
 })
 export type GrammarPoint = z.infer<typeof GrammarPoint>
 

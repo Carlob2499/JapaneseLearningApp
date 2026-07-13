@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Pack, VocabItem, KanjiItem, SentenceItem, StrokeItem } from './index'
+import { Pack, VocabItem, KanjiItem, GrammarPoint, SentenceItem, StrokeItem } from './index'
 
 const sentence = {
   kind: 'sentence',
@@ -11,6 +11,32 @@ const sentence = {
   levelEstimate: 'L1',
   register: 'polite',
   coverage: { knownRatioBasis: 'kanji-coverage proxy' },
+}
+
+const grammar = {
+  kind: 'grammar',
+  id: 'grammar:l1:te-mo-ii',
+  name: '〜てもいいです',
+  level: 'L1',
+  gloss: 'permission — it is OK to do',
+  summary: 'The te-form of a verb followed by もいいです asks or grants permission to do something.',
+  citations: [
+    {
+      name: 'JLPT Sensei — N5 grammar list',
+      url: 'https://jlptsensei.com/jlpt-n5-grammar-list/',
+      retrieved: '2026-07-13',
+      license: 'editorial reference (counts/placement only)',
+    },
+  ],
+  textbookAnchors: [{ book: 'genki1', chapter: 6 }],
+  examples: [
+    {
+      ja: '帰ってもいいです。',
+      en: 'You may go home.',
+      tatoebaId: 1,
+      attribution: { author: 'alice', license: 'CC-BY-2.0-FR' },
+    },
+  ],
 }
 
 const vocab = {
@@ -72,6 +98,14 @@ describe('item schemas', () => {
 
   it('rejects a vocab item with no senses (no verified meaning)', () => {
     expect(VocabItem.safeParse({ ...vocab, senses: [] }).success).toBe(false)
+  })
+
+  it('accepts a curated grammar point and rejects one missing citations or examples', () => {
+    expect(GrammarPoint.safeParse(grammar).success).toBe(true)
+    expect(GrammarPoint.safeParse({ ...grammar, citations: [] }).success).toBe(false)
+    expect(GrammarPoint.safeParse({ ...grammar, examples: [] }).success).toBe(false)
+    const { gloss: _omit, ...noGloss } = grammar
+    expect(GrammarPoint.safeParse(noGloss).success).toBe(false)
   })
 
   it('accepts a sentence item with a register and rejects one missing it', () => {
