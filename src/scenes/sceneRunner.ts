@@ -1,0 +1,53 @@
+import type { Beat, ItemState, SceneTemplate, VocabItem } from '@hikkoshi/schemas'
+
+/** One step in the flattened scene sequence — either ambient narration or an interactive beat. */
+export type SceneStep =
+  | { kind: 'narration'; text: string; phraseId?: string }
+  | { kind: 'beat'; text: string; phraseId?: string; beat: Beat }
+
+/**
+ * Flatten a scene's `framing` (an ordered array of narration/dialogue lines) into a linear
+ * step sequence, splicing in the referenced `Beat` wherever a framing entry names one via
+ * `beatId`. This is the scene's whole "script" — the SceneRunner just walks it in order.
+ */
+export function buildSceneSteps(scene: SceneTemplate): SceneStep[] {
+  const beatsById = new Map(scene.beats.map((b) => [b.id, b]))
+  return scene.framing.map((f) => {
+    const beat = f.beatId ? beatsById.get(f.beatId) : undefined
+    if (beat) return { kind: 'beat', text: f.text, phraseId: f.phraseId, beat }
+    return { kind: 'narration', text: f.text, phraseId: f.phraseId }
+  })
+}
+
+export type Rng = () => number
+
+/**
+ * Resolve one beat's item slot to a concrete vocab item from the scene's module pool
+ * (curriculum §5 P1/P3 — the SRS decides *what* is due, the scene decides *where* it
+ * resurfaces): a due item first (earliest due), else a known item (has state, not yet due —
+ * picked at random for freshness across replays), else introduce a fresh item from the pool.
+ * Never repeats an item already used earlier in the same scene run.
+ */
+export function pickSlotItem(
+  pool: VocabItem[],
+  states: Map<string, ItemState>,
+  usedIds: Set<string>,
+  now: number,
+  rng: Rng = Math.random,
+): VocabItem | undefined {
+  const candidates = pool.filter((v) => !usedIds.has(v.id))
+  if (candidates.length === 0) return undefined
+
+  const due = candidates
+    .filter((v) => {
+      const st = states.get(v.id)
+      return st !== undefined && st.due <= now
+    })
+    .sort((a, b) => (states.get(a.id)?.due ?? 0) - (states.get(b.id)?.due ?? 0))
+  if (due.length > 0) return due[0]
+
+  const known = candidates.filter((v) => states.has(v.id))
+  if (known.length > 0) return known[Math.floor(rng() * known.length)]
+
+  return candidates[0]
+}

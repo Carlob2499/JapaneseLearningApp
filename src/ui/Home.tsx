@@ -8,10 +8,12 @@ export default function Home({
   levels,
   onToggleLevel,
   onStart,
+  onStartScene,
 }: {
   levels: Level[]
   onToggleLevel: (level: Level) => void
   onStart: () => void
+  onStartScene: () => void
 }) {
   const selectedCount = levels.reduce((sum, l) => sum + levelItemCount(l), 0)
   return (
@@ -58,6 +60,17 @@ export default function Home({
           fresh start introduces ~10 · progress saved on this device. Levels beyond N5 download once,
           then work offline.
         </p>
+      </section>
+
+      <section className="card errand-cta">
+        <h2>Errands</h2>
+        <p>
+          Same words, a real moment: run the konbini checkout counter and use what you know in a
+          live exchange with the clerk.
+        </p>
+        <button className="errand-btn" onClick={onStartScene}>
+          Konbini checkout
+        </button>
       </section>
 
       <About />

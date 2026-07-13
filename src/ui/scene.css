@@ -1,0 +1,188 @@
+/* Real-world scene UI (D-017) — a diegetic errand, not a flashcard. The konbini backdrop is a
+   hand-authored flat-vector illustration (inline SVG in SceneView.tsx); this file styles the
+   VN-style dialogue box, the receipt-toned choice UI, and the scene-complete recap. */
+
+.scene-view {
+  display: grid;
+  gap: 14px;
+}
+
+.scene-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.scene-backdrop {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.14);
+}
+.scene-backdrop svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.scene-stage {
+  animation: scene-rise 0.32s ease-out both;
+}
+@keyframes scene-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The clerk's line — a lightweight visual-novel textbox: nameplate tab + paper body. */
+.scene-dialogue {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px 20px 16px;
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  text-align: center;
+}
+.scene-dialogue .nameplate {
+  position: absolute;
+  top: -13px;
+  left: 18px;
+  background: var(--accent-2);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+}
+.scene-dialogue .jp-line {
+  font-size: clamp(20px, 6vw, 26px);
+  line-height: 1.5;
+}
+.scene-dialogue .narration {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.scene-continue-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 30px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent-2);
+  cursor: pointer;
+  justify-self: center;
+}
+
+.scene-exit {
+  justify-self: center;
+}
+
+/* Receipt-toned choice UI: nested under .scene-view so the shared ChoiceCard component
+   picks up a distinct, ticket-like look here without any change to cards.tsx. */
+.scene-view .study-card {
+  background: var(--paper);
+}
+.scene-view .card-kind {
+  color: var(--accent-2);
+}
+.scene-view .choice {
+  background: var(--paper);
+  border-color: var(--wood);
+  border-radius: 4px;
+  position: relative;
+  animation: scene-choice-in 0.28s ease-out both;
+}
+.scene-view .choices .choice:nth-child(1) {
+  animation-delay: 0.02s;
+}
+.scene-view .choices .choice:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.scene-view .choices .choice:nth-child(3) {
+  animation-delay: 0.14s;
+}
+.scene-view .choices .choice:nth-child(4) {
+  animation-delay: 0.2s;
+}
+@keyframes scene-choice-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.scene-view .next-btn {
+  background: var(--accent-2);
+}
+
+/* Scene-complete: a printed-receipt recap of the errand. */
+.scene-summary {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 24px 22px;
+  display: grid;
+  gap: 4px;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+  box-shadow: 0 10px 26px rgb(0 0 0 / 0.14);
+}
+.scene-summary h2 {
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.scene-summary .receipt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 14px;
+}
+.scene-summary .receipt-row:last-of-type {
+  border-bottom: none;
+}
+.scene-summary .receipt-outcome.pass {
+  color: var(--ok);
+}
+.scene-summary .receipt-outcome.fail {
+  color: var(--accent);
+}
+.scene-summary .receipt-total {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-stage,
+  .scene-view .choice {
+    animation: none;
+  }
+}

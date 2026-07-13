@@ -9,6 +9,12 @@
   --line: #e4e0d8;
   --accent: #bc002d; /* hinomaru red */
   --ok: #2c7a4b;
+  /* Real-world scene palette (D-017) — noren-curtain indigo + washi-paper/wood tones,
+     a small, purposeful extension rather than the full token system (that's D-003/Phase 3). */
+  --accent-2: #2f4f6b; /* noren indigo */
+  --paper: #fffaf2; /* shironeri — warm washi white, distinct from --card */
+  --wood: #a9764f; /* counter wood tone */
+  --wood-dark: #7d5636;
   color-scheme: light dark;
 }
 
@@ -21,6 +27,10 @@
     --line: #322c3f;
     --accent: #ff5470;
     --ok: #5dd39e;
+    --accent-2: #6c9ec2;
+    --paper: #26222e;
+    --wood: #8a6144;
+    --wood-dark: #5f4229;
   }
 }
 

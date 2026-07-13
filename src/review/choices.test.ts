@@ -203,6 +203,8 @@ describe('buildPools', () => {
       kanji: [kanji('k1', '一', ['one', 'first']).item, kanji('k2', '二', ['two']).item],
       grammar: [grammar('g1', '〜てもいい', 'permission').item, grammar('g2', '〜たい', 'desire').item],
       sentences: [sentence('s1', '行くよ。', "I'm going.").item],
+      phrases: [],
+      scenes: [],
       strokesById: new Map(),
     }
     const p = buildPools(content)

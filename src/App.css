@@ -111,6 +111,32 @@
   background: var(--accent);
   cursor: pointer;
 }
+.errand-cta {
+  display: grid;
+  gap: 12px;
+  text-align: center;
+  justify-items: center;
+}
+.errand-cta p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.errand-btn {
+  border: 1px solid var(--accent-2);
+  border-radius: 12px;
+  padding: 12px 26px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--accent-2);
+  background: transparent;
+  cursor: pointer;
+}
+.errand-btn:hover {
+  background: var(--accent-2);
+  color: #fff;
+}
 .session-bar {
   display: flex;
   align-items: center;
