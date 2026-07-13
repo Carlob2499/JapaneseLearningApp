@@ -214,6 +214,59 @@
   color: #b3402f;
 }
 
+/* Grammar cards */
+.grammar-front {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+.grammar-lead {
+  font-size: clamp(18px, 5vw, 22px);
+  color: var(--muted);
+}
+.grammar-back {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  max-width: 420px;
+}
+.grammar-gloss {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.grammar-summary {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.grammar-examples {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+.grammar-examples li {
+  display: grid;
+  gap: 2px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.grammar-examples .ex-ja {
+  font-size: 17px;
+}
+.grammar-examples .ex-en {
+  font-size: 13px;
+  color: var(--muted);
+}
+.grammar-cite {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
 /* Audio */
 .speak-btn {
   border: 0;

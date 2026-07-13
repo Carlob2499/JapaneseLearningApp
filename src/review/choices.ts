@@ -28,6 +28,8 @@ export interface Pools {
   kanjiMeaning: string[]
   /** The kanji characters. */
   kanjiLiteral: string[]
+  /** Short function gloss of each grammar point. */
+  grammarGloss: string[]
   /** English translation of each sentence. */
   sentenceEn: string[]
 }
@@ -41,6 +43,7 @@ export function buildPools(content: Content): Pools {
     vocabWord: content.vocab.map((v) => v.expression),
     kanjiMeaning: content.kanji.map((k) => k.meanings[0]),
     kanjiLiteral: content.kanji.map((k) => k.literal),
+    grammarGloss: content.grammar.map((g) => g.gloss),
     sentenceEn: content.sentences.map((s) => s.en),
   }
 }
@@ -49,15 +52,17 @@ export function buildPools(content: Content): Pools {
 const MODES_BY_KIND: Record<CardKind, RetrievalMode[]> = {
   vocab: ['recognition', 'production', 'typed', 'recall'],
   kanji: ['recognition', 'production', 'recall'],
+  grammar: ['recognition', 'recall'],
   sentence: ['recognition', 'recall'],
 }
 
 /**
  * Retrieval mode for a card, escalating with mastery: recognition (stage 0–1) → production
  * (2–3) → typed reading (4–5, vocab only) → free recall (6+). Kanji have no unambiguous typed
- * answer (multiple on/kun readings) so they go straight to recall at 4+; sentences have no
- * production/typed form and stay recognition until recall at 4+. A leech (architecture §5) is
- * forced into varied modes — cycling by `seed` — rather than hammering the same failing drill.
+ * answer (multiple on/kun readings) so they go straight to recall at 4+; sentences and grammar
+ * points have no production/typed form and stay recognition until recall at 4+. A leech
+ * (architecture §5) is forced into varied modes — cycling by `seed` — rather than hammering the
+ * same failing drill.
  */
 export function retrievalModeFor(
   kind: CardKind,
@@ -69,7 +74,7 @@ export function retrievalModeFor(
     return modes[(((opts.seed ?? 0) % modes.length) + modes.length) % modes.length]
   }
   if (stage <= 1) return 'recognition'
-  if (stage <= 3) return kind === 'sentence' ? 'recognition' : 'production'
+  if (stage <= 3) return kind === 'sentence' || kind === 'grammar' ? 'recognition' : 'production'
   if (kind === 'vocab' && stage <= 5) return 'typed'
   return 'recall'
 }
@@ -135,6 +140,10 @@ function answerSpec(r: Reviewable, mode: RetrievalMode, pools: Pools): AnswerSpe
     const answer = r.item.meanings[0]
     const own = r.item.meanings.map(normalize)
     return { answer, pool: pools.kanjiMeaning, exclude: new Set([normalize(answer), ...own]) }
+  }
+  if (r.kind === 'grammar') {
+    // recognition only: identify the point's function; distractors are other grammar glosses
+    return { answer: r.item.gloss, pool: pools.grammarGloss, exclude: new Set([normalize(r.item.gloss)]) }
   }
   // sentence — recognition only (production falls back upstream)
   return { answer: r.item.en, pool: pools.sentenceEn, exclude: new Set([normalize(r.item.en)]) }

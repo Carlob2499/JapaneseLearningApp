@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { toHiragana, toKana } from 'wanakana'
-import type { KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
+import type { GrammarPoint, KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import type { Choice } from '../review/choices'
 import { useAudio } from '../audio/useAudio'
 import StrokeViewer from './StrokeViewer'
@@ -177,6 +177,48 @@ export function SentenceCard({ item, onGrade }: { item: SentenceItem; onGrade: (
       }
       onGrade={onGrade}
       back={<div className="en">{item.en}</div>}
+    />
+  )
+}
+
+export function GrammarCard({ item, onGrade }: { item: GrammarPoint; onGrade: (o: Outcome) => void }) {
+  const lead = item.examples[0]
+  return (
+    <StudyCard
+      kind="Grammar"
+      front={
+        <div className="grammar-front">
+          <span className="jp-lg">{item.name}</span>
+          {lead && (
+            <span className="grammar-lead">
+              {lead.ja} <SpeakButton text={lead.ja} />
+            </span>
+          )}
+        </div>
+      }
+      onGrade={onGrade}
+      back={
+        <div className="grammar-back">
+          <div className="grammar-gloss">{item.gloss}</div>
+          <p className="grammar-summary">{item.summary}</p>
+          <ul className="grammar-examples">
+            {item.examples.map((e, i) => (
+              <li key={i}>
+                <span className="ex-ja">
+                  {e.ja} <SpeakButton text={e.ja} />
+                </span>
+                <span className="ex-en">{e.en}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="grammar-cite">
+            {item.textbookAnchors && item.textbookAnchors.length > 0 && (
+              <span>{item.textbookAnchors.map((a) => `${a.book} ch.${a.chapter}`).join(' · ')} · </span>
+            )}
+            placement: {item.citations.map((c) => c.name).join('; ')}
+          </p>
+        </div>
+      }
     />
   )
 }

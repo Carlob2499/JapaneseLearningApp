@@ -64,11 +64,29 @@ function sentence(id: string, ja: string, en: string): Extract<Reviewable, { kin
   }
 }
 
+function grammar(id: string, name: string, gloss: string): Extract<Reviewable, { kind: 'grammar' }> {
+  return {
+    id,
+    kind: 'grammar',
+    item: {
+      kind: 'grammar',
+      id,
+      name,
+      level: 'L1',
+      gloss,
+      summary: 'summary',
+      citations: [{ name: 'src', url: 'https://x', retrieved: '2026-07-13', license: 'ref' }],
+      examples: [{ ja: 'れい。', en: 'example', tatoebaId: 1, attribution: { author: 'x', license: 'CC-BY-2.0-FR' } }],
+    },
+  }
+}
+
 const pools: Pools = {
   vocabGloss: ['to eat', 'to drink', 'blue', 'red', 'to go', 'to come', 'water', 'fire'],
   vocabWord: ['食べる', '飲む', '青', '赤', '行く', '来る', '水', '火'],
   kanjiMeaning: ['one', 'two', 'three', 'below', 'above', 'tree', 'river', 'mountain'],
   kanjiLiteral: ['一', '二', '三', '下', '上', '木', '川', '山'],
+  grammarGloss: ['permission', 'prohibition', 'obligation', 'desire', 'intention'],
   sentenceEn: ["I'm going.", 'No way!', 'You can search me!', 'It is raining.', 'Good morning.'],
 }
 
@@ -87,6 +105,9 @@ describe('retrievalModeFor', () => {
     // sentences have no production/typed form
     expect(retrievalModeFor('sentence', 2)).toBe('recognition')
     expect(retrievalModeFor('sentence', 5)).toBe('recall')
+    // grammar behaves like sentences: recognition until recall at 4+, never production/typed
+    expect(retrievalModeFor('grammar', 3)).toBe('recognition')
+    expect(retrievalModeFor('grammar', 4)).toBe('recall')
   })
 
   it('forces varied modes for a leech, cycling by seed instead of the stage default', () => {
@@ -111,6 +132,16 @@ describe('buildChoices', () => {
     expect(choices.filter((c) => c.correct)).toHaveLength(1)
     expect(choices.find((c) => c.correct)?.text).toBe('to eat')
     for (const c of choices) expect(pools.vocabGloss.includes(c.text)).toBe(true)
+    expect(new Set(choices.map((c) => c.text)).size).toBe(choices.length)
+  })
+
+  it('answers a grammar card with its function gloss, distractors from other glosses', () => {
+    const choices = buildChoices(grammar('grammar:1', '〜てもいいです', 'permission'), 'recognition', pools, {
+      count: 4,
+      rng: lcg(4),
+    })
+    expect(choices.find((c) => c.correct)?.text).toBe('permission')
+    for (const c of choices) expect(pools.grammarGloss.includes(c.text)).toBe(true)
     expect(new Set(choices.map((c) => c.text)).size).toBe(choices.length)
   })
 
@@ -170,6 +201,7 @@ describe('buildPools', () => {
     const content: Content = {
       vocab: [vocab('v1', '食べる', [['to eat', 'to consume']]).item, vocab('v2', '飲む', [['to drink']]).item],
       kanji: [kanji('k1', '一', ['one', 'first']).item, kanji('k2', '二', ['two']).item],
+      grammar: [grammar('g1', '〜てもいい', 'permission').item, grammar('g2', '〜たい', 'desire').item],
       sentences: [sentence('s1', '行くよ。', "I'm going.").item],
       strokesById: new Map(),
     }
@@ -178,6 +210,7 @@ describe('buildPools', () => {
     expect(p.vocabWord).toEqual(['食べる', '飲む'])
     expect(p.kanjiMeaning).toEqual(['one', 'two'])
     expect(p.kanjiLiteral).toEqual(['一', '二'])
+    expect(p.grammarGloss).toEqual(['permission', 'desire'])
     expect(p.sentenceEn).toEqual(["I'm going."])
   })
 })

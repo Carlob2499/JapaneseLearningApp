@@ -1,5 +1,6 @@
 import {
   Pack,
+  type GrammarPoint,
   type Item,
   type KanjiItem,
   type Level,
@@ -13,6 +14,7 @@ import manifest from '../../content/packs/manifest.json'
 export interface Content {
   vocab: VocabItem[]
   kanji: KanjiItem[]
+  grammar: GrammarPoint[]
   sentences: SentenceItem[]
   /** Stroke data keyed by KanjiVG id, for the KanjiItem.strokes.kanjivgId join. */
   strokesById: Map<string, StrokeItem>
@@ -26,6 +28,7 @@ export interface Content {
 const L1_IMPORTS: Array<() => Promise<{ default: unknown }>> = [
   () => import('../../content/packs/l1/vocab.json'),
   () => import('../../content/packs/l1/kanji.json'),
+  () => import('../../content/packs/l1/grammar.json'),
   () => import('../../content/packs/l1/sentence.json'),
   () => import('../../content/packs/l1/strokes.json'),
 ]
@@ -63,6 +66,7 @@ export async function loadLevels(levels: Level[]): Promise<Content> {
   return {
     vocab: all.filter((i): i is VocabItem => i.kind === 'vocab'),
     kanji: all.filter((i): i is KanjiItem => i.kind === 'kanji'),
+    grammar: all.filter((i): i is GrammarPoint => i.kind === 'grammar'),
     sentences: all.filter((i): i is SentenceItem => i.kind === 'sentence'),
     strokesById: new Map(strokes.map((x) => [x.kanjivgId, x])),
   }

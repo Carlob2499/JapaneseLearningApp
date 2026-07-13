@@ -3,12 +3,13 @@ import type { Level, Outcome } from '@hikkoshi/schemas'
 import { useReview, type Presentation, type Reviewable } from '../review/useReview'
 import { useAudio } from '../audio/useAudio'
 import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
-import { ChoiceCard, KanjiCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
+import { ChoiceCard, GrammarCard, KanjiCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
 
 const KIND_LABEL: Record<Reviewable['kind'], string> = {
   vocab: 'Vocabulary',
   kanji: 'Kanji',
+  grammar: 'Grammar',
   sentence: 'Sentence',
 }
 
@@ -27,6 +28,8 @@ function RecallCard({
       return <VocabCard item={r.item} onGrade={onGrade} autoPlay={autoPlay} />
     case 'kanji':
       return <KanjiCard item={r.item} stroke={r.stroke} onGrade={onGrade} />
+    case 'grammar':
+      return <GrammarCard item={r.item} onGrade={onGrade} />
     case 'sentence':
       return <SentenceCard item={r.item} onGrade={onGrade} />
   }
@@ -49,6 +52,19 @@ function multipleChoicePrompt(
     return mode === 'production'
       ? { prompt: <span className="jp-lg">{r.item.meanings[0]}</span>, question: 'Which kanji?' }
       : { prompt: <span className="jp-xl">{r.item.literal}</span>, question: 'Which meaning?' }
+  }
+  if (r.kind === 'grammar') {
+    // recognition only: show the pattern and an example, ask for its function
+    const ex = r.item.examples[0]
+    return {
+      prompt: (
+        <div className="grammar-front">
+          <span className="jp-lg">{r.item.name}</span>
+          {ex && <span className="grammar-lead">{ex.ja}</span>}
+        </div>
+      ),
+      question: 'What does this grammar do?',
+    }
   }
   // Sentences carry their register on both the recognition prompt (read here first) and the
   // recall card, so politeness is felt from the first encounter, not only when mature.

@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { ChoiceCard, SentenceCard, SpeakButton, TypedCard } from './cards'
+import { ChoiceCard, GrammarCard, SentenceCard, SpeakButton, TypedCard } from './cards'
 import type { Choice } from '../review/choices'
-import type { SentenceItem } from '@hikkoshi/schemas'
+import type { GrammarPoint, SentenceItem } from '@hikkoshi/schemas'
 
 afterEach(cleanup)
 
@@ -100,6 +100,29 @@ describe('SentenceCard', () => {
     const chip = screen.getByTestId('register-chip')
     expect(chip.textContent).toBe('keigo')
     expect(chip.getAttribute('data-reg')).toBe('keigo')
+  })
+})
+
+describe('GrammarCard', () => {
+  const point: GrammarPoint = {
+    kind: 'grammar',
+    id: 'grammar:l1:te-mo-ii',
+    name: '〜てもいいです',
+    level: 'L1',
+    gloss: 'permission — it is OK to',
+    summary: 'The te-form + もいいです asks or grants permission.',
+    citations: [{ name: 'JLPT Sensei', url: 'https://x', retrieved: '2026-07-13', license: 'ref' }],
+    textbookAnchors: [{ book: 'genki1', chapter: 6 }],
+    examples: [{ ja: '帰ってもいいです。', en: 'You may go home.', tatoebaId: 1, attribution: { author: 'x', license: 'CC-BY-2.0-FR' } }],
+  }
+
+  it('cues with the pattern, then reveals the gloss, summary, and a verified example', () => {
+    render(<GrammarCard item={point} onGrade={() => {}} />)
+    expect(screen.getByText('〜てもいいです')).toBeTruthy() // pattern is the front cue
+    expect(screen.queryByText('permission — it is OK to')).toBeNull() // gloss hidden until reveal
+    fireEvent.click(screen.getByText('Reveal'))
+    expect(screen.getByText('permission — it is OK to')).toBeTruthy()
+    expect(screen.getByText('You may go home.')).toBeTruthy() // the Tatoeba example's translation
   })
 })
 

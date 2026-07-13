@@ -6,6 +6,8 @@ describe('loadL1', () => {
     const c = await loadL1()
     expect(c.vocab.length).toBeGreaterThan(100)
     expect(c.kanji.length).toBeGreaterThan(50)
+    expect(c.grammar.length).toBeGreaterThan(0)
+    expect(c.grammar[0].examples.length).toBeGreaterThan(0) // every point ships a verified example
     expect(c.sentences.length).toBeGreaterThan(100)
     // every kanji resolves to stroke data via its kanjivgId
     const sample = c.kanji[0]

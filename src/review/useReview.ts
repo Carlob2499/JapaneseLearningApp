@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isHiragana } from 'wanakana'
 import type {
+  GrammarPoint,
   ItemState,
   JournalEntry,
   KanjiItem,
@@ -26,6 +27,7 @@ import { buildChoices, buildPools, retrievalModeFor, type Choice, type Pools } f
 export type Reviewable =
   | { id: string; kind: 'vocab'; item: VocabItem }
   | { id: string; kind: 'kanji'; item: KanjiItem; stroke?: StrokeItem }
+  | { id: string; kind: 'grammar'; item: GrammarPoint }
   | { id: string; kind: 'sentence'; item: SentenceItem }
 
 /** What to show for the head-of-queue item: the item, its retrieval mode, and (for MC) the choices. */
@@ -39,7 +41,7 @@ export type Mode = 'loading' | 'review' | 'practice' | 'summary' | 'error'
 
 const PRACTICE_SIZE = 24
 
-/** Round-robin kanji/vocab/sentence so a fresh session's intro batch is varied (kanji first). */
+/** Round-robin kanji/vocab/grammar/sentence so a fresh session's intro batch is varied (kanji first). */
 function buildPool(c: Content): Reviewable[] {
   const kanji = c.kanji.map<Reviewable>((k) => ({
     id: k.id,
@@ -48,12 +50,14 @@ function buildPool(c: Content): Reviewable[] {
     stroke: c.strokesById.get(k.strokes.kanjivgId),
   }))
   const vocab = c.vocab.map<Reviewable>((v) => ({ id: v.id, kind: 'vocab', item: v }))
+  const grammar = c.grammar.map<Reviewable>((g) => ({ id: g.id, kind: 'grammar', item: g }))
   const sentence = c.sentences.map<Reviewable>((s) => ({ id: s.id, kind: 'sentence', item: s }))
   const out: Reviewable[] = []
-  const max = Math.max(kanji.length, vocab.length, sentence.length)
+  const max = Math.max(kanji.length, vocab.length, grammar.length, sentence.length)
   for (let i = 0; i < max; i++) {
     if (kanji[i]) out.push(kanji[i])
     if (vocab[i]) out.push(vocab[i])
+    if (grammar[i]) out.push(grammar[i])
     if (sentence[i]) out.push(sentence[i])
   }
   return out
@@ -95,6 +99,7 @@ export function useReview(levels: Level[]): ReviewApi {
     vocabWord: [],
     kanjiMeaning: [],
     kanjiLiteral: [],
+    grammarGloss: [],
     sentenceEn: [],
   })
   const shownAtRef = useRef<number>(Date.now())
