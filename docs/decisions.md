@@ -254,3 +254,35 @@ unchanged). GENKI sequence verified against the St. Olaf Genki I & II grammar in
 Deferred: the "conjugate into register" production retrieval mode (E2 keigo/casual transforms); per-sense
 vocab register; grammar-point register curation (D-005). Tatoeba lock date kept stable to scope the diff.
 *Source: Session 10 build, 2026-07-13; approved plan + re-emit/validate verification.*
+
+### D-016: Grammar points as a first-class content type (curated-cited, N5→N1)
+Builds the third leg of JLPT study (curriculum §3.3) — the grammar inventory D-005 committed to. The
+`GrammarPoint` schema + `PackDomain: 'grammar'` already existed unpopulated; this session populates and
+wires them across all five levels. User directive: cover N4–N1, not just N5.
+- **Grammar prose is authored; grammar examples are dataset-verified.** This is the one content type
+  where model-written prose is allowed (D-005 exception — no importable open grammar inventory exists):
+  each point's `name` (pattern), short `gloss`, and fuller `summary` are original descriptions. But
+  **example sentences must never be generated (D-002)** — so `pipeline/src/grammar.ts` `linkExamples()`
+  draws them verbatim from the Tatoeba corpus by matching each point's literal `patterns`, keeping only
+  sentences readable at the point's level (kanji-coverage ≤ level), embedding the best few with author
+  attribution. A point that matches **zero** examples is logged and **held back** — nothing ships
+  example-less. (All 98 authored points found ≥1 example, incl. N1.)
+- **Grammar is `curated-cited`, not `dataset-verified`.** `VerificationStatus` already had the value;
+  `buildPack` now takes status per domain and `validate.ts` expects `curated-cited` for grammar. The
+  D-002 provenance gate still holds — `Pack.parse` requires ≥1 `citations` per point + pack `sources`
+  (Tatoeba, credited for the examples). Point placement is cross-referenced against ≥2 public inventories
+  (JLPT Sensei per-level + Bunpro); N5/N4 carry **verified** Genki I/II chapter anchors (St. Olaf grammar
+  index), N3–N1 omit textbook anchors rather than fabricate Quartet/Tobira chapters (honesty rule).
+- **Two prose fields**: a short `gloss` (MC option + compact display) and a fuller `summary` (recall card).
+- **Retrieval mirrors sentences** (no production/typed form): recognition (pattern + example → pick the
+  gloss; distractors = other glosses) → recall (reveal summary + examples + citations). `GrammarCard` +
+  the interleaved intro round-robin; the SRS/store are kind-agnostic (no changes).
+- **Scale, honestly disclosed.** This phase authors a genuinely-cited core at each level (L1 25 · L2 24 ·
+  L3 19 · L4 16 · L5 14 = 98 shipped); the JLPT-Sensei-scale totals (§3.3: 848) are the aspiration, the
+  gate ships only cited+exampled points, and the achieved count is disclosed — no fabricated coverage.
+Result: validate green (25 packs / 15,180 items; grammar `curated-cited`, sha256-matched; vocab/kanji/
+sentence/stroke packs byte-identical). `pipeline:build-grammar` re-emits grammar independently; a full
+`pipeline:build` also links + emits it (no silent drop). Deferred: N4–N1 completion toward the full
+inventory; the E2 register-transform production mode (needs `TransformRule`, undefined); grammar as a
+scene-beat interaction; grammar↔vocab/kanji linking.
+*Source: Session 11 build, 2026-07-13; approved plan + build-grammar/validate + Playwright verification.*
