@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type {
+  GrammarPoint,
   KanjiItem,
   Level,
   Manifest,
@@ -10,6 +11,7 @@ import type {
   SentenceItem,
   Source,
   StrokeItem,
+  VerificationStatus,
   VocabItem,
 } from '@hikkoshi/schemas'
 import { SCHEMA_VERSION } from '@hikkoshi/schemas'
@@ -29,8 +31,8 @@ export interface LockSource {
   attribution: string
 }
 
-type Domain = 'vocab' | 'kanji' | 'sentence' | 'strokes'
-type AnyItem = VocabItem | KanjiItem | SentenceItem | StrokeItem
+type Domain = 'vocab' | 'kanji' | 'grammar' | 'sentence' | 'strokes'
+type AnyItem = VocabItem | KanjiItem | GrammarPoint | SentenceItem | StrokeItem
 
 const LEVEL_JLPT: Record<Level, string> = {
   L0: 'kana/survival',
@@ -49,6 +51,8 @@ interface DomainMeta {
   licenseNotes: string
   levelTagSource?: string
   verificationMethod: string
+  /** Defaults to 'dataset-verified'; curated domains (grammar) declare 'curated-cited'. */
+  verificationStatus?: VerificationStatus
 }
 
 const DOMAIN_META: Record<Domain, DomainMeta> = {
@@ -69,6 +73,17 @@ const DOMAIN_META: Record<Domain, DomainMeta> = {
     licenseNotes: 'KANJIDIC2 data is CC BY-SA 4.0; JLPT level tags are community estimates (CC BY, Jonathan Waller).',
     levelTagSource: 'Jonathan Waller / tanos.co.uk via davidluzgouveia/kanji-data (jlpt_new)',
     verificationMethod: 'KANJIDIC2 literal join',
+  },
+  grammar: {
+    domain: 'grammar',
+    titleWord: 'Grammar',
+    // Examples are drawn from Tatoeba (credited via these keys); the point descriptions are ours.
+    dataKeys: ['tatoeba-jpn-detailed', 'tatoeba-jpn-eng-links', 'tatoeba-eng', 'tatoeba-jpn-cc0'],
+    licenseSpdx: 'CC-BY-SA-4.0',
+    licenseNotes:
+      'Grammar point names/glosses/summaries are original descriptions (CC BY-SA 4.0); each point cites public inventories for level placement (D-005). Example sentences are drawn verbatim from Tatoeba (CC BY 2.0 FR; a CC0 subset is marked per example).',
+    verificationStatus: 'curated-cited',
+    verificationMethod: 'curated grammar point (≥1 cited inventory + textbook anchor) with examples pattern-matched verbatim from Tatoeba',
   },
   sentence: {
     domain: 'sentence',
@@ -114,7 +129,7 @@ function buildPack(meta: DomainMeta, level: Level, items: AnyItem[], lock: LockS
     license: { spdx: meta.licenseSpdx, notes: meta.licenseNotes },
     sources,
     ...(meta.levelTagSource ? { levelTagSource: meta.levelTagSource, levelTagLicense: 'CC-BY' } : {}),
-    verification: { status: 'dataset-verified', method: meta.verificationMethod, date },
+    verification: { status: meta.verificationStatus ?? 'dataset-verified', method: meta.verificationMethod, date },
     items,
   }
 }
@@ -150,7 +165,7 @@ function attribution(lock: LockSource[]): string {
   return lines.join('\n')
 }
 
-/** Emit per-level vocab/kanji/sentence/strokes packs, the manifest, and ATTRIBUTION.md. */
+/** Emit per-level vocab/kanji/grammar/sentence/strokes packs, the manifest, and ATTRIBUTION.md. */
 export async function emitPacks(
   vocab: VocabItem[],
   kanji: KanjiItem[],
@@ -158,10 +173,12 @@ export async function emitPacks(
   strokes: StrokeItem[],
   lock: LockSource[],
   date: string,
+  grammar: GrammarPoint[] = [],
 ): Promise<Manifest> {
   const groups: { meta: DomainMeta; byLevel: Map<Level, AnyItem[]> }[] = [
     { meta: DOMAIN_META.vocab, byLevel: groupByLevel<AnyItem>(vocab, (i) => (i as VocabItem).level) },
     { meta: DOMAIN_META.kanji, byLevel: groupByLevel<AnyItem>(kanji, (i) => (i as KanjiItem).level) },
+    { meta: DOMAIN_META.grammar, byLevel: groupByLevel<AnyItem>(grammar, (i) => (i as GrammarPoint).level) },
     { meta: DOMAIN_META.sentence, byLevel: groupByLevel<AnyItem>(sentences, (i) => (i as SentenceItem).levelEstimate) },
     { meta: DOMAIN_META.strokes, byLevel: groupByLevel<AnyItem>(strokes, (i) => (i as StrokeItem).level) },
   ]
@@ -219,6 +236,39 @@ export async function emitSentencePacks(
       path: relPath,
       level,
       domain: 'sentence',
+      packVersion: PACK_VERSION,
+      itemCount: items.length,
+      sha256: sha256(Buffer.from(body)),
+    })
+  }
+  return entries
+}
+
+/**
+ * Re-emit ONLY the per-level grammar packs (targeted rebuild) and return their manifest entries,
+ * for the caller to splice into the existing manifest (curated grammar iterates independently of
+ * the dataset build). Reuses `buildPack` + `DOMAIN_META.grammar` so bytes match `emitPacks`.
+ */
+export async function emitGrammarPacks(
+  grammar: GrammarPoint[],
+  lock: LockSource[],
+  date: string,
+): Promise<ManifestEntry[]> {
+  const byLevel = groupByLevel<AnyItem>(grammar, (i) => (i as GrammarPoint).level)
+  const entries: ManifestEntry[] = []
+  for (const level of LEVELS_IN_ORDER) {
+    const items = byLevel.get(level) ?? []
+    if (items.length === 0) continue
+    await mkdir(join(PACKS_DIR, level.toLowerCase()), { recursive: true })
+    const pack = buildPack(DOMAIN_META.grammar, level, items, lock, date)
+    const body = JSON.stringify(pack) + '\n'
+    const relPath = `${level.toLowerCase()}/grammar.json`
+    await writeFile(join(PACKS_DIR, relPath), body)
+    entries.push({
+      packId: pack.packId,
+      path: relPath,
+      level,
+      domain: 'grammar',
       packVersion: PACK_VERSION,
       itemCount: items.length,
       sha256: sha256(Buffer.from(body)),

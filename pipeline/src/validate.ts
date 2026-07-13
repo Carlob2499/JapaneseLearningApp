@@ -7,9 +7,13 @@ import { sha256 } from './lib/io'
 /**
  * Validate one committed pack against its manifest entry. Runs offline against
  * committed bytes — the CI gate. Checks: whole-file sha256 integrity, Zod schema
- * (which enforces the D-002 provenance gate), packId/itemCount agreement, and
- * dataset-verified status. Returns a list of human-readable errors ([] = ok).
+ * (which enforces the D-002 provenance gate), packId/itemCount agreement, and the
+ * expected verification status per domain. Returns a list of human-readable errors ([] = ok).
  */
+// Curated domains attest 'curated-cited' (D-005: original prose + citations); dataset domains
+// attest 'dataset-verified'. Both still pass the Pack provenance gate (sources + citations).
+const EXPECTED_STATUS: Partial<Record<ManifestEntry['domain'], string>> = { grammar: 'curated-cited' }
+
 export function checkPack(entry: ManifestEntry, bytes: Buffer): string[] {
   const errs: string[] = []
   if (sha256(bytes) !== entry.sha256) {
@@ -35,8 +39,9 @@ export function checkPack(entry: ManifestEntry, bytes: Buffer): string[] {
   if (pack.items.length !== entry.itemCount) {
     errs.push(`${entry.path}: itemCount ${pack.items.length} != manifest ${entry.itemCount}`)
   }
-  if (pack.verification.status !== 'dataset-verified') {
-    errs.push(`${entry.path}: verification.status is "${pack.verification.status}", expected dataset-verified`)
+  const expectedStatus = EXPECTED_STATUS[entry.domain] ?? 'dataset-verified'
+  if (pack.verification.status !== expectedStatus) {
+    errs.push(`${entry.path}: verification.status is "${pack.verification.status}", expected ${expectedStatus}`)
   }
   return errs
 }

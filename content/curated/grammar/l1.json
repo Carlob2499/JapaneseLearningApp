@@ -1,0 +1,352 @@
+[
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:desu",
+    "name": "〜です",
+    "level": "L1",
+    "gloss": "to be — polite copula",
+    "summary": "です follows a noun or na-adjective to state politely what something is (X is Y). It is the polite form learners produce first; the plain equivalent is だ.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 1 }],
+    "patterns": ["です。", "ですか", "ですね", "ですよ"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:ka-question",
+    "name": "〜か",
+    "level": "L1",
+    "gloss": "question marker",
+    "summary": "The particle か at the end of a sentence turns a statement into a question, without changing word order.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 1 }],
+    "patterns": ["ですか。", "ますか。", "ですか？", "ますか？"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:masu",
+    "name": "〜ます",
+    "level": "L1",
+    "gloss": "polite verb ending (non-past)",
+    "summary": "The ます-form is the polite non-past form of a verb, used for present and future affirmative actions.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 3 }],
+    "patterns": ["ます。", "ます！"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:masen",
+    "name": "〜ません",
+    "level": "L1",
+    "gloss": "polite negative verb ending",
+    "summary": "ません is the polite negative of a verb (does not / will not do). Its past is ませんでした.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 3 }],
+    "patterns": ["ません。", "ませんでした"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:mashita",
+    "name": "〜ました",
+    "level": "L1",
+    "gloss": "polite past verb ending",
+    "summary": "ました is the polite past affirmative of a verb (did / has done).",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 4 }],
+    "patterns": ["ました。", "ました！"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:ja-arimasen",
+    "name": "〜じゃありません",
+    "level": "L1",
+    "gloss": "is not — negative copula",
+    "summary": "じゃありません (more formal: ではありません) is the polite negative of です — it states that something is not the case.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 2 }],
+    "patterns": ["じゃありません", "ではありません", "じゃない。"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:aru-iru",
+    "name": "あります・います",
+    "level": "L1",
+    "gloss": "there is / exists",
+    "summary": "あります expresses the existence of inanimate things; います is used for people and animals. The thing that exists is marked with が.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 4 }],
+    "patterns": ["があります", "がいます", "はあります", "はいます"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:suki",
+    "name": "〜が好きです",
+    "level": "L1",
+    "gloss": "to like",
+    "summary": "The na-adjective 好き, with its object marked by が, expresses what someone likes; 嫌い (dislike) works the same way.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 5 }],
+    "patterns": ["が好き", "がすき", "好きです"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:mashou",
+    "name": "〜ましょう",
+    "level": "L1",
+    "gloss": "let's — suggestion",
+    "summary": "The ～ましょう form of a verb suggests doing something together (let's …), or offers to do something.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 5 }],
+    "patterns": ["ましょう"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:masenka",
+    "name": "〜ませんか",
+    "level": "L1",
+    "gloss": "won't you? — invitation",
+    "summary": "～ませんか politely invites the listener to do something together (won't you …?), softer than ～ましょう.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 5 }],
+    "patterns": ["ませんか"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:te-kudasai",
+    "name": "〜てください",
+    "level": "L1",
+    "gloss": "please do",
+    "summary": "The て-form of a verb followed by ください makes a polite request for the listener to do something.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 6 }],
+    "patterns": ["てください", "て下さい", "でください", "で下さい"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:te-mo-ii",
+    "name": "〜てもいいです",
+    "level": "L1",
+    "gloss": "permission — it is OK to",
+    "summary": "The て-form of a verb followed by もいいです asks for or grants permission to do something.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 6 }],
+    "patterns": ["てもいい", "でもいい"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:te-wa-ikemasen",
+    "name": "〜てはいけません",
+    "level": "L1",
+    "gloss": "prohibition — must not",
+    "summary": "The て-form of a verb followed by はいけません states that something must not be done.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 6 }],
+    "patterns": ["てはいけません", "てはいけない", "てはだめ"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:kara-reason",
+    "name": "〜から",
+    "level": "L1",
+    "gloss": "because — reason",
+    "summary": "から follows a clause to give a reason or cause (because …, so …). The reason comes first, the result after.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 6 }],
+    "patterns": ["からです", "から。"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:te-iru",
+    "name": "〜ている",
+    "level": "L1",
+    "gloss": "progressive / ongoing state",
+    "summary": "The て-form of a verb followed by いる (polite います) expresses an action in progress or a resulting, continuing state.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 7 }],
+    "patterns": ["ています", "でいます", "ている。", "でいる。"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:nai-de-kudasai",
+    "name": "〜ないでください",
+    "level": "L1",
+    "gloss": "please don't",
+    "summary": "The ない-form of a verb followed by でください politely asks the listener not to do something.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 8 }],
+    "patterns": ["ないでください", "ないで下さい"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:naru",
+    "name": "〜くなる・〜になる",
+    "level": "L1",
+    "gloss": "to become",
+    "summary": "なる expresses a change of state. い-adjectives drop い and take く, na-adjectives and nouns take に, before なる.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 10 }],
+    "patterns": ["くなりました", "になりました", "くなる", "になる"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:tsumori",
+    "name": "〜つもりです",
+    "level": "L1",
+    "gloss": "intention — plan to",
+    "summary": "つもり after a plain-form verb states the speaker's intention or plan to do (or not do) something.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 10 }],
+    "patterns": ["つもりです", "つもりだ", "つもりは"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:ta-koto-ga-aru",
+    "name": "〜たことがあります",
+    "level": "L1",
+    "gloss": "have done before — experience",
+    "summary": "The past plain form of a verb followed by ことがあります expresses that one has had the experience of doing something.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 11 }],
+    "patterns": ["たことがあります", "たことがある", "だことがあります", "だことがある"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:tai",
+    "name": "〜たいです",
+    "level": "L1",
+    "gloss": "want to do",
+    "summary": "The verb stem followed by たい expresses the speaker's desire to do something; it conjugates like an い-adjective (たくない, たかった).",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 11 }],
+    "patterns": ["たいです", "たいん", "たかったです", "たくない"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:deshou",
+    "name": "〜でしょう",
+    "level": "L1",
+    "gloss": "probably — conjecture",
+    "summary": "でしょう expresses probability (probably …) or seeks the listener's agreement (…, right?). It is the tentative form of です.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 12 }],
+    "patterns": ["でしょう", "でしょうか"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:n-desu",
+    "name": "〜んです",
+    "level": "L1",
+    "gloss": "explanatory — the thing is …",
+    "summary": "んです (plain のだ) adds an explanatory nuance, giving the reason or background behind a statement or question.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 12 }],
+    "patterns": ["んです", "のです", "んですか", "んだ。"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:hou-ga-ii",
+    "name": "〜ほうがいいです",
+    "level": "L1",
+    "gloss": "had better — advice",
+    "summary": "～ほうがいいです recommends one course of action over another (you had better …); the past plain form makes the advice stronger.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 12 }],
+    "patterns": ["ほうがいい", "方がいい"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:nakereba",
+    "name": "〜なければいけません",
+    "level": "L1",
+    "gloss": "must — obligation",
+    "summary": "The negative conditional of a verb followed by いけません／なりません expresses obligation (must do). Casually shortened to なくちゃ／なきゃ.",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 12 }],
+    "patterns": ["なければいけません", "なければなりません", "なくちゃいけません", "なきゃいけない"]
+  },
+  {
+    "kind": "grammar",
+    "id": "grammar:l1:sugiru",
+    "name": "〜すぎる",
+    "level": "L1",
+    "gloss": "too much — excess",
+    "summary": "The verb stem or adjective stem followed by すぎる means something is done to excess or is excessively so (too …).",
+    "citations": [
+      { "name": "JLPT Sensei — N5 grammar list", "url": "https://jlptsensei.com/jlpt-n5-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "genki1", "chapter": 12 }],
+    "patterns": ["すぎる", "すぎます", "すぎた", "すぎて"]
+  }
+]

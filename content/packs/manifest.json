@@ -181,6 +181,15 @@
       "packVersion": "0.1.0",
       "itemCount": 1232,
       "sha256": "c3e67eb61945034139b48fa18fec9f7403b343016e90c8ec394a049e2cf01d14"
+    },
+    {
+      "packId": "grammar.l1.core",
+      "path": "l1/grammar.json",
+      "level": "L1",
+      "domain": "grammar",
+      "packVersion": "0.1.0",
+      "itemCount": 25,
+      "sha256": "1a4a8b05819dabab36e0c0c01cdb0d125db46442a6ae31c1831247af225db5ba"
     }
   ]
 }

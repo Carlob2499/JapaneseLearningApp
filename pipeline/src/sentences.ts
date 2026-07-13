@@ -32,7 +32,7 @@ export function buildKnownKanjiByLevel(kanjiItems: KanjiItem[]): Map<Level, Set<
 }
 
 /** Lowest level whose known-kanji set covers every kanji in the sentence; null if none (even L5). */
-function sentenceLevel(kanji: string[], known: Map<Level, Set<string>>): Level | null {
+export function sentenceLevel(kanji: string[], known: Map<Level, Set<string>>): Level | null {
   if (kanji.length === 0) return 'L1' // kana-only: no kanji barrier
   for (const level of LEVELS_IN_ORDER) {
     const set = known.get(level)
@@ -50,7 +50,7 @@ function registerGroup(r: Register): RegGroup {
 }
 
 /** Higher = a more complete sentence: prefer a 。 ending and a mid length over bare fragments. */
-function quality(ja: string, len: number): number {
+export function quality(ja: string, len: number): number {
   return (/[。．]$/.test(ja) ? 2 : 0) + (len >= 7 && len <= 28 ? 1 : 0) - (len < 6 ? 1 : 0)
 }
 

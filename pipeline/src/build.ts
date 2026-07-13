@@ -14,6 +14,7 @@ import { parseCsv } from './lib/csv'
 import { emitPacks, type LockSource } from './emit'
 import { buildKnownKanjiByLevel, buildSentenceItems, loadTatoeba } from './sentences'
 import { buildStrokeItems } from './kanjivg'
+import { linkExamples, loadCuratedGrammar } from './grammar'
 
 const JLPT_FILES = [
   { file: 'jlpt-vocab-n5.csv', jlpt: 'N5' },
@@ -124,6 +125,16 @@ async function main(): Promise<void> {
   lock.sources = [...lock.sources.filter((s) => s.key !== 'kanjivg'), strokes.lockEntry]
   await writeFile(join(CONTENT_DIR, 'sources.lock.json'), JSON.stringify(lock, null, 2) + '\n')
 
+  // Grammar (curated, D-005) — link verbatim Tatoeba examples to each point (D-002).
+  const grammarPoints = await loadCuratedGrammar(join(CONTENT_DIR, 'curated', 'grammar'))
+  const grammar = linkExamples(grammarPoints, corpus, knownKanji)
+  if (grammarPoints.length > 0) {
+    console.log('\nGrammar points by level:', grammar.statsByLevel)
+    if (grammar.shortfalls.length > 0) {
+      console.log(`  held back ${grammar.shortfalls.length} point(s) with no readable example`)
+    }
+  }
+
   const manifest = await emitPacks(
     vocab.items,
     kanji.items,
@@ -131,6 +142,7 @@ async function main(): Promise<void> {
     strokes.items,
     lock.sources,
     date,
+    grammar.items,
   )
   console.log(`\nEmitted ${manifest.packs.length} packs → content/packs/ (+ manifest, ATTRIBUTION.md)`)
 }
