@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Pack, VocabItem, KanjiItem, GrammarPoint, SentenceItem, StrokeItem } from './index'
+import { Pack, VocabItem, KanjiItem, GrammarPoint, SentenceItem, StrokeItem, PhraseTemplate, SceneTemplate } from './index'
 
 const sentence = {
   kind: 'sentence',
@@ -35,6 +35,40 @@ const grammar = {
       en: 'You may go home.',
       tatoebaId: 1,
       attribution: { author: 'alice', license: 'CC-BY-2.0-FR' },
+    },
+  ],
+}
+
+const phrase = {
+  kind: 'phrase',
+  id: 'phrase:m2:irasshaimase',
+  level: 'L1',
+  module: 'M2_konbini',
+  register: 'service_script',
+  pattern: 'いらっしゃいませ。',
+  citations: [
+    {
+      name: 'Coto Academy — Convenience Store Japanese',
+      url: 'https://cotoacademy.com/convenience-store-japanese/',
+      retrieved: '2026-07-13',
+      license: 'editorial reference — phrase documented, not copied verbatim from a fixed inventory',
+    },
+  ],
+}
+
+const scene = {
+  kind: 'scene',
+  id: 'scene:l1:konbini',
+  sceneKind: 'konbini',
+  level: 'L1',
+  modules: ['M2_konbini'],
+  beats: [{ id: 'beat:1', interaction: 'recognize', slotIds: ['item-1'] }],
+  framing: [
+    {
+      beatId: 'beat:1',
+      phraseId: 'phrase:m2:irasshaimase',
+      text: 'You step up to the register with your items.',
+      modelWritten: true,
     },
   ],
 }
@@ -113,6 +147,19 @@ describe('item schemas', () => {
     const { register: _omit, ...noRegister } = sentence
     expect(SentenceItem.safeParse(noRegister).success).toBe(false)
     expect(SentenceItem.safeParse({ ...sentence, register: 'shouting' }).success).toBe(false)
+  })
+
+  it('accepts a cited phrase template and rejects one missing citations', () => {
+    expect(PhraseTemplate.safeParse(phrase).success).toBe(true)
+    expect(PhraseTemplate.safeParse({ ...phrase, citations: [] }).success).toBe(false)
+  })
+
+  it('accepts a curated scene and rejects one with no beats or non-model-written framing', () => {
+    expect(SceneTemplate.safeParse(scene).success).toBe(true)
+    expect(SceneTemplate.safeParse({ ...scene, beats: [] }).success).toBe(false)
+    expect(
+      SceneTemplate.safeParse({ ...scene, framing: [{ text: 'x', modelWritten: false }] }).success,
+    ).toBe(false)
   })
 
   it('accepts a KanjiVG stroke item and rejects one with no strokes', () => {

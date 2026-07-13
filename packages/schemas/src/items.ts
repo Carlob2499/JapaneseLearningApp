@@ -117,16 +117,63 @@ export const StrokeItem = z.object({
 })
 export type StrokeItem = z.infer<typeof StrokeItem>
 
-/** Scene phrase template — curated register facts, cited. Defined now; populated later. */
+/**
+ * Scene phrase template — a fixed real-world service/register line, cited to the
+ * documented-usage sources that motivate the module (curriculum.md §4). Never generated:
+ * the Japanese `pattern` is copied verbatim from the cited guide/survey (D-002); only the
+ * point of introduction (`level`) is our estimate.
+ */
 export const PhraseTemplate = z.object({
   kind: z.literal('phrase'),
   id: z.string().min(1),
+  level: Level,
   module: ModuleTag,
   register: Register,
   pattern: z.string().min(1),
   citations: z.array(Source).min(1),
 })
 export type PhraseTemplate = z.infer<typeof PhraseTemplate>
+
+/**
+ * One interaction within a scene. `slotIds` are logical labels (not item ids) — the
+ * SceneRunner resolves each to a concrete item drawn from the scene's module pool at
+ * presentation time (due items first, then known items — curriculum §5 P1/P3), so the
+ * same beat surfaces a different real item on every replay.
+ */
+export const Beat = z.object({
+  id: z.string().min(1),
+  interaction: z.enum(['recognize', 'recall', 'produce', 'speed', 'context']),
+  slotIds: z.array(z.string().min(1)).min(1),
+})
+export type Beat = z.infer<typeof Beat>
+
+/**
+ * A curated real-world scene (D-002-safe): the item slots are resolved at runtime from
+ * dataset-verified vocabulary tagged into the scene's modules; only the English `framing`
+ * prose is model-written (curriculum §5, architecture §4). `beats` are the ordered
+ * interactions. Each `framing` entry is one NPC-dialogue/narration beat: `phraseId`
+ * (a cited `PhraseTemplate.id`) supplies the verbatim Japanese line, if any; `beatId`
+ * pairs it with the interaction it precedes, or is omitted for pure narration.
+ */
+export const SceneTemplate = z.object({
+  kind: z.literal('scene'),
+  id: z.string().min(1),
+  sceneKind: z.enum(['konbini']),
+  level: Level,
+  modules: z.array(ModuleTag).min(1),
+  beats: z.array(Beat).min(1),
+  framing: z
+    .array(
+      z.object({
+        beatId: z.string().min(1).optional(),
+        phraseId: z.string().min(1).optional(),
+        text: z.string().min(1),
+        modelWritten: z.literal(true),
+      }),
+    )
+    .min(1),
+})
+export type SceneTemplate = z.infer<typeof SceneTemplate>
 
 /** Any pack item, discriminated on `kind`. */
 export const Item = z.discriminatedUnion('kind', [
@@ -136,5 +183,6 @@ export const Item = z.discriminatedUnion('kind', [
   SentenceItem,
   StrokeItem,
   PhraseTemplate,
+  SceneTemplate,
 ])
 export type Item = z.infer<typeof Item>
