@@ -3,6 +3,7 @@ import type { Level, Outcome } from '@hikkoshi/schemas'
 import { useReview, type Presentation, type Reviewable } from '../review/useReview'
 import { useAudio } from '../audio/useAudio'
 import { EnterOnMount } from '../motion/EnterOnMount'
+import { useFlipLanding } from '../motion/useFlipLanding'
 import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
 import { ChoiceCard, GrammarCard, KanjiCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
@@ -120,6 +121,7 @@ export default function ReviewSession({ levels, onHome }: { levels: Level[]; onH
   const { mode, view, remaining, reviewed, sessionSize, error, grade, practiceMore } = useReview(levels)
   const { available: audioAvailable } = useAudio()
   const [autoPlay, setAutoPlay] = useState<boolean>(() => getAutoPlay())
+  const sessionBarRef = useFlipLanding<HTMLDivElement>('home-to-review')
 
   if (mode === 'loading') {
     return (
@@ -171,7 +173,7 @@ export default function ReviewSession({ levels, onHome }: { levels: Level[]; onH
   const done = sessionSize - remaining
   return (
     <main className="shell">
-      <div className="session-bar">
+      <div className="session-bar" ref={sessionBarRef}>
         <button className="ghost-btn" onClick={onHome}>
           ← Home
         </button>

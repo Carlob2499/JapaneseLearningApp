@@ -1,14 +1,17 @@
-import { useState } from 'react'
+import { useState, type ReactNode, type RefObject } from 'react'
 import type { Level } from '@hikkoshi/schemas'
 import Home from './ui/Home'
 import Onboarding from './ui/Onboarding'
 import ReviewSession from './ui/ReviewSession'
 import SceneView from './ui/SceneView'
+import { useViewTransition } from './motion/useViewTransition'
 import { getActiveLevels, getOnboarded, setActiveLevels, setOnboarded } from './store/settings'
 import './App.css'
 
+type View = 'onboarding' | 'home' | 'review' | 'scene'
+
 export default function App() {
-  const [view, setView] = useState<'onboarding' | 'home' | 'review' | 'scene'>(() =>
+  const { view, containerRef, navigate } = useViewTransition<View>(() =>
     getOnboarded() ? 'home' : 'onboarding',
   )
   const [levels, setLevels] = useState<Level[]>(() => getActiveLevels())
@@ -21,29 +24,33 @@ export default function App() {
     })
   }
 
+  let content: ReactNode
   if (view === 'onboarding') {
-    return (
+    content = (
       <Onboarding
         onContinue={() => {
           setOnboarded(true)
-          setView('home')
+          navigate('home')
+        }}
+      />
+    )
+  } else if (view === 'review') {
+    content = <ReviewSession levels={levels} onHome={() => navigate('home')} />
+  } else if (view === 'scene' && sceneId) {
+    content = <SceneView levels={levels} sceneId={sceneId} onExit={() => navigate('home')} />
+  } else {
+    content = (
+      <Home
+        levels={levels}
+        onToggleLevel={toggleLevel}
+        onStart={() => navigate('review')}
+        onStartScene={(id) => {
+          setSceneId(id)
+          navigate('scene')
         }}
       />
     )
   }
-  if (view === 'review') return <ReviewSession levels={levels} onHome={() => setView('home')} />
-  if (view === 'scene' && sceneId) {
-    return <SceneView levels={levels} sceneId={sceneId} onExit={() => setView('home')} />
-  }
-  return (
-    <Home
-      levels={levels}
-      onToggleLevel={toggleLevel}
-      onStart={() => setView('review')}
-      onStartScene={(id) => {
-        setSceneId(id)
-        setView('scene')
-      }}
-    />
-  )
+
+  return <div ref={containerRef as RefObject<HTMLDivElement>}>{content}</div>
 }

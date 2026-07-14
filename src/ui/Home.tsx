@@ -1,7 +1,9 @@
+import { Flip } from 'gsap/Flip'
 import type { Level } from '@hikkoshi/schemas'
 import type { DiaryEntry } from '../day/diary'
 import { useToday } from '../day/useToday'
 import { APP_NAME, APP_NAME_JA, JLPT_LABEL, levelItemCount } from '../lib/appMeta'
+import { stash } from '../motion/flipHandoff'
 import { ALL_LEVELS } from '../store/settings'
 import About from './About'
 import './study.css'
@@ -69,7 +71,13 @@ export default function Home({
                 {today.dayPlan.tasks.map((task) =>
                   task.kind === 'review' ? (
                     <div className="today-task" key="review">
-                      <button className="start-btn" onClick={onStart}>
+                      <button
+                        className="start-btn"
+                        onClick={(e) => {
+                          stash('home-to-review', Flip.getState(e.currentTarget))
+                          onStart()
+                        }}
+                      >
                         Start today's review
                       </button>
                       <p className="fineprint">
@@ -78,7 +86,13 @@ export default function Home({
                     </div>
                   ) : (
                     <div className="today-task" key={task.sceneId}>
-                      <button className="errand-btn" onClick={() => onStartScene(task.sceneId)}>
+                      <button
+                        className="errand-btn"
+                        onClick={(e) => {
+                          stash('home-to-scene', Flip.getState(e.currentTarget))
+                          onStartScene(task.sceneId)
+                        }}
+                      >
                         {task.title}
                       </button>
                     </div>

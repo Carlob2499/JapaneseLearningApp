@@ -1,7 +1,10 @@
-// Side-effect-only: gsap/Flip's ambient Flip.FlipState type merges globally once this module's
-// .d.ts is loaded — no named import needed, and (crucially) no runtime Flip code ships until
-// Commit 4 actually registers/uses the plugin.
-import 'gsap/Flip'
+import gsap from 'gsap'
+import { Flip } from 'gsap/Flip'
+
+// Registered here (this module's first real runtime consumer, Commit 4) rather than at Commit
+// 1's infrastructure stage, matching the "don't front-load a plugin before its first use" rule —
+// an unused Flip import would fail the build outright (verbatimModuleSyntax + noUnusedLocals).
+gsap.registerPlugin(Flip)
 
 /**
  * A tiny plain-module singleton handing off Flip.getState() results between the component that

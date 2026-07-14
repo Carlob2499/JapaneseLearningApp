@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Level, SceneTemplate } from '@hikkoshi/schemas'
 import { loadLevels, type Content } from '../content/packs'
 import { EnterOnMount } from '../motion/EnterOnMount'
+import { useFlipLanding } from '../motion/useFlipLanding'
 import { useScene } from '../scenes/useScene'
 import { ChoiceCard, SpeakButton } from './cards'
 import './scene.css'
@@ -101,6 +102,7 @@ function ScenePlayer({
   onExit: () => void
 }) {
   const api = useScene(scene, content)
+  const progressRef = useFlipLanding<HTMLDivElement>('home-to-scene')
 
   if (api.mode === 'loading') {
     return (
@@ -155,7 +157,7 @@ function ScenePlayer({
   const { step } = api
   return (
     <main className="shell scene-view">
-      <div className="scene-progress">
+      <div className="scene-progress" ref={progressRef}>
         <button className="ghost-btn" onClick={onExit}>
           ← Leave errand
         </button>
