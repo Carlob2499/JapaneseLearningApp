@@ -14,8 +14,7 @@ export default function About() {
         <p>
           <strong>Early build.</strong> N5–N1 content with a spaced-repetition scheduler and several
           retrieval modes (recognition, production, typed reading, free recall). Tap 🔊 to hear
-          pronunciation where your device has a Japanese voice. The flashcard reviewer is still
-          scaffold-grade — a full visual pass is a later session. Progress is stored on this device only.
+          pronunciation where your device has a Japanese voice. Progress is stored on this device only.
         </p>
         <p>
           <strong>Errands are the same items, in a real moment.</strong> The konbini checkout puts

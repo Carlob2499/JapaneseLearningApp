@@ -68,7 +68,10 @@
   border-radius: 999px;
   box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
 }
+/* Narrative Japanese (D-019): the clerk's cited line is read, not drilled, so it gets the same
+   considered mincho as Diary's sentences rather than the drill-prompt gothic stack. */
 .scene-dialogue .jp-line {
+  font-family: var(--font-display);
   font-size: clamp(20px, 6vw, 26px);
   line-height: 1.5;
 }

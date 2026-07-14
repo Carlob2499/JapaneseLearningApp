@@ -25,6 +25,8 @@
     "pipeline:validate": "tsx pipeline/src/validate.ts"
   },
   "dependencies": {
+    "@fontsource/klee-one": "^5.2.8",
+    "@fontsource/zen-old-mincho": "^5.2.8",
     "@gsap/react": "^2.1.2",
     "gsap": "^3.15.0",
     "idb": "^8.0.3",

@@ -1,4 +1,4 @@
-/* Scaffold-grade study styling — the real visual identity is a later session (D-003). */
+/* Study/day-loop UI (D-019 extends the D-017 shironeri/aizome/wood palette here). */
 
 .study-card {
   background: var(--card);
@@ -365,7 +365,7 @@
   color: var(--muted);
 }
 
-/* Today panel + diary (Phase 2 — grey-box; the illustrated pass is Phase 3, D-003) */
+/* Today panel + diary */
 .onboarding-card,
 .today-card,
 .levels-card {
@@ -374,15 +374,24 @@
   justify-items: center;
   text-align: center;
 }
+/* Asanoha (hemp-leaf, growth/protection) — the one place it appears, per D-019. Selector is
+   .card.onboarding-card (not just .onboarding-card) so it reliably outweighs App.css's .card
+   background shorthand regardless of CSS import/bundle order across files. */
+.card.onboarding-card {
+  background-color: var(--paper);
+  background-image: var(--pattern-asanoha);
+  background-size: 64px 64px;
+}
 .life-stage-badge {
+  font-family: var(--font-display);
   margin: 0;
   display: inline-block;
   border: 1px solid var(--accent);
   color: var(--accent);
   border-radius: 999px;
   padding: 4px 14px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 400;
 }
 .today-tasks {
   display: grid;
@@ -396,22 +405,39 @@
   justify-items: center;
 }
 
+/* Seigaiha (waves, calm/continuity) — the one place it appears, per D-019. .card.diary-card for
+   the same specificity-over-import-order reason as .card.onboarding-card above. */
 .diary-card {
   display: grid;
   gap: 4px;
+}
+.card.diary-card {
+  background-color: var(--paper);
+  background-image: var(--pattern-seigaiha);
+  background-size: 56px 56px;
+  background-position: bottom;
 }
 .diary-row {
   display: grid;
   gap: 4px;
 }
+/* Kumiko (lattice joinery) divider between rows — the D-019 extension of --wood/--wood-dark. */
 .diary-row + .diary-row {
-  border-top: 1px solid var(--line);
-  padding-top: 10px;
-  margin-top: 6px;
+  margin-top: 10px;
+  padding-top: 12px;
+}
+.diary-row + .diary-row::before {
+  content: '';
+  display: block;
+  height: 3px;
+  margin-bottom: 10px;
+  background-image: var(--pattern-kumiko);
+  background-size: 26px 3px;
 }
 .diary-ja {
+  font-family: var(--font-display);
   margin: 0;
-  font-size: 17px;
+  font-size: 18px;
 }
 .diary-word {
   border: 0;

@@ -14,15 +14,18 @@
 }
 
 .mark {
+  font-family: var(--font-display);
   font-size: 44px;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--accent);
   letter-spacing: 0.06em;
 }
 
 .masthead h1 {
+  font-family: var(--font-display);
   margin: 0;
   font-size: 28px;
+  font-weight: 400;
   letter-spacing: 0.02em;
 }
 

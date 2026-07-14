@@ -1,5 +1,10 @@
-/* Scaffold-grade styles only — the real visual identity is a dedicated later
-   session (docs/architecture.md §9, item 8; decision D-003). */
+/* App-wide visual identity + motion system (D-003/D-019) — extends the shironeri/aizome/wood
+   palette D-017 introduced on one screen to every screen. Only the 400 weight of each font is
+   imported (restraint over synthetic-bold mismatches); both are runtime-cached rather than
+   precached (vite.config.ts) since their full unicode-range coverage is real weight but the
+   browser only ever fetches the ranges a page actually renders. */
+@import '@fontsource/zen-old-mincho/400.css';
+@import '@fontsource/klee-one/400.css';
 
 :root {
   --bg: #f6f4ef;
@@ -9,12 +14,61 @@
   --line: #e4e0d8;
   --accent: #bc002d; /* hinomaru red */
   --ok: #2c7a4b;
-  /* Real-world scene palette (D-017) — noren-curtain indigo + washi-paper/wood tones,
-     a small, purposeful extension rather than the full token system (that's D-003/Phase 3). */
+  /* Real-world scene palette (D-017) — noren-curtain indigo + washi-paper/wood tones. */
   --accent-2: #2f4f6b; /* noren indigo */
   --paper: #fffaf2; /* shironeri — warm washi white, distinct from --card */
   --wood: #a9764f; /* counter wood tone */
   --wood-dark: #7d5636;
+
+  /* Typography (D-019): narrative/reading Japanese and headings get a considered mincho;
+     drill-prompt Japanese (cards.tsx's .jp-xl/.jp-lg) deliberately keeps the proven gothic
+     stack — legibility-at-a-glance for a beginner beats variety on the highest-frequency text
+     in the app. Klee One is reserved for exactly one moment: the life-stage-up celebration. */
+  --font-display: 'Zen Old Mincho', serif;
+  --font-celebrate: 'Klee One', cursive;
+
+  /* Wagara pattern tokens (D-019) — CSS-native approximations (gradients, not SVG assets) of
+     four traditional motifs, each with one deliberate placement, never blanket decoration:
+     kumiko (lattice joinery) as the general divider/border treatment; asanoha (hemp-leaf,
+     growth) on Onboarding only; seigaiha (waves, calm) behind Diary only; ichimatsu
+     (checkerboard) reserved for the life-stage celebration only. */
+  --pattern-kumiko: repeating-linear-gradient(
+    90deg,
+    var(--wood) 0 12px,
+    var(--wood-dark) 12px 14px,
+    transparent 14px 26px
+  );
+  /* Low-opacity washes (color-mix, not element opacity) so the pattern sits behind content
+     without needing a positioned pseudo-element — background-image always paints below an
+     element's own children regardless of stacking order. Felt as texture, not seen as a
+     graphic: kept faint (8% mix) and large-tiled on purpose — the first pass at 30%/small-tile
+     read as a busy grid competing with the text, the opposite of the restraint these are for. */
+  --pattern-asanoha: repeating-linear-gradient(
+      60deg,
+      color-mix(in srgb, var(--wood) 8%, transparent) 0 1px,
+      transparent 1px 32px
+    ),
+    repeating-linear-gradient(-60deg, color-mix(in srgb, var(--wood) 8%, transparent) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--wood) 8%, transparent) 0 1px, transparent 1px 32px);
+  --pattern-seigaiha: radial-gradient(
+      circle at 0 100%,
+      transparent 60%,
+      color-mix(in srgb, var(--accent-2) 8%, transparent) 60% 64%,
+      transparent 64%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      transparent 60%,
+      color-mix(in srgb, var(--accent-2) 8%, transparent) 60% 64%,
+      transparent 64%
+    );
+  --pattern-ichimatsu: conic-gradient(
+    var(--accent-2) 0 25%,
+    transparent 0 50%,
+    var(--accent-2) 0 75%,
+    transparent 0
+  );
+
   color-scheme: light dark;
 }
 
@@ -51,6 +105,21 @@ body {
     sans-serif;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Wagara pattern utilities (D-019) — see the token comments above for placement rules. Asanoha
+   and seigaiha are applied directly on their one target rule each (Onboarding/Diary cards in
+   study.css) rather than as separate utility classes, since each has exactly one use. */
+.kumiko-rule {
+  border: 0;
+  height: 3px;
+  background-image: var(--pattern-kumiko);
+  background-size: 26px 3px;
+}
+
+.pattern-ichimatsu {
+  background-image: var(--pattern-ichimatsu);
+  background-size: 24px 24px;
 }
 
 .sw-toast {

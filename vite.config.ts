@@ -78,8 +78,9 @@ export default defineConfig({
       workbox: {
         // Versioned precache generated from actual build output (brief requirement:
         // precache kept in sync with build). L1 packs are bundled JS chunks caught by the
-        // glob; L2–L5 JSON is runtime-cached below (lazy, so first load stays light).
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2,webmanifest}'],
+        // glob; L2–L5 JSON and the D-019 webfonts are runtime-cached below (lazy, so first
+        // load stays light) — woff2 is deliberately absent from this glob: see below.
+        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
         navigateFallback: `${BASE}index.html`,
         cleanupOutdatedCaches: true,
         runtimeCaching: [
@@ -91,6 +92,20 @@ export default defineConfig({
             options: {
               cacheName: 'hikkoshi-packs',
               expiration: { maxEntries: 40 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Zen Old Mincho / Klee One (D-019): unicode-range-chunked into many small files
+            // so a browser only ever fetches the ranges a page actually renders, but their
+            // full combined coverage is real weight — cache-first (fonts don't change) rather
+            // than forced into the day-one precache, matching the same "offline after first
+            // online visit" trade-off already accepted for content packs above.
+            urlPattern: /\.woff2$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'hikkoshi-fonts',
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 365 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
