@@ -413,3 +413,102 @@ scene-history sort actually bind against real competition (Phase 5); the illustr
 Today/Diary (Phase 3); `ProgressExport` still lacks `lifeStage`/`settingsHash` (not touched — these are
 ephemeral/recomputed, not exported state).
 *Source: Session 13 build, 2026-07-13; approved plan + Playwright verification.*
+
+### D-019: Visual identity + motion (D-003 fulfilled) — the whole app becomes one considered system
+Roadmap Phase 3 (architecture.md §9 build-order item 8), the dedicated GSAP session D-003 promised at
+Session 1. Before this session: one beautifully designed screen (D-017's konbini) next to an otherwise
+scaffold-grade app, and zero motion anywhere except two small CSS keyframes. User direction: **"ensure
+visual continuity"** (the whole app reads as one system, not one nice screen + defaults) and **"innovate
+on smoothness and navigation"** (real motion design, not decoration).
+- **Two new fonts, self-hosted, one placement rule each.** `Zen Old Mincho` for headings and narrative/
+  reading Japanese specifically (Diary's `.diary-ja`, the life-stage badge) — one statable rule:
+  *narrative JP gets the serif; drill-prompt JP (`cards.tsx`'s `.jp-xl`/`.jp-lg`, the highest-frequency
+  text in the app) stays gothic*, since a beginner's at-a-glance legibility there outweighs variety.
+  `Klee One` is reserved for exactly one moment — the life-stage-up celebration framing — never reused,
+  so it stays a felt "something good happened" cue instead of becoming just another font.
+- **GSAP scope: `gsap` core + `Flip` only**, imported from `gsap/Flip` (never `gsap/all`). No
+  ScrollTrigger — nothing in this app scrolls in a way that needs it. `Flip`'s type import must be a bare
+  `import 'gsap/Flip'` side-effect import, not `import type { Flip }` — the latter binds to a
+  non-namespaced re-exported class that doesn't resolve `Flip.FlipState` and reads as unused under this
+  repo's `verbatimModuleSyntax`/`noUnusedLocals`.
+- **`src/motion/` is pure modules + thin hooks**, matching `src/day/`'s shape: `tokens.ts` (duration/ease
+  constants), `reducedMotion.ts` (`gsap.matchMedia()` + `isReducedMotion()`), `timelines.ts` (enter/exit/
+  stagger/pulse-pass/shake-fail/celebrate factories, all reduced-motion-aware), `flipHandoff.ts` (a plain
+  module-singleton `stash`/`take` pair — this codebase has zero `React.createContext` usage anywhere, so
+  a plain singleton matches existing convention better than introducing Context). jsdom here ships neither
+  `window.matchMedia` nor `requestAnimationFrame`; both are polyfilled in `src/test/setup.ts`
+  (`matchMedia` defaults `matches: true` — reduced motion **on** in tests — which collapses GSAP tweens
+  near-instant for a suite that mounts/unmounts fast, and incidentally gives the reduced-motion path
+  coverage it would otherwise never get).
+- **Flip (shared-element) transitions only for Home→Review and Home→Scene** — the two highest-traffic
+  navigations: the tapped task's rect morphs into the destination header band. The **return** trip is a
+  plain fade, not Flip, and not just for cost reasons — Home's task list re-renders fresh on return, and
+  the tapped task may no longer exist (the review task vanishes once due+intro both hit zero right after
+  finishing it), so there's often no valid element to morph back into. The generic view-fade
+  (`useViewTransition`) and the Flip morph (`useFlipLanding`) are independently composed — the fade owns
+  only the container crossfade; Flip is a separate, opt-in layer destination components add via their own
+  mount, checking the stash/take handoff. `useFlipLanding`/`useEnterAnimation`-consuming components must
+  call these hooks before any early return (`react-hooks/rules-of-hooks`) — caught twice
+  (`ReviewSession.tsx`, `SceneView.tsx`) by the lint gate.
+- **pulse-pass/shake-fail are wired to the still-mounted moment, never the final grade-and-advance
+  click.** `useReview`'s `grade()` unmounts the card immediately, so a tween started on "Next →" would
+  race the unmount and never visibly paint. `ChoiceCard`'s option click and `TypedCard`'s `check()` stay
+  mounted after firing — that's where the tween goes, additive alongside the existing synchronous state
+  calls, so `cards.test.tsx`/`ui.test.tsx` needed zero changes.
+- **Reduced motion splits by what the animation actually is, not one blanket rule.** `study.css`'s
+  `.stroke-path` KanjiVG stroke-draw keyframe has no GSAP equivalent in scope (DrawSVG territory,
+  excluded) and was left exactly as pure CSS. `scene.css`'s `scene-rise`/`scene-choice-in` keyframes
+  duplicated concepts the new `timelines.ts` already defines for reuse everywhere, so they were migrated
+  into the shared primitives and deleted — closing a real "two parallel reduced-motion systems for the
+  same idea" gap.
+- **Wagara motifs get one deliberate placement each, not blanket decoration**: asanoha (growth) on
+  Onboarding's card only; seigaiha (waves) behind the Diary card only; kumiko (lattice) as the general
+  divider/border, a direct extension of the existing `--wood`/`--wood-dark` tokens; ichimatsu
+  (checkerboard) reserved for the life-stage celebration only. All four are CSS gradients, not SVG assets.
+  Three are low-opacity `color-mix` washes (asanoha/seigaiha at 8%, discovered by direct visual check that
+  an initial 30%-opacity/small-tile pass read as a busy grid competing with text). **Ichimatsu shipped
+  first as a *solid*-color conic-gradient** — the same `--accent-2` as the badge text sitting on top of
+  it — which silently erased the celebration text wherever a glyph crossed a solid square (confirmed by
+  live-browser screenshot: the word inside the badge was simply invisible). Fixed in the same commit that
+  discovered it, to the same 20%-`color-mix` treatment (bolder than the other three's 8%, since this one
+  moment is meant to read as a stamp, but still a wash, never solid fill, over same-color text).
+- **CJK webfont precache footprint measured, not assumed.** `@fontsource`'s Japanese packages ship many
+  unicode-range-chunked woff2 files (a browser normally lazy-fetches only what a page renders), but
+  `vite-plugin-pwa`'s blanket `globPatterns` would precache all of them at install time regardless.
+  Measured directly against the built `dist/sw.js`: excluded both font packages from `globPatterns` and
+  added a dedicated `CacheFirst` `runtimeCaching` route (`hikkoshi-fonts`, 1-year expiry) instead —
+  mirroring the exact `StaleWhileRevalidate` pattern already used for L2–L5 content packs (same accepted
+  "offline after first online visit" trade-off, not a new one). Verified zero `.woff2` entries land in the
+  generated precache manifest.
+- **Life-stage-up celebration, with a fixed sentinel bug.** A naive "celebrate whenever
+  `stage > lastCelebrated`" with a `-1` default would fire on a brand-new profile's very first load
+  (`0 > -1`) — celebrating merely *arriving* at the default starting stage (Tourist) as an achievement.
+  `decideCelebration` uses `null` (never a numeric sentinel) for "never celebrated": the first-ever read
+  silently establishes the baseline with no celebration; only a **later** load computing a stage greater
+  than the persisted baseline celebrates. Copy is 5 hand-written framing strings, not one template, since
+  stage 5's name is already a full sentence ("You handle it for someone else.") and breaks any uniform
+  "Your residence card now reads: {name}" pattern. Presentation is inline on the badge (an elastic
+  `celebrate()` stamp + fading framing text, ~4s), never a blocking modal.
+- **`decideCelebration`'s read-decide-persist step needed no extra guard against React Strict Mode's
+  dev-only double-invoke of `useToday`'s effect** — a plausible-sounding concern raised while first
+  live-verifying this commit, but disproven by tracing the actual execution: the pre-existing `alive`
+  cancellation-guard flips false (via the effect's cleanup) before the first invocation's suspended
+  `await` can resume, so invocation 1 always bails before ever reaching the celebration code; only
+  invocation 2 ever runs it, exactly once. The apparent failure to celebrate during live verification
+  traced instead to the **verification script**: Playwright's `text=` selector is case-insensitive by
+  default, and Onboarding's own copy sentence contains the lowercase word "tourist"
+  ("...life stage: tourist, resident, and further in."), so a `waitForSelector('text=Tourist')` matched
+  that copy and declared victory before Home ever mounted for real — masking that the baseline had never
+  actually been established. Corrected verification (waiting for the real `.life-stage-badge` element)
+  confirmed the original, unguarded implementation was already correct.
+- **App icon/favicon untouched** — already a clean, appropriate torii+hinomaru mark.
+Verified per commit (typecheck/lint/`vitest run`/`pipeline:validate`/build) plus live-browser passes: every
+screen in both color schemes, both transition types at natural pacing, reduced-motion emulation toggled on
+every path, CPU-throttled Flip transitions, and the life-stage celebration seeded via real IndexedDB
+coverage (fresh profile silently baselines at Tourist with no framing text; seeding past L1's clear
+threshold reaches Resident with the stamp + legible framing text in both light and dark schemes; the
+framing fades after ~4s while the stamp persists for the rest of that session; a later revisit at the same
+stage re-shows neither) — zero console errors throughout.
+Deferred, not forgotten: kisetsu seasonal color rotation; extending the narrative serif to study-card
+drill text; a Flip-based transition for the return trip home.
+*Source: Session 14 build, 2026-07-14; approved plan + Playwright verification.*
