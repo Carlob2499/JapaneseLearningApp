@@ -512,3 +512,55 @@ stage re-shows neither) — zero console errors throughout.
 Deferred, not forgotten: kisetsu seasonal color rotation; extending the narrative serif to study-card
 drill text; a Flip-based transition for the return trip home.
 *Source: Session 14 build, 2026-07-14; approved plan + Playwright verification.*
+
+### D-020: Production + escalation beats — the upper three rungs of the retrieval ladder
+Roadmap Phase 4 (architecture.md §9 build-order item… the scene-interaction escalation the design has
+carried since Session 3). The `Beat.interaction` schema enum has defined five values since D-017
+(`recognize`, `recall`, `produce`, `speed`, `context`), but the scene engine implemented only the first
+two — everything non-`recognize` collapsed to a production MC. This phase implements the three harder
+stages of design-options §E2's ladder (recognition → recall → **production → speed → context**) and
+re-authors the one shipped konbini errand into an escalating five-beat arc so E4's "same items, rising
+stakes" is demonstrable inside existing content. Higher-level scene variants, more scene kinds, and the
+placement probe (E5) stay Phase 5.
+- **produce = typed production of the resolved item's reading**, reusing the wanakana pipeline
+  (`TypedCard`), cued only by the English gloss, graded through the normal SRS path. Reuses D-013's
+  `isHiragana` guard: a katakana-reading item (カード) downgrades to a production MC, since romaji
+  long-vowel input is too fiddly — the exact rule the flashcard `typed` mode already applies. This is
+  the customer-side production the design's E4 trace puts at L3.
+- **speed = timed recognition** (JP → meaning under a countdown — the "checkout barrage"). The timeout
+  auto-grades `fail` and advances; SRS applies normally. The clock runs on plain JS timers, never GSAP,
+  so the reduced-motion duration system (D-019) can't collapse it to instant — the countdown is
+  functional, not decoration. The draining bar is pure CSS and disables under `prefers-reduced-motion`
+  while the numeric second-count keeps the beat fully playable (E8 text-first). `ChoiceCard` gained an
+  optional `onPick` (a no-op for the flashcard review) so the timer stops the moment an option is chosen.
+- **context = register/function discrimination over the scene's real cited service phrases.** An English
+  situation is described, the clerk's line withheld, and the learner picks the fitting cited line from
+  real phrase options (`buildPhraseChoices` — correct line + verbatim distractors from the module's other
+  phrases). **Chosen over "meaning-in-context via a containing sentence"** because the narrow M2 vocab
+  barely appears in the L1 sentence pool (袋/温/店 = 0 containing sentences each — measured, not assumed),
+  so that design would perpetually fall back to bare recognition; whereas the 8 cited M2 phrases guarantee
+  content and this uniquely drills the phrase/register system nothing else exercises. D-002-safe (every
+  option is a verbatim cited `PhraseTemplate.pattern`); it realizes "notice appropriate usage in scene."
+  A context beat operates on a *phrase*, not a vocab item, so it logs a `context` journal entry against
+  the phrase id **without a `putItemState`** — phrases were never SRS-scheduled, mirroring how the Diary
+  logs a context read without touching item state. `SceneSummaryEntry` widened to carry a vocab item OR a
+  phrase line, and the receipt renders whichever it has.
+- **The five beats stay author-driven, not stage-driven.** The flashcard side escalates retrieval by the
+  *item's* SRS stage (`retrievalModeFor`); scenes escalate by *authored beat* (architecture §4), with
+  level as the E4 escalation axis. Keeping these separate — rather than making a beat auto-escalate to a
+  harder rung when the resolved item happens to be mature — preserves the clean "SRS decides *what*, the
+  scene decides *where* and *how hard*" split and avoids a stage→interaction coupling the one shipped L1
+  scene can't yet justify.
+- **Honest deferral:** full staff-side keigo *production* and error-noticing / baito-keigo "spot the wrong
+  keigo" (the E4 L4–L5 beats) need the disputed-forms bank (Bunkachō survey items + rule-inverted
+  transforms) and higher-level scene variants — Phase 5 content, disclosed in the About panel ("producing
+  full keigo from behind the counter — and catching a coworker's register slips — arrives with the higher
+  levels") rather than faked now.
+Verified: pure resolvers (`planBeat`, `buildPhraseChoices`) and the speed countdown are unit-tested (+10
+tests, 194 total); `pipeline:validate` green (27 packs / 15,189 items, sha256-matched, phrase pack
+byte-identical). Live-browser, both color schemes + reduced-motion: the konbini errand walks
+recognize → recall → produce → speed → context in order; the produce typed answer grades; the speed
+countdown both beats-the-clock (picking stops it) and auto-fails on timeout (advancing to the next beat);
+the context beat discriminates the farewell line among real service lines; the receipt mixes drilled words
+with the context line — zero console errors.
+*Source: Session 15 build, 2026-07-14; approved plan + Playwright verification.*

@@ -21,8 +21,13 @@ export default function About() {
           vocabulary you're already studying into an actual exchange with a clerk — the clerk's lines
           are documented real-world Japanese (cited to convenience-store-Japanese guides and a
           government register survey), never invented, and the item you're asked about is drawn live
-          from your own due and known words. It uses the same spaced-repetition tracking as review, so
-          practicing there counts too.
+          from your own due and known words. One errand escalates through the same retrieval ladder the
+          review screen uses: decode what the clerk means, name a word yourself, type one out, read one
+          before a countdown runs out, then pick the service line that fits the moment — the picks are
+          all real cited clerk lines, so it's a judgement call, not a guess. It uses the same
+          spaced-repetition tracking as review, so practicing there counts too. Producing full keigo
+          from behind the counter — and catching a coworker's register slips — arrives with the higher
+          levels.
         </p>
         <p>
           <strong>Politeness register is scaffolded, GENKI-style.</strong> Each sentence carries a small
