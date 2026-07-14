@@ -6,10 +6,11 @@
     "level": "L1",
     "modules": ["M2_konbini"],
     "beats": [
-      { "id": "beat:warm", "interaction": "recognize", "slotIds": ["item-warm"] },
-      { "id": "beat:bag", "interaction": "recall", "slotIds": ["item-bag"] },
-      { "id": "beat:card", "interaction": "recognize", "slotIds": ["item-card"] },
-      { "id": "beat:pay", "interaction": "recall", "slotIds": ["item-pay"] }
+      { "id": "beat:decode-warm", "interaction": "recognize", "slotIds": ["item-warm"] },
+      { "id": "beat:name-bag", "interaction": "recall", "slotIds": ["item-bag"] },
+      { "id": "beat:say-it", "interaction": "produce", "slotIds": ["item-say"] },
+      { "id": "beat:decode-total", "interaction": "speed", "slotIds": ["item-total"] },
+      { "id": "beat:closing-line", "interaction": "context", "slotIds": ["line-closing"] }
     ],
     "framing": [
       {
@@ -18,42 +19,37 @@
         "modelWritten": true
       },
       {
-        "beatId": "beat:warm",
-        "text": "The clerk holds up your bento, gesturing toward the microwave.",
+        "beatId": "beat:decode-warm",
+        "text": "The clerk holds up your bento, gesturing toward the microwave, and asks something. What do they mean?",
         "phraseId": "phrase:m2:atatamemasu-ka",
         "modelWritten": true
       },
       {
-        "beatId": "beat:bag",
-        "text": "Next, the clerk nods toward a stack of plastic bags by the register.",
+        "beatId": "beat:name-bag",
+        "text": "The clerk nods toward a stack of plastic bags by the register. This time you have to come up with the word yourself — which one is it?",
         "phraseId": "phrase:m2:reji-bukuro",
         "modelWritten": true
       },
       {
-        "beatId": "beat:card",
-        "text": "The clerk taps the little card reader mounted on the counter.",
-        "phraseId": "phrase:m2:point-card",
+        "beatId": "beat:say-it",
+        "text": "There's one more thing you want. No pointing, no menu — you just say it, and type it out for the clerk.",
         "modelWritten": true
       },
       {
-        "beatId": "beat:pay",
-        "text": "The register beeps and displays your total.",
+        "beatId": "beat:decode-total",
+        "text": "The register beeps and the clerk rattles off your total — read the word on the screen before the moment passes.",
         "phraseId": "phrase:m2:kaikei-ichiman",
         "modelWritten": true
       },
       {
-        "text": "The clerk counts out your change, note by note.",
-        "phraseId": "phrase:m2:sen-en-kara",
-        "modelWritten": true
-      },
-      {
-        "text": "You gather your bags. The clerk gives a small bow.",
-        "phraseId": "phrase:m2:arigatou-gozaimashita",
-        "modelWritten": true
-      },
-      {
-        "text": "The automatic door slides open behind you.",
+        "beatId": "beat:closing-line",
+        "text": "Change counted, bag in hand, you turn for the door. What does a good clerk call after you as you leave?",
         "phraseId": "phrase:m2:mata-okoshi-kudasaimase",
+        "modelWritten": true
+      },
+      {
+        "text": "The automatic door slides open, and the clerk's thanks follow you out into the street.",
+        "phraseId": "phrase:m2:arigatou-gozaimashita",
         "modelWritten": true
       }
     ]
