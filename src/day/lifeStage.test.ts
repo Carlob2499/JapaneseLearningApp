@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import type { ItemState, Level, VocabItem } from '@hikkoshi/schemas'
 import type { Content } from '../content/packs'
-import { LIFE_STAGE_NAMES, computeLifeStage } from './lifeStage'
+import { LIFE_STAGE_NAMES, computeLifeStage, decideCelebration } from './lifeStage'
 
 const LEVELS: Level[] = ['L1', 'L2', 'L3', 'L4', 'L5']
 
@@ -120,5 +120,33 @@ describe('computeLifeStage', () => {
     expect(stage.stage).toBe(LIFE_STAGE_NAMES.length - 1)
     expect(stage.name).toBe('You handle it for someone else.')
     expect(stage.next).toBeUndefined()
+  })
+})
+
+describe('decideCelebration', () => {
+  it('never celebrates a fresh profile\'s first-ever read, even at stage 0 — it only establishes the baseline', () => {
+    expect(decideCelebration(0, null)).toEqual({ celebrate: false, newBaseline: 0 })
+  })
+
+  it('establishes the baseline silently even if a fresh profile somehow starts above stage 0', () => {
+    expect(decideCelebration(2, null)).toEqual({ celebrate: false, newBaseline: 2 })
+  })
+
+  it('celebrates when the new stage exceeds the persisted baseline, and updates the baseline', () => {
+    expect(decideCelebration(1, 0)).toEqual({ celebrate: true, newBaseline: 1 })
+  })
+
+  it('does not re-celebrate when the stage is unchanged from the persisted baseline', () => {
+    expect(decideCelebration(1, 1)).toEqual({ celebrate: false })
+  })
+
+  it('does not celebrate (or touch the baseline) if the computed stage is below the persisted one', () => {
+    expect(decideCelebration(0, 1)).toEqual({ celebrate: false })
+  })
+
+  it('never fires on a naive -1 sentinel mistake — regression guard for the exact bug this design avoids', () => {
+    // If null were represented as -1 instead, `0 > -1` would incorrectly celebrate. Confirms
+    // decideCelebration's own null-check is what prevents that, not a caller-side workaround.
+    expect(decideCelebration(0, null).celebrate).toBe(false)
   })
 })

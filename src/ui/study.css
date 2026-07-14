@@ -393,6 +393,22 @@
   font-size: 15px;
   font-weight: 400;
 }
+/* Ichimatsu (checkerboard) — reserved for this one moment, per D-019: the life-stage-up
+   celebration, never a standing decoration elsewhere. */
+.life-stage-badge.celebrating {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+  background-image: var(--pattern-ichimatsu);
+  background-size: 10px 10px;
+}
+.life-stage-framing {
+  margin: 0;
+  max-width: 320px;
+  font-family: var(--font-celebrate);
+  font-size: 16px;
+  color: var(--accent-2);
+  text-align: center;
+}
 .today-tasks {
   display: grid;
   gap: 14px;

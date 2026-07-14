@@ -21,7 +21,10 @@ async function clearDb() {
   db.close()
 }
 
-beforeEach(clearDb)
+beforeEach(async () => {
+  await clearDb()
+  localStorage.clear() // getLastCelebratedStage/setLastCelebratedStage live in localStorage, not IndexedDB
+})
 afterEach(cleanup)
 
 describe('useToday', () => {
@@ -34,6 +37,7 @@ describe('useToday', () => {
     expect(result.current.introCount).toBeGreaterThan(0)
     expect(result.current.lifeStage?.name).toBe('Tourist')
     expect(result.current.lifeStage?.stage).toBe(0)
+    expect(result.current.celebrateStage).toBeNull() // the very first load never celebrates
     expect(result.current.diaryEntries).toEqual([])
     expect(result.current.dayPlan?.tasks.length).toBeGreaterThan(0)
   })
@@ -53,6 +57,37 @@ describe('useToday', () => {
 
     expect(result.current.lifeStage?.name).toBe('Resident')
     expect(result.current.lifeStage?.stage).toBe(1)
+  })
+
+  it('celebrates a genuine stage increase across two loads, but never the very first load', async () => {
+    // Load 1: fresh profile, stage 0 — establishes the baseline, no celebration (matches the
+    // fresh-store test above; re-asserted here since it's the premise this test builds on).
+    const first = renderHook(() => useToday(LEVELS))
+    await waitFor(() => expect(first.result.current.mode).toBe('ready'))
+    expect(first.result.current.lifeStage?.stage).toBe(0)
+    expect(first.result.current.celebrateStage).toBeNull()
+    first.unmount()
+
+    // Seed coverage past L1's clear threshold — as if a review session happened in between.
+    const content = await loadLevels(LEVELS)
+    const ids = reviewablePoolIds(content, 'L1')
+    const now = Date.now()
+    for (const id of ids) {
+      await putItemState({ itemId: id, stage: 1, due: now + 999_999_999, introducedAt: now, lapses: 0, lastOutcomes: 0 })
+    }
+
+    // Load 2: a later, genuine stage increase — this one celebrates.
+    const second = renderHook(() => useToday(LEVELS))
+    await waitFor(() => expect(second.result.current.mode).toBe('ready'))
+    expect(second.result.current.lifeStage?.stage).toBe(1)
+    expect(second.result.current.celebrateStage).toBe(1)
+
+    // Load 3: same stage again (e.g. the user revisits Home) — must not re-celebrate.
+    second.unmount()
+    const third = renderHook(() => useToday(LEVELS))
+    await waitFor(() => expect(third.result.current.mode).toBe('ready'))
+    expect(third.result.current.lifeStage?.stage).toBe(1)
+    expect(third.result.current.celebrateStage).toBeNull()
   })
 
   it('revealGloss logs exactly one journal entry per item, even when called twice', async () => {

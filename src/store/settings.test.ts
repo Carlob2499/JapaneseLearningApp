@@ -1,5 +1,14 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getActiveLevels, getAutoPlay, getOnboarded, setActiveLevels, setAutoPlay, setOnboarded } from './settings'
+import {
+  getActiveLevels,
+  getAutoPlay,
+  getLastCelebratedStage,
+  getOnboarded,
+  setActiveLevels,
+  setAutoPlay,
+  setLastCelebratedStage,
+  setOnboarded,
+} from './settings'
 
 beforeEach(() => localStorage.clear())
 
@@ -43,5 +52,18 @@ describe('onboarded flag', () => {
     expect(getOnboarded()).toBe(true)
     setOnboarded(false)
     expect(getOnboarded()).toBe(false)
+  })
+})
+
+describe('last celebrated life stage', () => {
+  it('defaults to null (a fresh profile has never celebrated) and round-trips a stage', () => {
+    expect(getLastCelebratedStage()).toBeNull()
+    expect(setLastCelebratedStage(2)).toBe(2)
+    expect(getLastCelebratedStage()).toBe(2)
+  })
+
+  it('survives a corrupt stored value the same as never-celebrated', () => {
+    localStorage.setItem('hikkoshi:lastCelebratedStage', 'not a number')
+    expect(getLastCelebratedStage()).toBeNull()
   })
 })

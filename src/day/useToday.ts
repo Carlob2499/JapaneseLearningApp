@@ -5,7 +5,8 @@ import { appendJournal, getAllItemStates, getJournal } from '../store/db'
 import { dueItems, pickNewItems } from '../scheduler/srs'
 import { dayIndex, introBudget, shapeDueQueue } from '../scheduler/loadShaper'
 import { reviewablePoolIds } from '../lib/appMeta'
-import { computeLifeStage, type LifeStage } from './lifeStage'
+import { getLastCelebratedStage, setLastCelebratedStage } from '../store/settings'
+import { computeLifeStage, decideCelebration, type LifeStage } from './lifeStage'
 import { isSceneUnlocked } from './moduleUnlock'
 import { buildDayPlan, deriveSceneHistory, type DayPlan } from './dayPlan'
 import { pickDiaryEntries, type DiaryEntry } from './diary'
@@ -18,6 +19,9 @@ export interface TodayApi {
   dueCount: number
   introCount: number
   lifeStage: LifeStage | null
+  /** The stage to celebrate this load, or null if none — set at most once per genuine stage
+   *  increase, never on a fresh profile's first-ever read (see decideCelebration). */
+  celebrateStage: number | null
   dayPlan: DayPlan | null
   diaryEntries: DiaryEntry[]
   isRevealed: (itemId: string) => boolean
@@ -37,6 +41,7 @@ export function useToday(levels: Level[]): TodayApi {
   const [dueCount, setDueCount] = useState(0)
   const [introCount, setIntroCount] = useState(0)
   const [lifeStage, setLifeStage] = useState<LifeStage | null>(null)
+  const [celebrateStage, setCelebrateStage] = useState<number | null>(null)
   const [dayPlan, setDayPlan] = useState<DayPlan | null>(null)
   const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([])
   const [revealed, setRevealed] = useState<Set<string>>(new Set())
@@ -71,9 +76,14 @@ export function useToday(levels: Level[]): TodayApi {
       const history = deriveSceneHistory(journal)
       const candidates = content.scenes.filter((s) => isSceneUnlocked(content, states, s))
 
+      const stage = computeLifeStage(content, states, levels)
+      const celebration = decideCelebration(stage.stage, getLastCelebratedStage())
+      if (celebration.newBaseline !== undefined) setLastCelebratedStage(celebration.newBaseline)
+
       setDueCount(keep.length)
       setIntroCount(introIds.length)
-      setLifeStage(computeLifeStage(content, states, levels))
+      setLifeStage(stage)
+      setCelebrateStage(celebration.celebrate ? stage.stage : null)
       setDayPlan(
         buildDayPlan({
           dueCount: keep.length,
@@ -103,5 +113,16 @@ export function useToday(levels: Level[]): TodayApi {
     [revealed],
   )
 
-  return { mode, error, dueCount, introCount, lifeStage, dayPlan, diaryEntries, isRevealed, revealGloss }
+  return {
+    mode,
+    error,
+    dueCount,
+    introCount,
+    lifeStage,
+    celebrateStage,
+    dayPlan,
+    diaryEntries,
+    isRevealed,
+    revealGloss,
+  }
 }

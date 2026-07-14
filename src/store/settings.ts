@@ -73,3 +73,27 @@ export function setOnboarded(on: boolean): boolean {
   }
   return on
 }
+
+const LAST_CELEBRATED_STAGE_KEY = 'hikkoshi:lastCelebratedStage'
+
+/** The highest life stage already celebrated, or null on a fresh profile (never celebrated). */
+export function getLastCelebratedStage(): number | null {
+  try {
+    const raw = localStorage.getItem(LAST_CELEBRATED_STAGE_KEY)
+    if (raw === null) return null
+    const n = Number(raw)
+    return Number.isInteger(n) ? n : null // a corrupt stored value reads the same as "never"
+  } catch {
+    return null
+  }
+}
+
+/** Persist the highest celebrated stage and return it. */
+export function setLastCelebratedStage(stage: number): number {
+  try {
+    localStorage.setItem(LAST_CELEBRATED_STAGE_KEY, String(stage))
+  } catch {
+    // best-effort
+  }
+  return stage
+}

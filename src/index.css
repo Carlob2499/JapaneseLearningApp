@@ -62,10 +62,13 @@
       color-mix(in srgb, var(--accent-2) 8%, transparent) 60% 64%,
       transparent 64%
     );
+  /* 20% (not the 8% the other three use) — this one moment is meant to read as a bolder stamp —
+     but still a wash, not solid fill: solid --accent-2 squares here would exactly match the
+     badge text's own color and erase it wherever a glyph crosses a square. */
   --pattern-ichimatsu: conic-gradient(
-    var(--accent-2) 0 25%,
+    color-mix(in srgb, var(--accent-2) 20%, transparent) 0 25%,
     transparent 0 50%,
-    var(--accent-2) 0 75%,
+    color-mix(in srgb, var(--accent-2) 20%, transparent) 0 75%,
     transparent 0
   );
 

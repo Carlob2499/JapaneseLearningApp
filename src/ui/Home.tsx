@@ -1,12 +1,57 @@
+import { useEffect, useRef, useState } from 'react'
+import { useGSAP } from '@gsap/react'
 import { Flip } from 'gsap/Flip'
 import type { Level } from '@hikkoshi/schemas'
 import type { DiaryEntry } from '../day/diary'
 import { useToday } from '../day/useToday'
 import { APP_NAME, APP_NAME_JA, JLPT_LABEL, levelItemCount } from '../lib/appMeta'
 import { stash } from '../motion/flipHandoff'
+import { celebrate } from '../motion/timelines'
 import { ALL_LEVELS } from '../store/settings'
 import About from './About'
 import './study.css'
+
+/**
+ * Five hand-written framing lines (D-019) — stage 5's name is already a full sentence ("You
+ * handle it for someone else."), so no single "Your X now reads: {name}" template covers all
+ * five; stage 0 (Tourist) never celebrates (decideCelebration), so it needs none.
+ */
+const CELEBRATION_FRAMING: Record<number, string> = {
+  1: 'Your residence card now reads: Resident.',
+  2: 'You picked up a part-time job. Your residence card now reads: Part-timer.',
+  3: 'Full-time, finally. Your residence card now reads: Employee.',
+  4: 'They ask your opinion now. Your residence card now reads: Senior staff.',
+  5: "Someone else just asked you how it's done. You handle it for someone else, now.",
+}
+
+/** The felt life-stage-up moment (D-019): a stamp animation on the badge itself, plus a line
+ *  of in-fiction framing that fades after a few seconds — inline, never a blocking dialog. */
+function LifeStageBadge({ name, celebrateStage }: { name: string; celebrateStage: number | null }) {
+  const [showFraming, setShowFraming] = useState(celebrateStage !== null)
+  const badgeRef = useRef<HTMLParagraphElement>(null)
+
+  useGSAP(
+    () => {
+      if (celebrateStage !== null && badgeRef.current) celebrate(badgeRef.current)
+    },
+    { dependencies: [celebrateStage], scope: badgeRef },
+  )
+
+  useEffect(() => {
+    if (celebrateStage === null) return
+    const timer = setTimeout(() => setShowFraming(false), 4000)
+    return () => clearTimeout(timer)
+  }, [celebrateStage])
+
+  return (
+    <>
+      <p ref={badgeRef} className={celebrateStage !== null ? 'life-stage-badge celebrating' : 'life-stage-badge'}>
+        {name}
+      </p>
+      {celebrateStage !== null && showFraming && <p className="life-stage-framing">{CELEBRATION_FRAMING[celebrateStage]}</p>}
+    </>
+  )
+}
 
 function DiaryRow({ entry, revealed, onReveal }: { entry: DiaryEntry; revealed: boolean; onReveal: () => void }) {
   const idx = entry.ja.indexOf(entry.expression)
@@ -65,7 +110,7 @@ export default function Home({
         )}
         {today.mode === 'ready' && today.lifeStage && (
           <>
-            <p className="life-stage-badge">{today.lifeStage.name}</p>
+            <LifeStageBadge name={today.lifeStage.name} celebrateStage={today.celebrateStage} />
             {today.dayPlan && today.dayPlan.tasks.length > 0 ? (
               <div className="today-tasks">
                 {today.dayPlan.tasks.map((task) =>

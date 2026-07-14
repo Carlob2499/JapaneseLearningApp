@@ -91,3 +91,27 @@ export function computeLifeStage(
   const stage = Math.min(levelsCleared.length, LIFE_STAGE_NAMES.length - 1)
   return { stage, name: LIFE_STAGE_NAMES[stage], levelsCleared, coverageByLevel, next }
 }
+
+export interface CelebrationDecision {
+  celebrate: boolean
+  /** The new "last celebrated" baseline to persist — set whenever `celebrate` is true, and
+   *  also on the very first-ever read (silently establishing the baseline without celebrating).
+   *  Undefined means: nothing changed, don't write anything. */
+  newBaseline?: number
+}
+
+/**
+ * Whether a freshly-computed stage should trigger the life-stage-up celebration (D-019),
+ * given the highest stage already celebrated (`null` = a fresh profile that has never
+ * celebrated). A fresh profile's first-ever computed stage never celebrates — arriving at the
+ * default starting stage (Tourist, 0) isn't an achievement — it only establishes the baseline;
+ * only a *later* computed stage greater than the persisted baseline celebrates. Using `null`
+ * (not a numeric sentinel like -1) as "never" is what keeps this correct: a naive `stage >
+ * lastCelebrated` with a `-1` default would fire on every fresh profile's first load, since
+ * `0 > -1`.
+ */
+export function decideCelebration(stage: number, lastCelebrated: number | null): CelebrationDecision {
+  if (lastCelebrated === null) return { celebrate: false, newBaseline: stage }
+  if (stage > lastCelebrated) return { celebrate: true, newBaseline: stage }
+  return { celebrate: false }
+}
