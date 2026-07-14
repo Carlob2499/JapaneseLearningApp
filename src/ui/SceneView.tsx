@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Level, SceneTemplate } from '@hikkoshi/schemas'
 import { loadLevels, type Content } from '../content/packs'
+import { EnterOnMount } from '../motion/EnterOnMount'
 import { useScene } from '../scenes/useScene'
 import { ChoiceCard, SpeakButton } from './cards'
 import './scene.css'
@@ -165,7 +166,7 @@ function ScenePlayer({
 
       <SceneBackdrop />
 
-      <div className="scene-stage" key={api.stepIndex}>
+      <EnterOnMount key={api.stepIndex} className="scene-stage">
         {step?.kind === 'narration' && (
           <>
             <DialogueBox en={step.text} jp={api.phrase?.pattern} speakable={api.phrase?.pattern} />
@@ -193,7 +194,7 @@ function ScenePlayer({
             </>
           )
         })()}
-      </div>
+      </EnterOnMount>
     </main>
   )
 }

@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import type { Level, Outcome } from '@hikkoshi/schemas'
 import { useReview, type Presentation, type Reviewable } from '../review/useReview'
 import { useAudio } from '../audio/useAudio'
+import { EnterOnMount } from '../motion/EnterOnMount'
 import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
 import { ChoiceCard, GrammarCard, KanjiCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
@@ -189,9 +190,9 @@ export default function ReviewSession({ levels, onHome }: { levels: Level[]; onH
         )}
       </div>
       {view && (
-        <div key={view.reviewable.id} className="card-slot">
+        <EnterOnMount key={view.reviewable.id} className="card-slot">
           <Card p={view} onGrade={grade} autoPlay={autoPlay} />
-        </div>
+        </EnterOnMount>
       )}
     </main>
   )

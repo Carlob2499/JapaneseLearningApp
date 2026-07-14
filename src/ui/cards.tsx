@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useGSAP } from '@gsap/react'
 import { toHiragana, toKana } from 'wanakana'
 import type { GrammarPoint, KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import type { Choice } from '../review/choices'
 import { useAudio } from '../audio/useAudio'
+import { pulsePass, shakeFail, staggerIn } from '../motion/timelines'
 import StrokeViewer from './StrokeViewer'
 import './study.css'
 
@@ -74,8 +76,15 @@ function StudyCard({
   onReveal?: () => void
 }) {
   const [revealed, setRevealed] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  useGSAP(
+    () => {
+      if (revealed) staggerIn('.card-back, .grade-bar')
+    },
+    { dependencies: [revealed], scope: rootRef },
+  )
   return (
-    <div className="study-card">
+    <div className="study-card" ref={rootRef}>
       <span className="card-kind">{kind}</span>
       <div className="card-front">{front}</div>
       {revealed ? (
@@ -242,8 +251,20 @@ export function ChoiceCard({
   onGrade: (o: Outcome) => void
 }) {
   const [selected, setSelected] = useState<Choice | null>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const { contextSafe } = useGSAP(() => staggerIn('.choice'), { scope: rootRef })
+
+  // Feedback fires here, on the pick — not on the later "Next →"/onGrade click, which unmounts
+  // this card before a tween would ever paint. contextSafe tracks/cleans up this event-triggered
+  // tween the same way useGSAP's setup callback is tracked automatically.
+  const pick = contextSafe((c: Choice, target: HTMLButtonElement) => {
+    setSelected(c)
+    if (c.correct) pulsePass(target)
+    else shakeFail(target)
+  })
+
   return (
-    <div className="study-card">
+    <div className="study-card" ref={rootRef}>
       <span className="card-kind">{kind}</span>
       <div className="card-front">{prompt}</div>
       <p className="choice-q">{question}</p>
@@ -261,7 +282,7 @@ export function ChoiceCard({
               data-testid="choice"
               data-correct={c.correct}
               disabled={selected !== null}
-              onClick={() => setSelected(c)}
+              onClick={(e) => pick(c, e.currentTarget)}
             >
               {c.text}
             </button>
@@ -299,14 +320,22 @@ export function TypedCard({
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const { available, speak } = useAudio()
+  const { contextSafe } = useGSAP()
   useEffect(() => inputRef.current?.focus(), [])
 
   const target = toHiragana(answer).trim()
-  function check() {
+  // Feedback fires here, on check() — not on the later "Next →"/onGrade click, which unmounts
+  // this card before a tween would ever paint.
+  const check = contextSafe(() => {
     if (result !== null || value.trim() === '') return
-    setResult(toHiragana(value).trim() === target ? 'correct' : 'wrong')
+    const correct = toHiragana(value).trim() === target
+    setResult(correct ? 'correct' : 'wrong')
+    if (inputRef.current) {
+      if (correct) pulsePass(inputRef.current)
+      else shakeFail(inputRef.current)
+    }
     if (autoPlay && available) speak(target) // hear the correct reading
-  }
+  })
 
   return (
     <div className="study-card">

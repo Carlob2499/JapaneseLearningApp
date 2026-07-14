@@ -29,19 +29,9 @@
   height: auto;
 }
 
-.scene-stage {
-  animation: scene-rise 0.32s ease-out both;
-}
-@keyframes scene-rise {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* .scene-stage's enter motion is EnterOnMount (src/motion/), not a local keyframe (D-019) —
+   the same "new step appears" concept ReviewSession's card-slot now shares, one GSAP system
+   rather than two independent reduced-motion-aware implementations of the same idea. */
 
 /* The clerk's line — a lightweight visual-novel textbox: nameplate tab + paper body. */
 .scene-dialogue {
@@ -111,29 +101,6 @@
   border-color: var(--wood);
   border-radius: 4px;
   position: relative;
-  animation: scene-choice-in 0.28s ease-out both;
-}
-.scene-view .choices .choice:nth-child(1) {
-  animation-delay: 0.02s;
-}
-.scene-view .choices .choice:nth-child(2) {
-  animation-delay: 0.08s;
-}
-.scene-view .choices .choice:nth-child(3) {
-  animation-delay: 0.14s;
-}
-.scene-view .choices .choice:nth-child(4) {
-  animation-delay: 0.2s;
-}
-@keyframes scene-choice-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 .scene-view .next-btn {
   background: var(--accent-2);
@@ -181,11 +148,4 @@
   display: flex;
   justify-content: space-between;
   font-weight: 700;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scene-stage,
-  .scene-view .choice {
-    animation: none;
-  }
 }
