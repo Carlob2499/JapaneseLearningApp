@@ -7,19 +7,18 @@ export type SceneStep =
   | { kind: 'beat'; text: string; phraseId?: string; beat: Beat }
 
 /**
- * How a beat renders, once its interaction and resolved item are known (Phase 4 / D-020). The
- * five `Beat.interaction` values map to three render surfaces:
- *  - `mc`      — multiple choice over a resolved vocab item (recognition = JP cue → meaning;
- *               production = meaning cue → JP word). `timed` is set for the `speed` stage.
- *  - `typed`   — type the resolved item's reading (the `produce` stage), reusing the wanakana
- *               pipeline. `answer` is the verified reading.
- *  - `phrase`  — pick the cited service line that fits the situation (the `context` stage),
- *               resolved separately against the scene's phrase inventory, not a vocab item.
+ * How a *vocab-item* beat renders, once its interaction and resolved item are known (Phase 4 /
+ * D-020). Four of the five `Beat.interaction` values plan here:
+ *  - `mc`     — multiple choice (recognition = JP cue → meaning; production = meaning cue → JP
+ *              word). `timed` is set for the `speed` stage.
+ *  - `typed`  — type the resolved item's reading (the `produce` stage), reusing the wanakana
+ *              pipeline. `answer` is the verified reading.
+ * The fifth value, `context`, plans separately against the scene's cited-phrase inventory (not a
+ * vocab item) and so is excluded from `planBeat` and this type — see `useScene`.
  */
 export type BeatPlan =
   | { render: 'mc'; mode: 'recognition' | 'production'; timed: boolean }
   | { render: 'typed'; answer: string }
-  | { render: 'phrase' }
 
 /**
  * Decide how a vocab-item beat renders. `context` never reaches here — it resolves against the

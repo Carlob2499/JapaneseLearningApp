@@ -1,8 +1,9 @@
 import { describe, it, expect, afterEach, vi } from 'vitest'
-import { cleanup, render, screen, fireEvent } from '@testing-library/react'
+import { act, cleanup, render, screen, fireEvent } from '@testing-library/react'
 import type { StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import StrokeViewer from './StrokeViewer'
 import { VocabCard } from './cards'
+import { SpeedTimer } from './SceneView'
 
 afterEach(cleanup)
 
@@ -45,5 +46,39 @@ describe('VocabCard', () => {
     expect(screen.getByText('みず')).toBeTruthy()
     fireEvent.click(screen.getByText('Good'))
     expect(onGrade).toHaveBeenCalledWith('pass')
+  })
+})
+
+describe('SpeedTimer (speed beat countdown, D-020)', () => {
+  it('fires onTimeout exactly once when the countdown elapses', () => {
+    vi.useFakeTimers()
+    try {
+      const onTimeout = vi.fn()
+      render(<SpeedTimer seconds={6} stopped={false} onTimeout={onTimeout} />)
+      expect(onTimeout).not.toHaveBeenCalled()
+      act(() => vi.advanceTimersByTime(6000))
+      expect(onTimeout).toHaveBeenCalledTimes(1)
+      act(() => vi.advanceTimersByTime(6000)) // no double-fire after it lands
+      expect(onTimeout).toHaveBeenCalledTimes(1)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('never fires once stopped — the learner picked in time', () => {
+    vi.useFakeTimers()
+    try {
+      const onTimeout = vi.fn()
+      render(<SpeedTimer seconds={6} stopped onTimeout={onTimeout} />)
+      act(() => vi.advanceTimersByTime(20000))
+      expect(onTimeout).not.toHaveBeenCalled()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('shows a check mark instead of a number once stopped', () => {
+    render(<SpeedTimer seconds={6} stopped onTimeout={() => {}} />)
+    expect(screen.getByText('✓')).toBeTruthy()
   })
 })

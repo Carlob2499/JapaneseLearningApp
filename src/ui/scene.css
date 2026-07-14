@@ -88,6 +88,66 @@
   justify-self: center;
 }
 
+/* The situation prompt shown in a `context` beat, where the JP options are the answer and the
+   clerk's own line is withheld (D-020). */
+.scene-situation {
+  font-size: clamp(18px, 5vw, 22px);
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Speed-beat countdown (D-020): a draining bar + a numeric second count. Timing is driven by JS
+   timers, not this animation, so the beat still auto-fails on time even with the bar disabled. */
+.speed-timer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: stretch;
+  max-width: 340px;
+  margin: 0 auto;
+  width: 100%;
+}
+.speed-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--wood) 24%, transparent);
+  overflow: hidden;
+}
+.speed-bar-fill {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: var(--accent);
+  animation: speed-drain linear forwards;
+}
+.speed-bar-fill.stopped {
+  animation: none;
+  background: var(--ok);
+  width: 100%;
+}
+.speed-count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--accent-2);
+  min-width: 1.4em;
+  text-align: center;
+}
+@keyframes speed-drain {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+/* Motion off: no draining animation — the numeric count still conveys the countdown (E8). */
+@media (prefers-reduced-motion: reduce) {
+  .speed-bar-fill {
+    animation: none;
+  }
+}
+
 /* Receipt-toned choice UI: nested under .scene-view so the shared ChoiceCard component
    picks up a distinct, ticket-like look here without any change to cards.tsx. */
 .scene-view .study-card {

@@ -1,11 +1,85 @@
-import { useEffect, useState } from 'react'
-import type { Level, SceneTemplate } from '@hikkoshi/schemas'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { Level, SceneTemplate, VocabItem } from '@hikkoshi/schemas'
 import { loadLevels, type Content } from '../content/packs'
+import type { Choice } from '../review/choices'
 import { EnterOnMount } from '../motion/EnterOnMount'
 import { useFlipLanding } from '../motion/useFlipLanding'
 import { useScene } from '../scenes/useScene'
-import { ChoiceCard, SpeakButton } from './cards'
+import { ChoiceCard, SpeakButton, TypedCard } from './cards'
 import './scene.css'
+
+/** Seconds a `speed` beat allows before the register "beeps" and it auto-fails. */
+const SPEED_SECONDS = 6
+
+/**
+ * A countdown for `speed` beats (D-020). Timing lives in plain timers (not GSAP) so it is never
+ * collapsed by the reduced-motion duration system — the clock is functional, not decoration. The
+ * draining bar is pure CSS and disables itself under `prefers-reduced-motion`; the numeric second
+ * count is always shown, so the beat stays fully playable with motion off (E8 text-first).
+ */
+export function SpeedTimer({ seconds, stopped, onTimeout }: { seconds: number; stopped: boolean; onTimeout: () => void }) {
+  const [remaining, setRemaining] = useState(seconds)
+  const firedRef = useRef(false)
+  const timeoutRef = useRef(onTimeout)
+  timeoutRef.current = onTimeout
+
+  useEffect(() => {
+    if (stopped) return
+    const interval = setInterval(() => setRemaining((r) => Math.max(0, r - 1)), 1000)
+    const timer = setTimeout(() => {
+      if (!firedRef.current) {
+        firedRef.current = true
+        timeoutRef.current()
+      }
+    }, seconds * 1000)
+    return () => {
+      clearInterval(interval)
+      clearTimeout(timer)
+    }
+  }, [seconds, stopped])
+
+  return (
+    <div className="speed-timer" aria-hidden="true">
+      <div className="speed-bar">
+        <div
+          className={`speed-bar-fill${stopped ? ' stopped' : ''}`}
+          style={{ animationDuration: `${seconds}s` }}
+        />
+      </div>
+      <span className="speed-count">{stopped ? '✓' : remaining}</span>
+    </div>
+  )
+}
+
+/** A timed recognition beat: the countdown runs until the learner picks; timing out grades a
+ *  fail (too slow at the register) and advances. */
+function SpeedBeat({
+  item,
+  choices,
+  onGrade,
+}: {
+  item: VocabItem
+  choices: Choice[]
+  onGrade: (o: 'pass' | 'fail' | 'partial') => void
+}) {
+  const [picked, setPicked] = useState(false)
+  const onGradeRef = useRef(onGrade)
+  onGradeRef.current = onGrade
+  const handleTimeout = useCallback(() => onGradeRef.current('fail'), [])
+  return (
+    <>
+      <SpeedTimer seconds={SPEED_SECONDS} stopped={picked} onTimeout={handleTimeout} />
+      <ChoiceCard
+        kind="Errand · quick!"
+        prompt={<span className="jp-lg">{item.expression}</span>}
+        question="Read it before the register beeps."
+        choices={choices}
+        onGrade={onGrade}
+        onPick={() => setPicked(true)}
+      />
+    </>
+  )
+}
 
 /** Product colors for the receding shelf rows — muted, warm, never neon (cozy-game palette). */
 const SHELF_HUES = ['#c98a5b', '#5b8f7a', '#c2a45c', '#7a8fae', '#b5715a', '#8a9c6a']
@@ -135,7 +209,13 @@ function ScenePlayer({
           {api.summary.map((s, i) => (
             <div className="receipt-row" key={i}>
               <span>
-                {s.item.expression} <span style={{ color: 'var(--muted)' }}>{s.item.reading}</span>
+                {s.item ? (
+                  <>
+                    {s.item.expression} <span style={{ color: 'var(--muted)' }}>{s.item.reading}</span>
+                  </>
+                ) : (
+                  s.phrase
+                )}
               </span>
               <span className={`receipt-outcome ${s.outcome}`}>{s.outcome === 'pass' ? 'OK' : 'MISS'}</span>
             </div>
@@ -178,21 +258,49 @@ function ScenePlayer({
           </>
         )}
 
-        {step?.kind === 'beat' && api.item && api.choices && (() => {
-          // 'recognize' → recognition mode: JP is the cue, pick the meaning.
-          // 'recall' → production mode: the meaning is the cue, pick the JP word (uncued, harder).
-          const gloss = api.item.senses[0]?.gloss[0] ?? api.item.expression
-          const recognizing = step.beat.interaction === 'recognize'
+        {step?.kind === 'beat' && api.beat && (() => {
+          const beat = api.beat
+          // Context beat: the JP options ARE the answer, so the clerk's line is withheld — only
+          // the English situation is shown, and the learner picks the fitting cited service line.
+          if (beat.render === 'phrase') {
+            return (
+              <>
+                <DialogueBox en={step.text} />
+                <ChoiceCard
+                  kind="Errand · which line?"
+                  prompt={<span className="scene-situation">Which line fits?</span>}
+                  question="Pick what the clerk says here."
+                  choices={beat.choices}
+                  onGrade={api.grade}
+                />
+              </>
+            )
+          }
+          // Vocab beats show the clerk's cited line as flavour above the drill.
           return (
             <>
               <DialogueBox en={step.text} jp={api.phrase?.pattern} speakable={api.phrase?.pattern} />
-              <ChoiceCard
-                kind="Errand"
-                prompt={<span className="jp-lg">{recognizing ? api.item.expression : gloss}</span>}
-                question={recognizing ? 'What does the clerk mean?' : `How do you say "${gloss}"?`}
-                choices={api.choices}
-                onGrade={api.grade}
-              />
+              {beat.render === 'typed' ? (
+                // produce: type the reading of the word, uncued and unaided (the hardest rung).
+                <TypedCard
+                  kind="Errand · say it"
+                  prompt={<span className="jp-lg">{beat.gloss}</span>}
+                  answer={beat.answer}
+                  onGrade={api.grade}
+                />
+              ) : beat.timed ? (
+                // speed: timed recognition — decode the word before the countdown runs out.
+                <SpeedBeat item={beat.item} choices={beat.choices} onGrade={api.grade} />
+              ) : (
+                // recognize (JP cue → meaning) / recall (meaning cue → JP word, uncued).
+                <ChoiceCard
+                  kind="Errand"
+                  prompt={<span className="jp-lg">{beat.mode === 'recognition' ? beat.item.expression : beat.gloss}</span>}
+                  question={beat.mode === 'recognition' ? 'What does the clerk mean?' : `How do you say "${beat.gloss}"?`}
+                  choices={beat.choices}
+                  onGrade={api.grade}
+                />
+              )}
             </>
           )
         })()}

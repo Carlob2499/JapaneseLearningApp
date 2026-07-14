@@ -243,12 +243,16 @@ export function ChoiceCard({
   question,
   choices,
   onGrade,
+  onPick,
 }: {
   kind: string
   prompt: ReactNode
   question: string
   choices: Choice[]
   onGrade: (o: Outcome) => void
+  /** Fires the moment an option is selected (before grading) — used by the speed beat to stop
+   *  its countdown. Optional: the flashcard review doesn't pass it. */
+  onPick?: () => void
 }) {
   const [selected, setSelected] = useState<Choice | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -259,6 +263,7 @@ export function ChoiceCard({
   // tween the same way useGSAP's setup callback is tracked automatically.
   const pick = contextSafe((c: Choice, target: HTMLButtonElement) => {
     setSelected(c)
+    onPick?.()
     if (c.correct) pulsePass(target)
     else shakeFail(target)
   })
