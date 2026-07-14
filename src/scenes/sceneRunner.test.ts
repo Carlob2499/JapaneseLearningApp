@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest'
 import type { ItemState, SceneTemplate, VocabItem } from '@hikkoshi/schemas'
-import { buildSceneSteps, pickSlotItem } from './sceneRunner'
+import { buildSceneSteps, pickSlotItem, planBeat } from './sceneRunner'
 
-function vocab(id: string): VocabItem {
+function vocab(id: string, reading = id): VocabItem {
   return {
     kind: 'vocab',
     id,
     jmdictSeq: 1,
     expression: id,
-    reading: id,
+    reading,
     senses: [{ gloss: ['x'], pos: [] }],
     level: 'L1',
     modules: ['M2_konbini'],
@@ -50,6 +50,25 @@ describe('pickSlotItem', () => {
 
   it('returns undefined when the pool is exhausted', () => {
     expect(pickSlotItem([vocab('a')], new Map(), new Set(['a']), now)).toBeUndefined()
+  })
+})
+
+describe('planBeat', () => {
+  it('maps recognize → recognition MC, recall → production MC, neither timed', () => {
+    expect(planBeat('recognize', vocab('a'))).toEqual({ render: 'mc', mode: 'recognition', timed: false })
+    expect(planBeat('recall', vocab('a'))).toEqual({ render: 'mc', mode: 'production', timed: false })
+  })
+
+  it('maps speed → a timed recognition MC (the checkout-barrage stage)', () => {
+    expect(planBeat('speed', vocab('a'))).toEqual({ render: 'mc', mode: 'recognition', timed: true })
+  })
+
+  it('maps produce → typed reading when the reading is clean hiragana', () => {
+    expect(planBeat('produce', vocab('warm', 'あたためる'))).toEqual({ render: 'typed', answer: 'あたためる' })
+  })
+
+  it('downgrades produce → production MC for a katakana reading (romaji long-vowels too fiddly, D-013)', () => {
+    expect(planBeat('produce', vocab('card', 'カード'))).toEqual({ render: 'mc', mode: 'production', timed: false })
   })
 })
 

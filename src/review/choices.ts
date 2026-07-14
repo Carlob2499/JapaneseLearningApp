@@ -175,3 +175,25 @@ export function buildChoices(
   ]
   return shuffle(choices, rng)
 }
+
+/**
+ * Build a shuffled choice set for a scene `context` beat (Phase 4 / D-020): the correct cited
+ * service line plus up to `count-1` distractors drawn from `pool` — a list of *other* verbatim
+ * cited phrase patterns from the scene's modules. Every option is real cited content (D-002);
+ * the learner discriminates which line fits the situation, not which word means what. Distinct
+ * from `buildChoices` (which drills a vocab/kanji/etc. item): here the answer space *is* the
+ * phrase inventory, so it takes bare strings rather than a `Reviewable`.
+ */
+export function buildPhraseChoices(
+  correctPattern: string,
+  pool: string[],
+  { count = 4, rng = Math.random }: ChoiceOptions = {},
+): Choice[] {
+  const exclude = new Set([normalize(correctPattern)])
+  const distractors = sampleDistinct(pool, count - 1, exclude, rng)
+  const choices: Choice[] = [
+    { text: correctPattern, correct: true },
+    ...distractors.map((text) => ({ text, correct: false })),
+  ]
+  return shuffle(choices, rng)
+}

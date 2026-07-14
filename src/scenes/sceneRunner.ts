@@ -1,9 +1,46 @@
+import { isHiragana } from 'wanakana'
 import type { Beat, ItemState, SceneTemplate, VocabItem } from '@hikkoshi/schemas'
 
 /** One step in the flattened scene sequence — either ambient narration or an interactive beat. */
 export type SceneStep =
   | { kind: 'narration'; text: string; phraseId?: string }
   | { kind: 'beat'; text: string; phraseId?: string; beat: Beat }
+
+/**
+ * How a beat renders, once its interaction and resolved item are known (Phase 4 / D-020). The
+ * five `Beat.interaction` values map to three render surfaces:
+ *  - `mc`      — multiple choice over a resolved vocab item (recognition = JP cue → meaning;
+ *               production = meaning cue → JP word). `timed` is set for the `speed` stage.
+ *  - `typed`   — type the resolved item's reading (the `produce` stage), reusing the wanakana
+ *               pipeline. `answer` is the verified reading.
+ *  - `phrase`  — pick the cited service line that fits the situation (the `context` stage),
+ *               resolved separately against the scene's phrase inventory, not a vocab item.
+ */
+export type BeatPlan =
+  | { render: 'mc'; mode: 'recognition' | 'production'; timed: boolean }
+  | { render: 'typed'; answer: string }
+  | { render: 'phrase' }
+
+/**
+ * Decide how a vocab-item beat renders. `context` never reaches here — it resolves against the
+ * phrase inventory, not a vocab item (see `useScene`). The `produce` stage falls back to a
+ * production MC when the reading isn't clean hiragana (katakana loanwords make romaji long-vowel
+ * input too fiddly — the exact guard the flashcard `typed` mode already applies, D-013).
+ */
+export function planBeat(interaction: Exclude<Beat['interaction'], 'context'>, item: VocabItem): BeatPlan {
+  switch (interaction) {
+    case 'recognize':
+      return { render: 'mc', mode: 'recognition', timed: false }
+    case 'recall':
+      return { render: 'mc', mode: 'production', timed: false }
+    case 'speed':
+      return { render: 'mc', mode: 'recognition', timed: true }
+    case 'produce':
+      return isHiragana(item.reading)
+        ? { render: 'typed', answer: item.reading }
+        : { render: 'mc', mode: 'production', timed: false }
+  }
+}
 
 /**
  * Flatten a scene's `framing` (an ordered array of narration/dialogue lines) into a linear

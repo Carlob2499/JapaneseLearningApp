@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildChoices, buildPools, retrievalModeFor, type Pools } from './choices'
+import { buildChoices, buildPhraseChoices, buildPools, retrievalModeFor, type Pools } from './choices'
 import type { Content } from '../content/packs'
 import type { Reviewable } from './useReview'
 
@@ -193,6 +193,40 @@ describe('buildChoices', () => {
     expect(choices).toHaveLength(2) // 1 correct + the single usable distractor
     expect(choices.filter((c) => c.correct)).toHaveLength(1)
     expect(choices.find((c) => !c.correct)?.text).toBe('two')
+  })
+})
+
+describe('buildPhraseChoices', () => {
+  const lines = [
+    'いらっしゃいませ。',
+    '温めますか。',
+    'レジ袋はご利用ですか。',
+    'ありがとうございました。',
+    'またお越しくださいませ。',
+  ]
+
+  it('offers the correct cited line plus real distractors drawn from the phrase pool', () => {
+    const choices = buildPhraseChoices('温めますか。', lines, { count: 4, rng: lcg(1) })
+    expect(choices).toHaveLength(4)
+    expect(choices.filter((c) => c.correct)).toHaveLength(1)
+    expect(choices.find((c) => c.correct)?.text).toBe('温めますか。')
+    for (const c of choices) expect(lines.includes(c.text)).toBe(true)
+    expect(new Set(choices.map((c) => c.text)).size).toBe(choices.length)
+  })
+
+  it('never repeats the correct line as a distractor', () => {
+    const choices = buildPhraseChoices('温めますか。', lines, { count: 4, rng: lcg(9) })
+    expect(choices.filter((c) => c.text === '温めますか。')).toHaveLength(1)
+  })
+
+  it('degrades to fewer options when the pool is thin, keeping exactly one correct', () => {
+    const choices = buildPhraseChoices('温めますか。', ['温めますか。', 'いらっしゃいませ。'], {
+      count: 4,
+      rng: lcg(5),
+    })
+    expect(choices).toHaveLength(2) // correct + the single distinct distractor
+    expect(choices.filter((c) => c.correct)).toHaveLength(1)
+    expect(choices.find((c) => !c.correct)?.text).toBe('いらっしゃいませ。')
   })
 })
 
