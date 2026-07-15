@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useGSAP } from '@gsap/react'
 import type { Level, SceneTemplate, VocabItem } from '@hikkoshi/schemas'
 import { loadLevels, type Content } from '../content/packs'
 import type { Choice } from '../review/choices'
 import { EnterOnMount } from '../motion/EnterOnMount'
 import { useFlipLanding } from '../motion/useFlipLanding'
+import { ambientDrift, enterTimeline, gentleSway } from '../motion/timelines'
 import { useScene } from '../scenes/useScene'
 import { ChoiceCard, SpeakButton, TypedCard } from './cards'
+import konbiniPhoto from '../assets/photos/konbini-heartin.webp'
+import transitPhoto from '../assets/photos/transit-mikunigaoka.webp'
+import './photo.css'
 import './scene.css'
 
 /** Seconds a `speed` beat allows before the register "beeps" and it auto-fails. */
@@ -56,10 +61,12 @@ export function SpeedTimer({ seconds, stopped, onTimeout }: { seconds: number; s
 function SpeedBeat({
   item,
   choices,
+  question,
   onGrade,
 }: {
   item: VocabItem
   choices: Choice[]
+  question: string
   onGrade: (o: 'pass' | 'fail' | 'partial') => void
 }) {
   const [picked, setPicked] = useState(false)
@@ -72,7 +79,7 @@ function SpeedBeat({
       <ChoiceCard
         kind="Errand · quick!"
         prompt={<span className="jp-lg">{item.expression}</span>}
-        question="Read it before the register beeps."
+        question={question}
         choices={choices}
         onGrade={onGrade}
         onPick={() => setPicked(true)}
@@ -81,122 +88,71 @@ function SpeedBeat({
   )
 }
 
-/** Product colors for the receding shelf rows — muted, warm, never neon (cozy-game palette). */
-const SHELF_HUES = ['#c98a5b', '#5b8f7a', '#c2a45c', '#7a8fae', '#b5715a', '#8a9c6a']
+/**
+ * The scene stage (D-026): a real photograph of the place — duotone-washed into the app's
+ * aizome world, breathing via Ken Burns — with the hand-drawn vector story layer swaying on
+ * top (a noren valance for the konbini, an ekimeihyō sign for the platform). "Photo is the
+ * world, vector is the story." A speed beat adds an urgency vignette (CSS, calm under
+ * reduced motion).
+ */
+const STAGE_PHOTO: Record<SceneTemplate['sceneKind'], { src: string; label: string }> = {
+  konbini: { src: konbiniPhoto, label: 'A convenience-store entrance in Japan, glowing in a station concourse' },
+  transit: { src: transitPhoto, label: 'A local train arriving at a Japanese station platform' },
+}
 
-function ShelfRow({ y, count, scale, opacity }: { y: number; count: number; scale: number; opacity: number }) {
-  const w = 340 / count
+function NorenAccent() {
   return (
-    <g opacity={opacity}>
-      {Array.from({ length: count }, (_, i) => (
-        <rect
-          key={i}
-          x={30 + i * (w + 4)}
-          y={y}
-          width={w * 0.85}
-          height={22 * scale}
-          rx={3}
-          fill={SHELF_HUES[i % SHELF_HUES.length]}
-        />
+    <svg className="scene-accent scene-accent-sway" viewBox="0 0 120 46" aria-hidden="true">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <rect key={i} x={i * 24.5} y="0" width="22" height={i === 2 ? 44 : 38} rx="2" fill="var(--accent-2)" opacity="0.94" />
       ))}
-    </g>
+      <text x="60" y="30" textAnchor="middle" fontSize="15" fill="var(--paper)" fontWeight="700">
+        店
+      </text>
+    </svg>
   )
 }
 
-/** A hand-authored flat-vector konbini counter — the scene's "juice," not a stock photo. */
-function KonbiniBackdrop() {
+function EkimeihyoAccent() {
   return (
-    <div className="scene-backdrop">
-      <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Konbini checkout counter">
-        <defs>
-          <linearGradient id="sceneSky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--paper)" />
-            <stop offset="100%" stopColor="var(--accent-2)" stopOpacity="0.18" />
-          </linearGradient>
-        </defs>
-        <rect x="0" y="0" width="400" height="200" fill="url(#sceneSky)" />
+    <svg className="scene-accent scene-accent-sway scene-accent-right" viewBox="0 0 96 64" aria-hidden="true">
+      <rect x="14" y="0" width="4" height="16" fill="var(--muted)" />
+      <rect x="78" y="0" width="4" height="16" fill="var(--muted)" />
+      <rect x="4" y="14" width="88" height="38" rx="5" fill="var(--card)" stroke="var(--line)" />
+      <text x="48" y="39" textAnchor="middle" fontSize="16" fill="var(--ink)" fontWeight="700">
+        駅
+      </text>
+      <rect x="4" y="44" width="88" height="8" rx="3" fill="var(--accent-2)" />
+    </svg>
+  )
+}
 
-        {/* Noren banner hanging above the shelves. */}
-        <g>
-          <rect x="16" y="10" width="46" height="30" rx="2" fill="var(--accent-2)" />
-          {[0, 1, 2, 3].map((i) => (
-            <rect key={i} x={16 + i * 11.5} y="38" width="9" height="10" fill="var(--accent-2)" />
-          ))}
-          <text x="39" y="31" textAnchor="middle" fontSize="16" fill="var(--paper)" fontWeight="700">
-            店
-          </text>
-        </g>
-
-        {/* Receding shelves — depth via shrinking scale + rising opacity toward the front. */}
-        <ShelfRow y={44} count={7} scale={0.7} opacity={0.55} />
-        <ShelfRow y={70} count={6} scale={0.85} opacity={0.75} />
-        <ShelfRow y={98} count={5} scale={1} opacity={0.9} />
-
-        {/* Abstract clerk — geometric, not a face: a considered flat shape, not an uncanny render. */}
-        <g opacity="0.9">
-          <rect x="318" y="70" width="34" height="54" rx="12" fill="var(--accent-2)" />
-          <circle cx="335" cy="60" r="15" fill="var(--wood)" />
-        </g>
-
-        {/* Counter, bevelled. */}
-        <path d="M0,132 L400,132 L400,200 L0,200 Z" fill="var(--wood-dark)" />
-        <path d="M0,132 L400,132 L400,144 L0,144 Z" fill="var(--wood)" />
-
-        {/* Register on the counter. */}
-        <rect x="250" y="106" width="52" height="30" rx="4" fill="var(--card)" stroke="var(--line)" />
-        <circle cx="292" cy="116" r="3" fill="var(--accent)" />
-      </svg>
+function ScenePhotoStage({ kind, urgent }: { kind: SceneTemplate['sceneKind']; urgent: boolean }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useGSAP(
+    () => {
+      if (!ref.current) return
+      enterTimeline(ref.current)
+      const img = ref.current.querySelector('img')
+      if (img) ambientDrift(img)
+      const sway = ref.current.querySelector('.scene-accent-sway')
+      if (sway) gentleSway(sway)
+    },
+    { scope: ref },
+  )
+  const photo = STAGE_PHOTO[kind]
+  return (
+    <div className={`photo-band scene-photo${urgent ? ' urgent' : ''}`} ref={ref} role="img" aria-label={photo.label}>
+      <img src={photo.src} alt="" />
+      {kind === 'konbini' ? <NorenAccent /> : <EkimeihyoAccent />}
     </div>
   )
 }
 
-/** A station platform in the same flat-vector language (D-024): ekimeihyō sign, warning strip,
- *  waiting train. Same palette tokens as the konbini so dark mode stays correct automatically. */
-function TransitBackdrop() {
-  return (
-    <div className="scene-backdrop">
-      <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Station platform">
-        <defs>
-          <linearGradient id="stationSky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--paper)" />
-            <stop offset="100%" stopColor="var(--accent-2)" stopOpacity="0.14" />
-          </linearGradient>
-        </defs>
-        <rect x="0" y="0" width="400" height="200" fill="url(#stationSky)" />
-
-        {/* The train, waiting: indigo body, paper windows, a hinomaru-red stripe. */}
-        <g>
-          <rect x="118" y="52" width="282" height="76" rx="10" fill="var(--accent-2)" />
-          <rect x="118" y="104" width="282" height="8" fill="var(--accent)" />
-          {[0, 1, 2, 3, 4].map((i) => (
-            <rect key={i} x={136 + i * 54} y="64" width="36" height="26" rx="4" fill="var(--paper)" opacity="0.92" />
-          ))}
-          {/* Door seam + headlight */}
-          <rect x="284" y="60" width="3" height="62" fill="var(--paper)" opacity="0.5" />
-          <circle cx="392" cy="120" r="4" fill="var(--paper)" opacity="0.9" />
-        </g>
-
-        {/* Ekimeihyō station sign on its posts (white board, indigo band). */}
-        <g>
-          <rect x="20" y="26" width="86" height="40" rx="5" fill="var(--card)" stroke="var(--line)" />
-          <text x="63" y="52" textAnchor="middle" fontSize="17" fill="var(--ink)" fontWeight="700">
-            駅
-          </text>
-          <rect x="20" y="58" width="86" height="8" rx="3" fill="var(--accent-2)" />
-          <rect x="30" y="66" width="4" height="66" fill="var(--muted)" />
-          <rect x="92" y="66" width="4" height="66" fill="var(--muted)" />
-        </g>
-
-        {/* Platform slab + the yellow warning strip the announcements point at. */}
-        <path d="M0,138 L400,138 L400,200 L0,200 Z" fill="var(--wood-dark)" />
-        <path d="M0,138 L400,138 L400,146 L0,146 Z" fill="var(--wood)" />
-        <rect x="0" y="146" width="400" height="8" fill="#c2a45c" />
-        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-          <rect key={i} x={8 + i * 50} y="147.5" width="26" height="5" rx="1" fill="var(--wood-dark)" opacity="0.35" />
-        ))}
-      </svg>
-    </div>
-  )
+/** The speed beat's ticking-clock framing, per world. */
+const SPEED_QUESTION: Record<SceneTemplate['sceneKind'], string> = {
+  konbini: 'Read it before the register beeps.',
+  transit: 'Read it before the doors close.',
 }
 
 /** Who's speaking, per scene kind — a station's lines are announcements, not a clerk. */
@@ -301,7 +257,7 @@ function ScenePlayer({
         </span>
       </div>
 
-      {scene.sceneKind === "transit" ? <TransitBackdrop /> : <KonbiniBackdrop />}
+      <ScenePhotoStage kind={scene.sceneKind} urgent={api.beat?.render === 'mc' && api.beat.timed} />
 
       <EnterOnMount key={api.stepIndex} className="scene-stage">
         {step?.kind === 'narration' && (
@@ -345,7 +301,7 @@ function ScenePlayer({
                 />
               ) : beat.timed ? (
                 // speed: timed recognition — decode the word before the countdown runs out.
-                <SpeedBeat item={beat.item} choices={beat.choices} onGrade={api.grade} />
+                <SpeedBeat item={beat.item} choices={beat.choices} question={SPEED_QUESTION[scene.sceneKind]} onGrade={api.grade} />
               ) : (
                 // recognize (JP cue → meaning) / recall (meaning cue → JP word, uncued).
                 <ChoiceCard

@@ -28,7 +28,7 @@
   pointer-events: none;
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--accent-2) 26%, transparent) 0%, transparent 42%),
-    linear-gradient(0deg, color-mix(in srgb, var(--ink) 34%, transparent) 0%, transparent 46%),
+    linear-gradient(0deg, color-mix(in srgb, var(--ink) 27%, transparent) 0%, transparent 46%),
     color-mix(in srgb, var(--accent-2) 10%, transparent);
 }
 

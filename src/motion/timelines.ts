@@ -73,6 +73,16 @@ export function ambientDrift(target: gsap.TweenTarget): gsap.core.Tween {
   )
 }
 
+/** A hanging-object sway (noren, station sign) — slow, small, forever; still under reduced motion. */
+export function gentleSway(target: gsap.TweenTarget): gsap.core.Tween {
+  if (isReducedMotion()) return gsap.to(target, { rotation: 0, duration: 0 })
+  return gsap.fromTo(
+    target,
+    { rotation: -1.3, transformOrigin: 'top center' },
+    { rotation: 1.3, transformOrigin: 'top center', duration: 4.6, ease: 'sine.inOut', yoyo: true, repeat: -1 },
+  )
+}
+
 /** A celebratory pop for the life-stage-up moment — bouncy elastic settle. */
 export function celebrate(target: gsap.TweenTarget): gsap.core.Tween {
   const reduced = isReducedMotion()

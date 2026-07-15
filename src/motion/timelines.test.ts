@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ambientDrift, celebrate, enterTimeline, exitTimeline, pulsePass, shakeFail, staggerIn } from './timelines'
+import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, pulsePass, shakeFail, staggerIn } from './timelines'
 
 function div(): HTMLDivElement {
   return document.createElement('div')
@@ -46,5 +46,11 @@ describe('motion timeline factories (reduced-motion branch)', () => {
     const tw = ambientDrift(div())
     expect(tw.duration()).toBe(0)
     expect(tw.vars.repeat).toBeUndefined() // no infinite loop is ever created under reduced motion
+  })
+
+  it('gentleSway keeps hanging accents still', () => {
+    const tw = gentleSway(div())
+    expect(tw.duration()).toBe(0)
+    expect(tw.vars.repeat).toBeUndefined()
   })
 })
