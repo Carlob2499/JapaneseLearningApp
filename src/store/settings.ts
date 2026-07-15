@@ -6,6 +6,13 @@ const KEY = 'hikkoshi:levels'
 export const ALL_LEVELS: readonly Level[] = ['L1', 'L2', 'L3', 'L4', 'L5']
 const DEFAULT_LEVELS: Level[] = ['L1']
 
+/** The active-level set for a placement result: L1 up to and including `level`, or the default
+ *  (L1) for an unplaced learner (`L0` / anything off the L1–L5 scale). */
+export function levelsUpTo(level: Level): Level[] {
+  const i = ALL_LEVELS.indexOf(level)
+  return i < 0 ? [...DEFAULT_LEVELS] : ALL_LEVELS.slice(0, i + 1)
+}
+
 /** The levels the learner has enabled, in canonical order. Always returns at least one. */
 export function getActiveLevels(): Level[] {
   try {

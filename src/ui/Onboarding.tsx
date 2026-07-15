@@ -1,9 +1,15 @@
 import { APP_NAME, APP_NAME_JA } from '../lib/appMeta'
 import './study.css'
 
-/** First-run screen, shown once (gated by `settings.ts`'s `onboarded` flag). Deliberately
- *  narrow: no level-picking or placement here — that's build-order item 7, a later phase. */
-export default function Onboarding({ onContinue }: { onContinue: () => void }) {
+/** First-run screen, shown once (gated by `settings.ts`'s `onboarded` flag). Forks into a beginner
+ *  start or the placement probe (E5 / D-021) — build-order item 7, now landed. */
+export default function Onboarding({
+  onBeginner,
+  onPlacement,
+}: {
+  onBeginner: () => void
+  onPlacement: () => void
+}) {
   return (
     <main className="shell">
       <header className="masthead">
@@ -21,12 +27,18 @@ export default function Onboarding({ onContinue }: { onContinue: () => void }) {
           in an actual exchange. Keep coming back, and your progress narrates itself back to you as
           a life stage: tourist, resident, and further in.
         </p>
+        <p>Studied some Japanese already? A few quick questions can place you past the basics.</p>
+        <div className="onboarding-choices">
+          <button className="start-btn" onClick={onPlacement}>
+            I've studied before
+          </button>
+          <button className="ghost-btn" onClick={onBeginner}>
+            I'm new — start at the beginning
+          </button>
+        </div>
         <p className="fineprint">
           Progress is stored on this device only. Levels beyond N5 download once, then work offline.
         </p>
-        <button className="start-btn" onClick={onContinue}>
-          Continue
-        </button>
       </section>
     </main>
   )

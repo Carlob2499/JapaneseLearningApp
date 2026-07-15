@@ -31,6 +31,13 @@ export async function putItemState(state: ItemState): Promise<void> {
   await (await db()).put('itemStates', state)
 }
 
+/** Write many item states in one transaction — the placement probe seeds a level's worth at once. */
+export async function putItemStates(states: readonly ItemState[]): Promise<void> {
+  if (states.length === 0) return
+  const tx = (await db()).transaction('itemStates', 'readwrite')
+  await Promise.all([...states.map((s) => tx.store.put(s)), tx.done])
+}
+
 export async function appendJournal(entry: JournalEntry): Promise<void> {
   await (await db()).add('journal', entry)
 }

@@ -26,7 +26,9 @@ describe('App', () => {
   it('gates a fresh profile behind onboarding, before any Home content shows', () => {
     setOnboarded(false)
     render(<App />)
-    expect(screen.getByRole('button', { name: /continue/i })).toBeTruthy()
+    // The first-run fork: place, or start at the beginning — never straight to Home.
+    expect(screen.getByRole('button', { name: /studied before/i })).toBeTruthy()
+    expect(screen.getByRole('button', { name: /start at the beginning/i })).toBeTruthy()
     expect(screen.queryByRole('button', { name: /start today's review/i })).toBeNull()
   })
 })

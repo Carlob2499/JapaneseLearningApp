@@ -2,13 +2,14 @@ import { useState, type ReactNode, type RefObject } from 'react'
 import type { Level } from '@hikkoshi/schemas'
 import Home from './ui/Home'
 import Onboarding from './ui/Onboarding'
+import PlacementProbe from './ui/PlacementProbe'
 import ReviewSession from './ui/ReviewSession'
 import SceneView from './ui/SceneView'
 import { useViewTransition } from './motion/useViewTransition'
-import { getActiveLevels, getOnboarded, setActiveLevels, setOnboarded } from './store/settings'
+import { getActiveLevels, getOnboarded, levelsUpTo, setActiveLevels, setOnboarded } from './store/settings'
 import './App.css'
 
-type View = 'onboarding' | 'home' | 'review' | 'scene'
+type View = 'onboarding' | 'placement' | 'home' | 'review' | 'scene'
 
 export default function App() {
   const { view, containerRef, navigate } = useViewTransition<View>(() =>
@@ -24,16 +25,23 @@ export default function App() {
     })
   }
 
+  function finishOnboarding(placed: Level) {
+    const next = levelsUpTo(placed) // L1 for a beginner (L0); L1…placed otherwise
+    setLevels(setActiveLevels(next))
+    setOnboarded(true)
+    navigate('home')
+  }
+
   let content: ReactNode
   if (view === 'onboarding') {
     content = (
       <Onboarding
-        onContinue={() => {
-          setOnboarded(true)
-          navigate('home')
-        }}
+        onBeginner={() => finishOnboarding('L0')}
+        onPlacement={() => navigate('placement')}
       />
     )
+  } else if (view === 'placement') {
+    content = <PlacementProbe onDone={finishOnboarding} />
   } else if (view === 'review') {
     content = <ReviewSession levels={levels} onHome={() => navigate('home')} />
   } else if (view === 'scene' && sceneId) {

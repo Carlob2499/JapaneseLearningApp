@@ -382,6 +382,30 @@
   background-image: var(--pattern-asanoha);
   background-size: 64px 64px;
 }
+.onboarding-choices {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Placement probe (D-021) — reuses the card/choice visual language; just a little chrome. */
+.placement-progress {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.placement-stage {
+  display: grid;
+  justify-items: center;
+}
+.placement-skip {
+  justify-self: center;
+}
+
 .life-stage-badge {
   font-family: var(--font-display);
   margin: 0;
