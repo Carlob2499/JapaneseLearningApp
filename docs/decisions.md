@@ -617,3 +617,34 @@ Deferred, not forgotten: new scene kinds / modules M3–M10 (transit, city hall,
 phrases; the E4 L4–L5 staff-side keigo / error-noticing beats (Phase 4 deferral); E6 textbook-mode chapter
 seeding; E7 progress export/import UI; making the probe a validated IRT instrument.
 *Source: Session 16 build, 2026-07-15; approved plan (user picked placement over a new scene) + Playwright verification.*
+
+### D-022: Progress export/import — the brief's E7 portability, no backend
+The brief requires progress to be "a single exportable JSON (SRS states, scene history, settings hash) via
+file download/upload — no backend," and the `ProgressExport` schema (`{schemaVersion, exportedAt,
+itemStates, journalTail}`) has existed unused since Session 6. This lands it as a small, self-contained
+utility — chosen as a quick, low-risk win after Phase 5 (user: "as much as possible before the reset …
+quick and easy … no errors").
+- **Export** (`buildProgressExport`): every item state plus a bounded journal tail (`JOURNAL_TAIL_MAX =
+  2000`, comfortably covering the 30-day leech window while keeping a heavy user's file bounded). Pure —
+  `exportedAt` is injected, not read — and downloaded client-side (Blob + anchor, date-stamped filename).
+  Nothing is uploaded (D-001).
+- **Import** (`parseProgressExport` = `ProgressExport.parse`): Zod validation is the **trust boundary** —
+  a malformed file (wrong shape, out-of-range stage, junk types) throws before any write, so a bad import
+  corrupts nothing and the UI shows a clean error. On success it **merges**: `putItemStates` overwrites by
+  id, `appendJournalEntries` appends. Merge (not replace) is deliberate — restoring is never destructive
+  to progress the backup doesn't mention, and there's no way to lose data to a partial file.
+- **Honest scope:** the snapshot carries *learning* progress (item states + a journal tail), not settings —
+  active levels, the onboarded flag, and autoplay live in localStorage and aren't in `ProgressExport`. So a
+  cross-device restore brings your SRS state and life-stage, but the level picker is one tap to re-set
+  (the imported higher-level states only surface once those levels are active). Re-importing your own
+  backup appends its journal tail again; harmless (only leech detection reads the journal, and it windows
+  to 30 days), but noted. A settings-inclusive snapshot, a journal de-dup on import, and an explicit
+  "replace everything" mode are deferred.
+- **Placement:** a `ProgressTransfer` block at the foot of the existing About panel — the app's "meta"
+  home — so Home's card layout is untouched; import offers "Reload to apply" (the read-once hooks pick up
+  restored state on reload) rather than a live in-place refresh.
+Verified: pure round-trip / tail-bound / invalid-rejection unit tests (+6, 217 total); typecheck/lint/build
+clean. Live-browser: a placed profile (12,969 states, life-stage 5) exported to a date-stamped file, wiped
+to Tourist/0, then restored to 12,969 states and life-stage 5 (round-trip exact); an invalid file shows a
+clean error and writes nothing (states unchanged); zero console errors.
+*Source: Session 16 build, 2026-07-15; user-requested quick win + Playwright round-trip verification.*
