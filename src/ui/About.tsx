@@ -1,3 +1,5 @@
+import ProgressTransfer from './ProgressTransfer'
+
 const REPO_URL = 'https://github.com/Carlob2499/JapaneseLearningApp'
 
 /** In-app disclosure + attribution required by D-002 / D-005. */
@@ -60,6 +62,7 @@ export default function About() {
           </a>
           .
         </p>
+        <ProgressTransfer />
       </div>
     </details>
   )

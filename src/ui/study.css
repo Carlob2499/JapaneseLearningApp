@@ -515,3 +515,33 @@
 .about a {
   color: var(--accent);
 }
+
+/* Progress export/import (D-022) — a small utility block at the foot of the About panel. */
+.progress-transfer {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+.progress-transfer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.progress-transfer-status.ok {
+  color: var(--ok);
+  margin: 0;
+}
+.progress-transfer-status.error {
+  color: var(--accent);
+  margin: 0;
+}
+.link-btn {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
