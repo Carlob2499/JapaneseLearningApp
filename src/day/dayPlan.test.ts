@@ -34,7 +34,7 @@ describe('buildDayPlan', () => {
       history: new Map(),
       todayIndex: 0,
     })
-    expect(plan.tasks).toEqual([{ kind: 'errand', sceneId: 's1', title: SCENE_KIND_TITLE.konbini }])
+    expect(plan.tasks).toEqual([{ kind: 'errand', sceneId: 's1', sceneKind: 'konbini', title: SCENE_KIND_TITLE.konbini }])
   })
 
   it('reports the real due/intro counts on the review task verbatim, never fabricated', () => {
@@ -51,7 +51,7 @@ describe('buildDayPlan', () => {
       history,
       todayIndex: 5, // zero days since last shown — the stalest-possible sort key, still included
     })
-    expect(plan.tasks).toEqual([{ kind: 'errand', sceneId: 's1', title: SCENE_KIND_TITLE.konbini }])
+    expect(plan.tasks).toEqual([{ kind: 'errand', sceneId: 's1', sceneKind: 'konbini', title: SCENE_KIND_TITLE.konbini }])
   })
 
   it('sorts candidates stalest-first, with never-shown ahead of any previously-shown scene', () => {

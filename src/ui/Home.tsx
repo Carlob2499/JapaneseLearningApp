@@ -1,15 +1,52 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import { Flip } from 'gsap/Flip'
-import type { Level } from '@hikkoshi/schemas'
+import type { Level, SceneTemplate } from '@hikkoshi/schemas'
 import type { DiaryEntry } from '../day/diary'
 import { useToday } from '../day/useToday'
 import { APP_NAME, APP_NAME_JA, JLPT_LABEL, levelItemCount } from '../lib/appMeta'
+import { timeBucket } from '../lib/timeOfDay'
 import { stash } from '../motion/flipHandoff'
-import { celebrate } from '../motion/timelines'
+import { ambientDrift, celebrate } from '../motion/timelines'
 import { ALL_LEVELS } from '../store/settings'
 import About from './About'
+import streetPhoto from '../assets/photos/street-yanaka.webp'
+import konbiniPhoto from '../assets/photos/konbini-heartin.webp'
+import transitPhoto from '../assets/photos/transit-mikunigaoka.webp'
+import './photo.css'
 import './study.css'
+
+/** The tile image behind each errand on Today (D-026) — the same real place you'll walk into. */
+const ERRAND_PHOTO: Record<SceneTemplate['sceneKind'], string> = {
+  konbini: konbiniPhoto,
+  transit: transitPhoto,
+}
+
+/** The neighborhood hero (D-026): Yanaka Ginza from the Yuyake Dandan steps, washed to the
+ *  learner's actual hour (dark scheme always renders night) and breathing via Ken Burns. */
+function HomeHero() {
+  const [tod] = useState(() => timeBucket(new Date().getHours()))
+  const heroRef = useRef<HTMLElement>(null)
+  useGSAP(
+    () => {
+      const img = heroRef.current?.querySelector('img')
+      if (img) ambientDrift(img)
+    },
+    { scope: heroRef },
+  )
+  return (
+    <header className={`photo-band home-hero tod-${tod}`} ref={heroRef}>
+      <img src={streetPhoto} alt="Yanaka Ginza shopping street, Tokyo — the neighborhood you're moving into" />
+      <div className="home-hero-text">
+        <span className="mark" aria-hidden="true">
+          {APP_NAME_JA}
+        </span>
+        <h1>{APP_NAME}</h1>
+        <p className="tagline">A life in Japan, one day at a time — N5 through N1.</p>
+      </div>
+    </header>
+  )
+}
 
 /**
  * Five hand-written framing lines (D-019) — stage 5's name is already a full sentence ("You
@@ -108,13 +145,7 @@ export default function Home({
 
   return (
     <main className="shell">
-      <header className="masthead">
-        <span className="mark" aria-hidden="true">
-          {APP_NAME_JA}
-        </span>
-        <h1>{APP_NAME}</h1>
-        <p className="tagline">A life in Japan, one day at a time — N5 through N1.</p>
-      </header>
+      <HomeHero />
 
       <section className="card today-card">
         <h2>Today</h2>
@@ -149,13 +180,14 @@ export default function Home({
                   ) : (
                     <div className="today-task" key={task.sceneId}>
                       <button
-                        className="errand-btn"
+                        className="errand-btn errand-tile"
                         onClick={(e) => {
                           stash('home-to-scene', Flip.getState(e.currentTarget))
                           onStartScene(task.sceneId)
                         }}
                       >
-                        {task.title}
+                        <img src={ERRAND_PHOTO[task.sceneKind]} alt="" />
+                        <span className="errand-tile-title">{task.title}</span>
                       </button>
                     </div>
                   ),

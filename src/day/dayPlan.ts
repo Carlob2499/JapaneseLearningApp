@@ -12,7 +12,7 @@ export const SCENE_KIND_TITLE: Record<SceneTemplate['sceneKind'], string> = {
 
 export type DayTask =
   | { kind: 'review'; dueCount: number; introCount: number }
-  | { kind: 'errand'; sceneId: string; title: string }
+  | { kind: 'errand'; sceneId: string; sceneKind: SceneTemplate['sceneKind']; title: string }
 
 export interface DayPlan {
   tasks: DayTask[]
@@ -66,7 +66,7 @@ export function buildDayPlan(input: BuildDayPlanInput): DayPlan {
   )
   for (const scene of sorted) {
     if (tasks.length >= cap) break
-    tasks.push({ kind: 'errand', sceneId: scene.id, title: SCENE_KIND_TITLE[scene.sceneKind] })
+    tasks.push({ kind: 'errand', sceneId: scene.id, sceneKind: scene.sceneKind, title: SCENE_KIND_TITLE[scene.sceneKind] })
   }
   return { tasks }
 }

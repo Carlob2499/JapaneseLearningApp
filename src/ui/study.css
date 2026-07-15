@@ -407,6 +407,23 @@
   max-width: 320px;
 }
 
+/* The arrival band (D-026): the window-seat view before the first choice. */
+.onboarding-arrival {
+  aspect-ratio: 5 / 2;
+  max-height: 170px;
+  width: 100%;
+}
+.arrival-caption {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  bottom: 10px;
+  font-family: var(--font-celebrate);
+  font-size: 14px;
+  color: #fdfaf3;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
+}
+
 /* Placement probe (D-021) — reuses the card/choice visual language; just a little chrome. */
 .placement-progress {
   margin: 0;
@@ -462,6 +479,130 @@
   gap: 14px;
   width: 100%;
   justify-items: center;
+}
+
+/* Errand photo tiles (D-026): the real place you're about to walk into, as the door itself.
+   Overrides the plain .errand-btn look; keeps the same element + Flip handoff semantics. */
+.errand-btn.errand-tile {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* Definite width: every child is position:absolute, so an auto width would collapse to zero
+     under the parent grid's justify-items: center. */
+  width: clamp(260px, 82vw, 340px);
+  aspect-ratio: 3 / 1;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.14);
+}
+.errand-tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(0.98);
+  transition: transform 0.35s ease;
+}
+.errand-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(0deg, color-mix(in srgb, var(--ink) 58%, transparent) 0%, transparent 62%),
+    color-mix(in srgb, var(--accent-2) 14%, transparent);
+}
+.errand-tile-title {
+  position: absolute;
+  z-index: 2;
+  left: 14px;
+  bottom: 10px;
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 15px;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+}
+.errand-btn.errand-tile:hover {
+  background: var(--card);
+}
+.errand-btn.errand-tile:hover img {
+  transform: scale(1.04);
+}
+@media (prefers-reduced-motion: reduce) {
+  .errand-tile img {
+    transition: none;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .errand-tile img {
+    filter: saturate(0.7) brightness(0.85);
+  }
+  /* dark scheme's --paper is dark washi — photo-overlay text switches to the near-white ink */
+  .errand-tile-title {
+    color: var(--ink);
+  }
+}
+
+/* The neighborhood hero (D-026). A dedicated scrim guarantees the wordmark reads over any
+   photo region, in every time-of-day wash. */
+.home-hero {
+  aspect-ratio: 16 / 10;
+  max-height: 250px;
+  width: 100%;
+}
+.home-hero::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 62%;
+  pointer-events: none;
+  background: linear-gradient(0deg, color-mix(in srgb, #0b0a12 72%, transparent) 0%, transparent 100%);
+}
+.home-hero-text {
+  position: absolute;
+  z-index: 2;
+  left: 18px;
+  right: 18px;
+  bottom: 12px;
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+  text-align: left;
+}
+.home-hero-text .mark {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: #ff8fa3;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 0.45);
+}
+.home-hero-text h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--paper);
+  text-shadow: 0 1px 4px rgb(0 0 0 / 0.5);
+}
+.home-hero-text .tagline {
+  margin: 0;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--paper) 88%, transparent);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+}
+@media (prefers-color-scheme: dark) {
+  .home-hero-text .mark {
+    color: var(--accent);
+  }
+  .home-hero-text h1,
+  .home-hero-text .tagline {
+    color: var(--ink); /* dark scheme's --ink is near-white */
+  }
 }
 .today-task {
   display: grid;

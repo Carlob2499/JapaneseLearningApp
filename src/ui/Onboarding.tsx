@@ -1,4 +1,6 @@
 import { APP_NAME, APP_NAME_JA } from '../lib/appMeta'
+import arrivalPhoto from '../assets/photos/arrival-clouds.webp'
+import './photo.css'
 import './study.css'
 
 /** First-run screen, shown once (gated by `settings.ts`'s `onboarded` flag). Forks into a beginner
@@ -19,6 +21,12 @@ export default function Onboarding({
         <h1>{APP_NAME}</h1>
         <p className="tagline">A life in Japan, one day at a time — N5 through N1.</p>
       </header>
+
+      {/* The arrival (D-026): your flight is on approach — the move starts at the window seat. */}
+      <div className="photo-band onboarding-arrival">
+        <img src={arrivalPhoto} alt="An airplane wing above the clouds — your flight on approach" />
+        <span className="arrival-caption">着陸まであと少し · almost there</span>
+      </div>
 
       <section className="card onboarding-card">
         <p>
