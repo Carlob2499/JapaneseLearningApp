@@ -19,6 +19,13 @@ export default function About() {
           pronunciation where your device has a Japanese voice. Progress is stored on this device only.
         </p>
         <p>
+          <strong>Kana are the front door.</strong> A brand-new profile starts with the syllabaries:
+          hiragana, then katakana, introduced row by row in chart order, with stroke animations from
+          KanjiVG and romaji per the Hepburn convention (typing a common variant like <em>si</em> or{' '}
+          <em>tu</em> is never marked wrong). Combined characters like きゃ aren't drilled separately
+          yet — they're built from the rows you learn here.
+        </p>
+        <p>
           <strong>Placement is an estimate, not an exam.</strong> If you've studied before, a short
           adaptive quiz places you past the basics by marking words up to your level as “probably known.”
           The app then confirms each one the first time it comes up in review and quietly drops any it had

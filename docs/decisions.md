@@ -648,3 +648,44 @@ clean. Live-browser: a placed profile (12,969 states, life-stage 5) exported to 
 to Tourist/0, then restored to 12,969 states and life-stage 5 (round-trip exact); an invalid file shows a
 clean error and writes nothing (states unchanged); zero console errors.
 *Source: Session 16 build, 2026-07-15; user-requested quick win + Playwright round-trip verification.*
+
+### D-023: L0 kana foundation — the missing beginning, dataset-verified
+The Immersion Pass, slice 1 (user directive: one expert session to "encapsulate language-learning from
+beginning to end," full creative authority; confirmed scope "full journey, ordered"). The `L0` level had
+existed in the schema since Session 4, populated by nothing — the app silently assumed every learner
+could already read kana. Now the beginning exists, without bending D-002:
+- **Content is dataset-verified + curated-cited.** The 142 single-glyph kana (46 base + 25 voiced per
+  script) get their characters and stroke data from **KanjiVG** — already licensed, already in
+  sources.lock, fetched per character from the same pinned tag/cache as kanji (all 142 resolved; a
+  partial syllabary fails the build loudly). Romaji follows the **Hepburn** convention with per-item
+  acceptance alternates (shi/si, chi/ti, tsu/tu, fu/hu, ji/zi, ji/di, zu/du, wo/o, n/nn) so typed
+  grading can never fail a correct learner on a spelling variant. The kana pack attests
+  `curated-cited`; its L0 strokes sibling attests `dataset-verified`. Yōon combos (きゃ…) and small
+  variants are deferred — two-glyph / no standalone romaji — and disclosed in About.
+- **The pack order IS the curriculum.** Kana emit in gojūon row order, hiragana fully then katakana,
+  and `buildPool` places all kana ahead of the kind round-robin — so the intro budget introduces them
+  **blocked, row by row** (E3's "block what's new," and the sequencing kana-pedagogy references
+  recommend; researched: Tofugu's chart guidance, gojūon practice-sequence articles). A beginner's
+  first-ever card is あ; the second is い (live-verified).
+- **Retrieval ladder, kana-shaped**: recognition ("which sound?", distractors from other kana readings,
+  the item's own alternates excluded so a distractor can never also be correct) → **typed romaji**
+  (stages 2–5; a new raw mode on TypedCard — no kana IME conversion, case-folded match against Hepburn
+  + alternates; 🔊 speaks the character, not English romaji) → recall (KanaCard: romaji + the KanjiVG
+  stroke animation through the existing StrokeViewer). Kana skip production MC — typing the sound IS
+  their production. Script label (ひらがな/カタカナ) shows on first encounter.
+- **A fresh profile now starts at the true beginning**: default levels are `['L0','L1']` — kana intro
+  first (the L1 pool becomes readable as the syllabary lands). **Placement seeds kana too**: any real
+  placement (≥L1) marks the L0 syllabary provisionally known — the learner just answered kana-cued
+  recognition questions — with the confirm-or-drop mechanic (D-021) covering individual gaps.
+  `levelsUpTo` includes L0 in every result. Life stages are untouched (their walk is hardcoded L1→L5),
+  so "Tourist" remains the base — kana are the flight over, not a residence stage.
+- **Honest counts**: `levelItemCount` now counts studyable domains only (vocab/kanji/kana/grammar/
+  sentence) so the L0 chip reads 142, not a kana+strokes double-count — this also makes every other
+  level chip an honest "items you study" number.
+- **Test hardening**: one parallel-load `waitFor` flake surfaced in `useToday.test.ts` with the heavier
+  content set; its mode-ready waits got real headroom (10s), assertions unchanged, suite green 3×
+  consecutively (225 tests).
+Verified: 29 packs / 15,473 items validate green; live-browser beginner flow (あ first, gojūon order,
+`si` accepted for し, stroke animation on recall, L0 chip = 142), placement flow (13,111 states incl.
+142 provisional kana, all six chips), zero console errors.
+*Source: Session 17 (the Immersion Pass), 2026-07-15; researched kana pedagogy + Playwright verification.*
