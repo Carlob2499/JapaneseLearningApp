@@ -564,3 +564,56 @@ countdown both beats-the-clock (picking stops it) and auto-fails on timeout (adv
 the context beat discriminates the farewell line among real service lines; the receipt mixes drilled words
 with the context line — zero console errors.
 *Source: Session 15 build, 2026-07-14; approved plan + Playwright verification.*
+
+### D-021: Placement probe (E5) — a calibrated entry point across the existing multi-level content
+Roadmap build-order item 7 (`architecture.md §9`), explicitly deferred by `Onboarding.tsx`'s own comment
+until now. Completes the core engine's last unbuilt piece (E1 SRS ✓, E2 retrieval ladder ✓, E3
+interleaving ✓, E4 escalation ✓, **E5 placement ← this**, E8 honest limits ✓). Before this, every learner
+started at zero and ground up from L1; a mid-level entrant (finished Quartet I ≈ N3, say) had no way in.
+The user chose this over authoring a new scene kind — the art-heavy "modules" M3–M10 expansion stays a
+follow-on. Placement is a *scale* feature in its own right: it scales the learner's entry point across the
+15,189 items that already ship, rather than adding content.
+- **Honest scope, stated in-app (E5's own requirement):** the probe is **IRT-*informed*, not a validated
+  IRT instrument** — a difficulty-ordered adaptive staircase, disclosed as a quick estimate the app
+  refines through review, never as exam-grade placement (no validation data exists pre-launch).
+- **Adaptive staircase** (`src/placement/probe.ts`), 8 questions, starting mid-range at L2: a correct
+  answer steps the difficulty band up, a wrong one steps it down (clamped L1…L5). The estimate is the
+  **highest band ever answered correctly**, or **L0** (seed nothing, start at the beginning) if even L1
+  is missed. Deterministic given the item stream, so it unit-tests cleanly.
+- **Difficulty ordering** (`difficulty.ts`): recognition items per band, kanji before vocab, kanji ranked
+  by KANJIDIC2 `grade` then `freq` (both already on every kanji item) — the "kanji recognition → vocab →
+  grammar" ordering E5 specifies, trimmed to what an 8-item staircase can fairly sample (grammar/sentences
+  don't fit a quick recognition MC, so they're left to normal review). Choices reuse `buildChoices`
+  (D-002-safe — every option is verbatim dataset content).
+- **Seeding** (`seed.ts`): every reviewable item up to the placed level becomes a *provisionally known*
+  `ItemState` — the `provisional` flag that had existed unused since Session 6 — at stage 2, due spread
+  across 10 days so the confirm pass doesn't flood (the load-shaper's 60/session cap paces the rest). This
+  makes life-stage, the due queue, and module coverage reflect the placement at once. Bulk-written in one
+  IndexedDB transaction (`putItemStates`; ~15k rows for a top placement, ~1.5s, behind a "Settling you in…"
+  state).
+- **Provisional confirm/drop** (`srs.ts` `applyReview`, the "provisional fast-track" D-011 deferred): a
+  seeded item's first review is a confirmation test — pass/partial confirms it (clears the flag, advances
+  normally), fail disconfirms it (clears the flag, restarts as genuinely new: stage 0, due now, no lapse —
+  a bad placement guess isn't a real forgetting). Overshoot from a lucky probe answer therefore
+  self-corrects at review time; the honesty lives in that mechanic + the disclosure, not in false probe
+  precision.
+- **Level activation:** a placement of level N also sets the active-level set to L1…N (`levelsUpTo`), so
+  the seeded higher-level states actually enter review and life-stage rather than sitting inert behind the
+  L1-only default. The level picker still lets the learner adjust afterward.
+- **Onboarding fork, one-time via the existing `onboarded` gate** (no new flag needed): "I'm new — start
+  at the beginning" (→ L0, unchanged behaviour) or "I've studied before" → the probe. Skippable at any
+  point. If L2–L5 can't load (offline first run — higher levels are runtime-cached, not precached, per
+  D-012), the probe degrades to a "start at the beginning" card rather than trapping the learner.
+- **No celebration on placement** (correct by construction): `decideCelebration` treats the first-ever
+  life-stage read as baseline-establishing, so being *placed* at stage 5 sets the baseline silently —
+  celebration is reserved for a stage *earned* through play (D-019), not a starting point.
+Verified: pure staircase/difficulty/seed logic + provisional SRS handling are unit-tested (+17 tests, 211
+total); typecheck/lint/build clean; `pipeline:validate` a no-op pass-through (no content/schema-emit change
+— the `provisional` field already existed). Live-browser, both color schemes + reduced-motion: beginner →
+Tourist, L1 only, nothing seeded; all-correct → placed to life-stage 5 with all levels active and a full
+(load-shaper-capped 60) due queue; all-wrong → L0, stays Tourist; a provisional item failed on its first
+review drops back to genuine learning — zero console errors throughout.
+Deferred, not forgotten: new scene kinds / modules M3–M10 (transit, city hall, …) and their art + cited
+phrases; the E4 L4–L5 staff-side keigo / error-noticing beats (Phase 4 deferral); E6 textbook-mode chapter
+seeding; E7 progress export/import UI; making the probe a validated IRT instrument.
+*Source: Session 16 build, 2026-07-15; approved plan (user picked placement over a new scene) + Playwright verification.*

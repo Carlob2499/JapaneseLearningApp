@@ -17,6 +17,13 @@ export default function About() {
           pronunciation where your device has a Japanese voice. Progress is stored on this device only.
         </p>
         <p>
+          <strong>Placement is an estimate, not an exam.</strong> If you've studied before, a short
+          adaptive quiz places you past the basics by marking words up to your level as “probably known.”
+          The app then confirms each one the first time it comes up in review and quietly drops any it had
+          wrong — so an over-generous guess costs at most one easy review. It's a quick calibration, never
+          a graded score.
+        </p>
+        <p>
           <strong>Errands are the same items, in a real moment.</strong> The konbini checkout puts
           vocabulary you're already studying into an actual exchange with a clerk — the clerk's lines
           are documented real-world Japanese (cited to convenience-store-Japanese guides and a
