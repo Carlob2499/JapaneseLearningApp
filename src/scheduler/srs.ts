@@ -38,25 +38,36 @@ export function nudgeMultiplier(lastOutcomes: number): number {
 /**
  * Apply a graded review (architecture §5): pass +1, fail −2 (min 1) + lapse, partial holds.
  * The next interval is the ladder value scaled by the nudge (partial is a fixed 1-day hold).
+ *
+ * A placement-seeded item carries `provisional: true` (D-021): its first review is a confirmation
+ * test. A fail disconfirms the "already known" assumption and restarts it as a genuinely new item
+ * (stage 0, due now); a pass or partial confirms it. Either way the flag clears here, so every
+ * later review of that item takes the ordinary path below.
  */
 export function applyReview(state: ItemState, outcome: Outcome, now: number): ItemState {
   const lastOutcomes = ((state.lastOutcomes << 1) | (outcome === 'pass' ? 1 : 0)) & 0xffff
+
+  if (state.provisional && outcome === 'fail') {
+    return { ...state, provisional: false, stage: 0, due: now, lastOutcomes }
+  }
+  const confirmed = state.provisional ? { ...state, provisional: false } : state
+
   if (outcome === 'partial') {
-    return { ...state, due: now + DAY, lastOutcomes }
+    return { ...confirmed, due: now + DAY, lastOutcomes }
   }
   const nudge = nudgeMultiplier(lastOutcomes)
   if (outcome === 'fail') {
-    const stage = Math.max(1, state.stage - 2)
+    const stage = Math.max(1, confirmed.stage - 2)
     return {
-      ...state,
+      ...confirmed,
       stage,
       due: now + Math.round(STAGE_INTERVALS_MS[stage] * nudge),
-      lapses: state.lapses + 1,
+      lapses: confirmed.lapses + 1,
       lastOutcomes,
     }
   }
-  const stage = Math.min(MAX_STAGE, state.stage + 1)
-  return { ...state, stage, due: now + Math.round(STAGE_INTERVALS_MS[stage] * nudge), lastOutcomes }
+  const stage = Math.min(MAX_STAGE, confirmed.stage + 1)
+  return { ...confirmed, stage, due: now + Math.round(STAGE_INTERVALS_MS[stage] * nudge), lastOutcomes }
 }
 
 export const LEECH_THRESHOLD = 3

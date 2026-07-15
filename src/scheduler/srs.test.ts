@@ -76,6 +76,38 @@ describe('srs', () => {
     expect(s.due).toBe(NOW + DAY)
   })
 
+  it('confirms a provisional (placement-seeded) item on a pass: clears the flag, advances normally', () => {
+    const seed = { ...newState('a', NOW), stage: 2, provisional: true }
+    const s = applyReview(seed, 'pass', NOW)
+    expect(s.provisional).toBe(false)
+    expect(s.stage).toBe(3) // advanced like a normal known item
+    // A second review then behaves exactly like any non-provisional item.
+    const s2 = applyReview({ ...s, due: NOW }, 'pass', NOW)
+    expect(s2.provisional).toBe(false)
+    expect(s2.stage).toBe(4)
+  })
+
+  it('confirms a provisional item on a partial: clears the flag, one-day hold', () => {
+    const seed = { ...newState('a', NOW), stage: 2, provisional: true }
+    const s = applyReview(seed, 'partial', NOW)
+    expect(s.provisional).toBe(false)
+    expect(s.stage).toBe(2)
+    expect(s.due).toBe(NOW + DAY)
+  })
+
+  it('drops a provisional item on its first failure: restarts as genuinely new (stage 0, due now)', () => {
+    const seed = { ...newState('a', NOW), stage: 2, provisional: true }
+    const s = applyReview(seed, 'fail', NOW)
+    expect(s.provisional).toBe(false)
+    expect(s.stage).toBe(0) // not the normal fail's max(1, stage-2) — a full restart
+    expect(s.due).toBe(NOW)
+    expect(s.lapses).toBe(0) // a bad placement guess isn't a genuine lapse
+  })
+
+  it('newState is never provisional (only placement seeds set the flag)', () => {
+    expect(newState('a', NOW).provisional).toBeUndefined()
+  })
+
   it('flags a leech at 3 fails within 30 days, ignoring older fails', () => {
     const now = 100 * DAY
     const d = DAY
