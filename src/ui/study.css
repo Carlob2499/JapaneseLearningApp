@@ -162,6 +162,7 @@
   max-width: 340px;
 }
 .choice {
+  position: relative; /* anchors the maru mark pressed over the corner (D-026) */
   border: 1px solid var(--line);
   background: var(--bg);
   color: var(--ink);
@@ -230,6 +231,27 @@
 }
 .typed-feedback.wrong {
   color: #b3402f;
+}
+
+/* The grader's maru (D-026) — a vermillion ○ pressed beside a correct answer, the way a
+   Japanese teacher marks a right one. Straddles the choice button's corner; sits inline on
+   the typed-feedback line. */
+.maru-mark {
+  pointer-events: none;
+}
+.maru-on-choice {
+  position: absolute;
+  top: -11px;
+  right: -9px;
+  width: 34px;
+  height: 34px;
+}
+.maru-on-line {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  vertical-align: -5px;
+  margin-right: 2px;
 }
 
 /* Grammar cards */

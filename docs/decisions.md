@@ -745,3 +745,47 @@ Verified: `stampStateFor` + glyph/note tables are pure and unit-tested (+4, 229 
 fresh beginner shows 1 stamped / 1 current / 4 ahead with kana 0/142, a placed-max profile shows all six
 pressed with kana 142/142 (dark mode), back-navigation clean — zero console errors.
 *Source: Session 17 (the Immersion Pass), 2026-07-15; eki-stamp design research + Playwright verification.*
+
+### D-026: The Overhaul Pass — real photographs join the hand-drawn world
+User directive: a full visual/UI-UX overhaul using "the breadth of animated and real-life situations
+and pictures," researched against Pinterest/Dribbble Japanese-aesthetic UI boards and creative
+language products (Memrise's real-world immersion framing; app-store creative trends toward lifestyle
+photography; the eki-stamp/hanko culture already grounding D-025). Clarified scope: **mix in real
+photographs** and **full sweep, prioritized** — shipped as four slices, each gated + pushed green.
+- **Thesis — "photo is the world, vector is the story."** Licensed photographs become the
+  *environments* (a real shōtengai, a real konbini entrance, a real platform, a real wing over
+  clouds); the hand-drawn vector identity stays the narrative/interactive layer *on top of* them
+  (noren and ekimeihyō accents swaying over the photo stages, stamps, dialogue). Photos are unified
+  into the shironeri/aizome identity by a duotone wash (`.photo-band::after` indigo/ink gradients +
+  desaturation) so they read as one world, not stock inserts.
+- **Provenance culture extends to imagery.** All four photos are Wikimedia Commons works (CC0 ×2,
+  CC BY-SA 4.0 ×2), downloaded at build-asset time, cropped/compressed to WebP (~500 KB total),
+  bundled + precached (`webp` added to the PWA glob — nothing hotlinked, D-005's offline posture
+  holds). `src/assets/photos/PHOTOS.md` is the ledger (subject/source/author/license per file);
+  About credits the authors by name, ShareAlike acknowledged. D-002 untouched: imagery carries no
+  language claims.
+- **Time-of-day**: the Home hero is Yanaka Ginza washed to the learner's actual hour (pure
+  `timeBucket(hour)`: 5–10 morning, 10–16 day, 16–19 dusk, else night) — dark scheme always renders
+  night ("it is night in the app's world, whatever the clock says"). Ken Burns `ambientDrift` (26 s
+  sine loop) keeps every photo breathing; `gentleSway` moves the hanging vector accents.
+- **Per-surface sweep**: Onboarding gains the arrival band (wing over clouds, 着陸まであと少し);
+  Home's masthead becomes the neighborhood hero and errand buttons become photo tiles of the real
+  place each scene enters (`DayTask` errands now carry `sceneKind`); scene vector backdrops are
+  replaced by living photo stages (urgency vignette breathes on speed beats — plain CSS keyframes,
+  never GSAP, so reduced motion can't collapse the countdown's honesty; speed-question copy is
+  per-world); Journey's earned stamps press onto the page on entry (`stampPress`, staggered slam).
+- **The grader's maru**: a vermillion ○ (`MaruMark` + `hankoPop`) presses beside a correct answer —
+  the choice card's corner and the typed card's 正解 line — the one new feedback flourish, kept to
+  correct answers only (wrong already has shake + fill). Under reduced motion every new tween
+  collapses to a zero-duration no-op, but the maru still *appears* (it is informative, not motion).
+- **Fixed en route**: (a) a button whose children are all `position:absolute` collapses to 0×0 under
+  `justify-items:center` — errand tiles need a definite width; (b) photo-overlay text must swap
+  `--paper`→`--ink` in dark scheme, where --paper is dark; (c) Playwright's fixed clock freezes
+  GSAP's ticker (performance.now), so clock-driven tests pre-set the onboarded flag rather than
+  navigate through animated transitions; (d) the final walkthrough's maru screenshot exposed that
+  `.scene-view .choice`'s ticket restyle had silently out-cascaded `.choice.correct/.wrong` at equal
+  specificity since Phase 3 — picked options rendered #fff-on-paper; restated the state fills at
+  higher specificity.
+Verified: 234 tests green; full three-scheme Playwright walkthrough (light placed profile end-to-end
+incl. a live typed-kana maru, dark, reduced-motion) — zero console errors in all runs.
+*Source: Session 18 (the Overhaul Pass), 2026-07-15; Commons API license metadata + Playwright verification.*

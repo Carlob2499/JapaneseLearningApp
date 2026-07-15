@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, pulsePass, shakeFail, staggerIn } from './timelines'
+import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, hankoPop, pulsePass, shakeFail, staggerIn, stampPress } from './timelines'
 
 function div(): HTMLDivElement {
   return document.createElement('div')
@@ -52,5 +52,18 @@ describe('motion timeline factories (reduced-motion branch)', () => {
     const tw = gentleSway(div())
     expect(tw.duration()).toBe(0)
     expect(tw.vars.repeat).toBeUndefined()
+  })
+
+  it('stampPress places stamps instantly, with no stagger and no press', () => {
+    const tw = stampPress([div(), div()])
+    expect(tw.duration()).toBe(0)
+    expect(tw.vars.stagger).toBeUndefined()
+    expect(tw.delay()).toBe(0)
+  })
+
+  it('hankoPop shows the maru instantly without the springy pop', () => {
+    const tw = hankoPop(div())
+    expect(tw.duration()).toBe(0)
+    expect(tw.vars.scale).toBe(1) // pinned at rest, not popped from 1.8
   })
 })

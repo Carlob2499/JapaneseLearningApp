@@ -83,6 +83,31 @@ export function gentleSway(target: gsap.TweenTarget): gsap.core.Tween {
   )
 }
 
+/**
+ * The eki-stamp press (D-026): earned stamps slam onto the Journey page one after another —
+ * fast approach, hard stop, the way a stamp-rally book fills in. Under reduced motion the
+ * stamps are simply there (zero duration, no stagger, no press).
+ */
+export function stampPress(targets: gsap.TweenTarget): gsap.core.Tween {
+  if (isReducedMotion()) return gsap.to(targets, { scale: 1, opacity: 1, duration: 0 })
+  return gsap.fromTo(
+    targets,
+    { scale: 1.6, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.32, ease: 'power3.in', delay: 0.15, stagger: { each: 0.14 } },
+  )
+}
+
+/** The grader's maru pop (D-026): the vermillion ○ pressed beside a correct answer. Under
+ *  reduced motion the mark simply appears — it still shows, it just doesn't move. */
+export function hankoPop(target: gsap.TweenTarget): gsap.core.Tween {
+  if (isReducedMotion()) return gsap.to(target, { scale: 1, opacity: 1, duration: 0 })
+  return gsap.fromTo(
+    target,
+    { scale: 1.8, opacity: 0 },
+    { scale: 1, opacity: 1, duration: DURATION.base, ease: 'back.out(2.4)' },
+  )
+}
+
 /** A celebratory pop for the life-stage-up moment — bouncy elastic settle. */
 export function celebrate(target: gsap.TweenTarget): gsap.core.Tween {
   const reduced = isReducedMotion()

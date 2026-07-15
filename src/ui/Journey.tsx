@@ -7,7 +7,7 @@ import { getActiveLevels, ALL_LEVELS } from '../store/settings'
 import { computeLifeStage, LIFE_STAGE_CLEAR_THRESHOLD, LIFE_STAGE_NAMES, type LifeStage } from '../day/lifeStage'
 import { JOURNEY_NOTES, STAMP_GLYPHS, stampStateFor, type StampState } from '../day/journey'
 import { reviewablePoolIds, JLPT_LABEL } from '../lib/appMeta'
-import { staggerIn } from '../motion/timelines'
+import { staggerIn, stampPress } from '../motion/timelines'
 import { APP_NAME_JA } from '../lib/appMeta'
 import './journey.css'
 
@@ -115,7 +115,10 @@ export default function Journey({ onHome }: { onHome: () => void }) {
 
   useGSAP(
     () => {
-      if (data) staggerIn('.journey-row')
+      if (!data) return
+      staggerIn('.journey-row')
+      // Then the earned stamps press onto the page, one after another (D-026).
+      stampPress('.stamp-stamped')
     },
     { dependencies: [data], scope: pageRef },
   )

@@ -75,6 +75,17 @@ export default function About() {
           </a>
           .
         </p>
+        <p className="attribution">
+          Photography, via Wikimedia Commons: <span>Yanaka Ginza by SuFlyer (CC0)</span>;{' '}
+          <span>7-Eleven “Heart-in” entrance by Mr.ちゅらさん (CC BY-SA 4.0)</span>;{' '}
+          <span>Mikunigaoka Station platform by そらみみ (CC BY-SA 4.0)</span>;{' '}
+          <span>wing above the clouds by Harry Knight (CC0)</span>. Shown with a duotone wash;
+          the underlying works are unmodified beyond crop/resize.{' '}
+          <a href={`${REPO_URL}/blob/claude/jlpt-game-research-7a5aoe/src/assets/photos/PHOTOS.md`}>
+            Photo ledger
+          </a>
+          .
+        </p>
         <ProgressTransfer />
       </div>
     </details>

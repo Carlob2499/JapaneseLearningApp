@@ -199,6 +199,16 @@
   border-radius: 4px;
   position: relative;
 }
+/* The ticket restyle above outweighs study.css's equal-specificity state fills (cascade
+   order), which left the picked option's #fff text on paper — restate them stronger. */
+.scene-view .choice.correct {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+.scene-view .choice.wrong {
+  background: #b3402f;
+  border-color: #b3402f;
+}
 .scene-view .next-btn {
   background: var(--accent-2);
 }

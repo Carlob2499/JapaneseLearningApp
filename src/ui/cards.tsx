@@ -4,7 +4,7 @@ import { toHiragana, toKana } from 'wanakana'
 import type { GrammarPoint, KanaItem, KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import type { Choice } from '../review/choices'
 import { useAudio } from '../audio/useAudio'
-import { pulsePass, shakeFail, staggerIn } from '../motion/timelines'
+import { hankoPop, pulsePass, shakeFail, staggerIn } from '../motion/timelines'
 import StrokeViewer from './StrokeViewer'
 import './study.css'
 
@@ -42,6 +42,35 @@ export function RegisterChip({ register }: { register: SentenceItem['register'] 
     <span className="register-chip" data-reg={m.group} title={m.title} data-testid="register-chip">
       {m.label}
     </span>
+  )
+}
+
+/** The grader's vermillion maru (D-026) — the ○ a Japanese teacher presses beside a correct
+ *  answer. Decorative reinforcement only (aria-hidden): the color change and the 正解 line
+ *  already carry the result. The dash gap + tilt keep it hand-pressed, not geometric. */
+function MaruMark({ className }: { className: string }) {
+  const ref = useRef<SVGSVGElement>(null)
+  useGSAP(
+    () => {
+      if (ref.current) hankoPop(ref.current)
+    },
+    { scope: ref },
+  )
+  return (
+    <svg ref={ref} className={`maru-mark ${className}`} viewBox="0 0 32 32" aria-hidden="true">
+      <circle
+        cx="16"
+        cy="16"
+        r="11.5"
+        fill="none"
+        stroke="var(--accent)"
+        strokeWidth="3.2"
+        strokeLinecap="round"
+        strokeDasharray="66 8"
+        transform="rotate(-52 16 16)"
+        opacity="0.92"
+      />
+    </svg>
   )
 }
 
@@ -331,6 +360,7 @@ export function ChoiceCard({
               onClick={(e) => pick(c, e.currentTarget)}
             >
               {c.text}
+              {selected?.correct && c.correct && <MaruMark className="maru-on-choice" />}
             </button>
           )
         })}
@@ -424,6 +454,7 @@ export function TypedCard({
       ) : (
         <>
           <p className={`typed-feedback ${result}`} data-testid="typed-feedback">
+            {result === 'correct' && <MaruMark className="maru-on-line" />}
             {result === 'correct' ? '正解 · correct' : `Answer: ${target}`} <SpeakButton text={spoken} />
           </p>
           <button className="next-btn" onClick={() => onGrade(result === 'correct' ? 'pass' : 'fail')}>
