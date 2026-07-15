@@ -689,3 +689,32 @@ Verified: 29 packs / 15,473 items validate green; live-browser beginner flow (�
 `si` accepted for し, stroke animation on recall, L0 chip = 142), placement flow (13,111 states incl.
 142 provisional kana, all six chips), zero console errors.
 *Source: Session 17 (the Immersion Pass), 2026-07-15; researched kana pedagogy + Playwright verification.*
+
+### D-024: M3 transit — the second errand world
+The Immersion Pass, slice 2: the day loop's variety mechanisms (stalest-first sort, multi-errand cap)
+finally bind against real competition — Today now offers **Konbini checkout** and **Catch your train**.
+- **Same D-002 recipe as M2 (D-017)**: 26 curated expression+reading tags applied to already-committed
+  dataset vocab (58/58 total assignments matched; L1 38 / L2 11 / L3 9 tagged items across both
+  modules — the errand deepens as levels unlock), plus 7 verbatim announcement phrases cited to the
+  sources curriculum.md M3 already lists (My Nihongo Sensei's announcements guide; japan-guide forum) —
+  まもなく、1番線に電車が参ります。/ 危ないですから、黄色い線までお下がりください。/ ドアが閉まります。
+  ご注意ください。/ この電車は各駅停車です。/ お出口は右側です。/ 駆け込み乗車はおやめください。/
+  ご乗車ありがとうございました。 Registers include genuine keigo_humble (参ります) — real announcement
+  keigo heard from day one (the §3.6 reception clock).
+- **A five-beat escalating arc** mirroring the konbini's (D-020): recognize (decode the platform sign)
+  → recall → produce (type your route word) → speed (read the flashing display before the doors shut)
+  → context (pick which announcement you're listening for as your stop nears). `sceneKind` gains
+  'transit' — the exhaustive title/speaker/backdrop maps forced every integration point at compile time.
+- **The speaker is the station, not a clerk**: the VN nameplate is per-sceneKind (店員 · Clerk vs
+  放送 · Announcement) — an announcement world speaks in broadcasts.
+- **A second hand-authored flat-vector backdrop** in the D-017 language: ekimeihyō station sign
+  (white board, indigo band), waiting train (indigo body, paper windows, hinomaru-red stripe), and the
+  yellow platform warning strip the cited announcement points at — all palette tokens, dark-mode-correct
+  automatically.
+- **Unlock threshold 0** (like M2): arriving by train is diegetically day-one, and two always-available
+  errands are what make the stalest-first rotation meaningful. Pipeline per-level pack readers now skip
+  levels without a domain file (L0 has only kana/strokes) — caught before it could break build-modules.
+Verified: validate green (29 packs / 15,481 items); live-browser both color schemes: two errands on
+Today, the full five-beat transit arc (honest MISS on a junk produce answer), the context beat lands on
+お出口は右側です among real announcement lines, receipt mixes words + the line — zero console errors.
+*Source: Session 17 (the Immersion Pass), 2026-07-15; Playwright verification.*

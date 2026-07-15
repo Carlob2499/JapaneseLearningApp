@@ -132,5 +132,129 @@
         "license": "editorial reference — the documented closing respectful invitation to return"
       }
     ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m3:mamonaku",
+    "level": "L1",
+    "module": "M3_transit",
+    "register": "keigo_humble",
+    "pattern": "まもなく、1番線に電車が参ります。",
+    "citations": [
+      {
+        "name": "My Nihongo Sensei — How to Understand Japanese Announcements in Trains & Stations",
+        "url": "https://mynihongosensei.com/how-to-understand-japanese-announcements-in-trains-stations/",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — documents this standard announcement script (curriculum.md M3), phrase not copied from a proprietary list"
+      },
+      {
+        "name": "japan-guide forum — decoding memorized train announcements",
+        "url": "https://www.japan-guide.com/forum/quereadisplay.html?0+114324=",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — corroborating documented announcement usage (curriculum.md M3)"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m3:kiiroi-sen",
+    "level": "L1",
+    "module": "M3_transit",
+    "register": "polite",
+    "pattern": "危ないですから、黄色い線までお下がりください。",
+    "citations": [
+      {
+        "name": "My Nihongo Sensei — How to Understand Japanese Announcements in Trains & Stations",
+        "url": "https://mynihongosensei.com/how-to-understand-japanese-announcements-in-trains-stations/",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — documents this standard announcement script (curriculum.md M3), phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m3:door-shimarimasu",
+    "level": "L1",
+    "module": "M3_transit",
+    "register": "polite",
+    "pattern": "ドアが閉まります。ご注意ください。",
+    "citations": [
+      {
+        "name": "My Nihongo Sensei — How to Understand Japanese Announcements in Trains & Stations",
+        "url": "https://mynihongosensei.com/how-to-understand-japanese-announcements-in-trains-stations/",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — documents this standard announcement script (curriculum.md M3), phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m3:kakueki",
+    "level": "L1",
+    "module": "M3_transit",
+    "register": "service_script",
+    "pattern": "この電車は各駅停車です。",
+    "citations": [
+      {
+        "name": "My Nihongo Sensei — How to Understand Japanese Announcements in Trains & Stations",
+        "url": "https://mynihongosensei.com/how-to-understand-japanese-announcements-in-trains-stations/",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — documents this standard announcement script (curriculum.md M3), phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m3:deguchi-migi",
+    "level": "L1",
+    "module": "M3_transit",
+    "register": "service_script",
+    "pattern": "お出口は右側です。",
+    "citations": [
+      {
+        "name": "My Nihongo Sensei — How to Understand Japanese Announcements in Trains & Stations",
+        "url": "https://mynihongosensei.com/how-to-understand-japanese-announcements-in-trains-stations/",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — documents this standard announcement script (curriculum.md M3), phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m3:kakekomi",
+    "level": "L1",
+    "module": "M3_transit",
+    "register": "polite",
+    "pattern": "駆け込み乗車はおやめください。",
+    "citations": [
+      {
+        "name": "My Nihongo Sensei — How to Understand Japanese Announcements in Trains & Stations",
+        "url": "https://mynihongosensei.com/how-to-understand-japanese-announcements-in-trains-stations/",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — documents this standard announcement script (curriculum.md M3), phrase not copied from a proprietary list"
+      },
+      {
+        "name": "japan-guide forum — decoding memorized train announcements",
+        "url": "https://www.japan-guide.com/forum/quereadisplay.html?0+114324=",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — corroborating documented announcement usage (curriculum.md M3)"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m3:gojosha",
+    "level": "L1",
+    "module": "M3_transit",
+    "register": "polite",
+    "pattern": "ご乗車ありがとうございました。",
+    "citations": [
+      {
+        "name": "My Nihongo Sensei — How to Understand Japanese Announcements in Trains & Stations",
+        "url": "https://mynihongosensei.com/how-to-understand-japanese-announcements-in-trains-stations/",
+        "retrieved": "2026-07-15",
+        "license": "editorial reference — documents this standard announcement script (curriculum.md M3), phrase not copied from a proprietary list"
+      }
+    ]
   }
 ]

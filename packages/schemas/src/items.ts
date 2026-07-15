@@ -180,7 +180,7 @@ export type Beat = z.infer<typeof Beat>
 export const SceneTemplate = z.object({
   kind: z.literal('scene'),
   id: z.string().min(1),
-  sceneKind: z.enum(['konbini']),
+  sceneKind: z.enum(['konbini', 'transit']),
   level: Level,
   modules: z.array(ModuleTag).min(1),
   beats: z.array(Beat).min(1),

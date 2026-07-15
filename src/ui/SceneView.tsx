@@ -104,7 +104,7 @@ function ShelfRow({ y, count, scale, opacity }: { y: number; count: number; scal
 }
 
 /** A hand-authored flat-vector konbini counter — the scene's "juice," not a stock photo. */
-function SceneBackdrop() {
+function KonbiniBackdrop() {
   return (
     <div className="scene-backdrop">
       <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Konbini checkout counter">
@@ -150,10 +150,65 @@ function SceneBackdrop() {
   )
 }
 
-function DialogueBox({ jp, en, speakable }: { jp?: string; en: string; speakable?: string }) {
+/** A station platform in the same flat-vector language (D-024): ekimeihyō sign, warning strip,
+ *  waiting train. Same palette tokens as the konbini so dark mode stays correct automatically. */
+function TransitBackdrop() {
+  return (
+    <div className="scene-backdrop">
+      <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Station platform">
+        <defs>
+          <linearGradient id="stationSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--paper)" />
+            <stop offset="100%" stopColor="var(--accent-2)" stopOpacity="0.14" />
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="400" height="200" fill="url(#stationSky)" />
+
+        {/* The train, waiting: indigo body, paper windows, a hinomaru-red stripe. */}
+        <g>
+          <rect x="118" y="52" width="282" height="76" rx="10" fill="var(--accent-2)" />
+          <rect x="118" y="104" width="282" height="8" fill="var(--accent)" />
+          {[0, 1, 2, 3, 4].map((i) => (
+            <rect key={i} x={136 + i * 54} y="64" width="36" height="26" rx="4" fill="var(--paper)" opacity="0.92" />
+          ))}
+          {/* Door seam + headlight */}
+          <rect x="284" y="60" width="3" height="62" fill="var(--paper)" opacity="0.5" />
+          <circle cx="392" cy="120" r="4" fill="var(--paper)" opacity="0.9" />
+        </g>
+
+        {/* Ekimeihyō station sign on its posts (white board, indigo band). */}
+        <g>
+          <rect x="20" y="26" width="86" height="40" rx="5" fill="var(--card)" stroke="var(--line)" />
+          <text x="63" y="52" textAnchor="middle" fontSize="17" fill="var(--ink)" fontWeight="700">
+            駅
+          </text>
+          <rect x="20" y="58" width="86" height="8" rx="3" fill="var(--accent-2)" />
+          <rect x="30" y="66" width="4" height="66" fill="var(--muted)" />
+          <rect x="92" y="66" width="4" height="66" fill="var(--muted)" />
+        </g>
+
+        {/* Platform slab + the yellow warning strip the announcements point at. */}
+        <path d="M0,138 L400,138 L400,200 L0,200 Z" fill="var(--wood-dark)" />
+        <path d="M0,138 L400,138 L400,146 L0,146 Z" fill="var(--wood)" />
+        <rect x="0" y="146" width="400" height="8" fill="#c2a45c" />
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+          <rect key={i} x={8 + i * 50} y="147.5" width="26" height="5" rx="1" fill="var(--wood-dark)" opacity="0.35" />
+        ))}
+      </svg>
+    </div>
+  )
+}
+
+/** Who's speaking, per scene kind — a station's lines are announcements, not a clerk. */
+const SPEAKER_BY_KIND: Record<SceneTemplate['sceneKind'], string> = {
+  konbini: '店員 · Clerk',
+  transit: '放送 · Announcement',
+}
+
+function DialogueBox({ speaker, jp, en, speakable }: { speaker: string; jp?: string; en: string; speakable?: string }) {
   return (
     <div className="scene-dialogue">
-      <span className="nameplate">店員 · Clerk</span>
+      <span className="nameplate">{speaker}</span>
       {jp && (
         <span className="jp-line">
           {jp} {speakable && <SpeakButton text={speakable} />}
@@ -246,12 +301,12 @@ function ScenePlayer({
         </span>
       </div>
 
-      <SceneBackdrop />
+      {scene.sceneKind === "transit" ? <TransitBackdrop /> : <KonbiniBackdrop />}
 
       <EnterOnMount key={api.stepIndex} className="scene-stage">
         {step?.kind === 'narration' && (
           <>
-            <DialogueBox en={step.text} jp={api.phrase?.pattern} speakable={api.phrase?.pattern} />
+            <DialogueBox speaker={SPEAKER_BY_KIND[scene.sceneKind]} en={step.text} jp={api.phrase?.pattern} speakable={api.phrase?.pattern} />
             <button className="scene-continue-btn" onClick={api.advance}>
               Continue →
             </button>
@@ -265,7 +320,7 @@ function ScenePlayer({
           if (beat.render === 'phrase') {
             return (
               <>
-                <DialogueBox en={step.text} />
+                <DialogueBox speaker={SPEAKER_BY_KIND[scene.sceneKind]} en={step.text} />
                 <ChoiceCard
                   kind="Errand · which line?"
                   prompt={<span className="scene-situation">Which line fits?</span>}
@@ -279,7 +334,7 @@ function ScenePlayer({
           // Vocab beats show the clerk's cited line as flavour above the drill.
           return (
             <>
-              <DialogueBox en={step.text} jp={api.phrase?.pattern} speakable={api.phrase?.pattern} />
+              <DialogueBox speaker={SPEAKER_BY_KIND[scene.sceneKind]} en={step.text} jp={api.phrase?.pattern} speakable={api.phrase?.pattern} />
               {beat.render === 'typed' ? (
                 // produce: type the reading of the word, uncued and unaided (the hardest rung).
                 <TypedCard

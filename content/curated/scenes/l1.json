@@ -4,13 +4,45 @@
     "id": "scene:l1:konbini",
     "sceneKind": "konbini",
     "level": "L1",
-    "modules": ["M2_konbini"],
+    "modules": [
+      "M2_konbini"
+    ],
     "beats": [
-      { "id": "beat:decode-warm", "interaction": "recognize", "slotIds": ["item-warm"] },
-      { "id": "beat:name-bag", "interaction": "recall", "slotIds": ["item-bag"] },
-      { "id": "beat:say-it", "interaction": "produce", "slotIds": ["item-say"] },
-      { "id": "beat:decode-total", "interaction": "speed", "slotIds": ["item-total"] },
-      { "id": "beat:closing-line", "interaction": "context", "slotIds": ["line-closing"] }
+      {
+        "id": "beat:decode-warm",
+        "interaction": "recognize",
+        "slotIds": [
+          "item-warm"
+        ]
+      },
+      {
+        "id": "beat:name-bag",
+        "interaction": "recall",
+        "slotIds": [
+          "item-bag"
+        ]
+      },
+      {
+        "id": "beat:say-it",
+        "interaction": "produce",
+        "slotIds": [
+          "item-say"
+        ]
+      },
+      {
+        "id": "beat:decode-total",
+        "interaction": "speed",
+        "slotIds": [
+          "item-total"
+        ]
+      },
+      {
+        "id": "beat:closing-line",
+        "interaction": "context",
+        "slotIds": [
+          "line-closing"
+        ]
+      }
     ],
     "framing": [
       {
@@ -50,6 +82,92 @@
       {
         "text": "The automatic door slides open, and the clerk's thanks follow you out into the street.",
         "phraseId": "phrase:m2:arigatou-gozaimashita",
+        "modelWritten": true
+      }
+    ]
+  },
+  {
+    "kind": "scene",
+    "id": "scene:l1:transit",
+    "sceneKind": "transit",
+    "level": "L1",
+    "modules": [
+      "M3_transit"
+    ],
+    "beats": [
+      {
+        "id": "beat:read-sign",
+        "interaction": "recognize",
+        "slotIds": [
+          "item-sign"
+        ]
+      },
+      {
+        "id": "beat:name-it",
+        "interaction": "recall",
+        "slotIds": [
+          "item-name"
+        ]
+      },
+      {
+        "id": "beat:say-route",
+        "interaction": "produce",
+        "slotIds": [
+          "item-route"
+        ]
+      },
+      {
+        "id": "beat:doors",
+        "interaction": "speed",
+        "slotIds": [
+          "item-doors"
+        ]
+      },
+      {
+        "id": "beat:which-announcement",
+        "interaction": "context",
+        "slotIds": [
+          "line-exit"
+        ]
+      }
+    ],
+    "framing": [
+      {
+        "text": "Morning rush. You feed your ticket to the gate; it blinks green and hands it back.",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:read-sign",
+        "text": "A voice crackles over the platform, and one word on the overhead sign matters most right now.",
+        "phraseId": "phrase:m3:mamonaku",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:name-it",
+        "text": "The announcement waves everyone back from the edge. This time the word has to come from you.",
+        "phraseId": "phrase:m3:kiiroi-sen",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:say-route",
+        "text": "You rehearse your route under your breath — no signs to help now. Type it out.",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:doors",
+        "text": "The chime sounds and the display flashes — read it before the doors shut.",
+        "phraseId": "phrase:m3:door-shimarimasu",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:which-announcement",
+        "text": "Your stop is next and your bag is already on your shoulder. Which announcement are you listening for?",
+        "phraseId": "phrase:m3:deguchi-migi",
+        "modelWritten": true
+      },
+      {
+        "text": "You step out onto the platform, and the train's thanks follow you up the stairs into daylight.",
+        "phraseId": "phrase:m3:gojosha",
         "modelWritten": true
       }
     ]

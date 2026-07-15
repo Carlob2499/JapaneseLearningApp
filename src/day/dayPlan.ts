@@ -4,9 +4,10 @@ import { dayIndex } from '../scheduler/loadShaper'
 /** Total tasks a single day's plan will ever surface (review + errands combined). */
 export const DAY_PLAN_MAX_TASKS = 4
 
-/** Exhaustive over `SceneTemplate['sceneKind']` — verbatim match to Phase 1's shipped button text. */
+/** Exhaustive over `SceneTemplate['sceneKind']` — the Today panel's errand button text. */
 export const SCENE_KIND_TITLE: Record<SceneTemplate['sceneKind'], string> = {
   konbini: 'Konbini checkout',
+  transit: 'Catch your train',
 }
 
 export type DayTask =

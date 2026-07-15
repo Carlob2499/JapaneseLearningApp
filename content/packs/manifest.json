@@ -9,7 +9,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 675,
-      "sha256": "2b58cd843ddd01ef25aa48a013126616657db6cfa5c87dd9f1aa3cad4d048572"
+      "sha256": "17c530ef6d3d890d262eb2d99f5de8a819aa8cbd240f8336a5ea32be50557493"
     },
     {
       "packId": "kanji.l1.core",
@@ -45,7 +45,7 @@
       "domain": "vocab",
       "packVersion": "0.1.0",
       "itemCount": 596,
-      "sha256": "8a8798db3180fb515ba40adc7d25e4716391f544b146c30c2b3c5efe45af1c2f"
+      "sha256": "10b8b9db0caefaa8dbc830f4235c1f0e52c647e6155b03240a303cb6ec289506"
     },
     {
       "packId": "kanji.l2.core",
@@ -228,24 +228,6 @@
       "sha256": "d54677d47041746e2efe6fb00d5aa1bc760b4c476d52a1202ffeace192f7d85f"
     },
     {
-      "packId": "phrase.l1.core",
-      "path": "l1/phrase.json",
-      "level": "L1",
-      "domain": "phrase",
-      "packVersion": "0.1.0",
-      "itemCount": 8,
-      "sha256": "db391e7b6a7a1c3c4d89e3f8e24f660da543d41fbf44c558670a0674b3cfc58a"
-    },
-    {
-      "packId": "scene.l1.core",
-      "path": "l1/scene.json",
-      "level": "L1",
-      "domain": "scene",
-      "packVersion": "0.1.0",
-      "itemCount": 1,
-      "sha256": "9e201116d4329c8694e4a6ebf2cebf9d1e62be0cae50f7059764cd0c3c3dda44"
-    },
-    {
       "packId": "kana.l0.core",
       "path": "l0/kana.json",
       "level": "L0",
@@ -262,6 +244,24 @@
       "packVersion": "0.1.0",
       "itemCount": 142,
       "sha256": "c035f5c44c9771b005426e16a5e9710fc9936b5161ec6ee3693c3aae03d97f13"
+    },
+    {
+      "packId": "phrase.l1.core",
+      "path": "l1/phrase.json",
+      "level": "L1",
+      "domain": "phrase",
+      "packVersion": "0.1.0",
+      "itemCount": 15,
+      "sha256": "c821859cb606ae2819f2418fb8146b1a0a64c5faa5d953b57e070be778bed364"
+    },
+    {
+      "packId": "scene.l1.core",
+      "path": "l1/scene.json",
+      "level": "L1",
+      "domain": "scene",
+      "packVersion": "0.1.0",
+      "itemCount": 2,
+      "sha256": "6ab574de89a12b6f203b719f6e69695365cc3a9aa147d4444f972f67deb93f22"
     }
   ]
 }

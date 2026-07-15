@@ -38,8 +38,11 @@ async function knownKanjiFromPacks(): Promise<Map<Level, Set<string>>> {
   const result = new Map<Level, Set<string>>()
   const cumulative = new Set<string>()
   for (const level of LEVELS_IN_ORDER) {
+    // L0 carries only kana/strokes packs (D-023) — skip levels without this domain's file.
+    const path = join(PACKS_DIR, level.toLowerCase(), 'kanji.json')
+    if (!existsSync(path)) continue
     const pack = JSON.parse(
-      await readFile(join(PACKS_DIR, level.toLowerCase(), 'kanji.json'), 'utf8'),
+      await readFile(path, 'utf8'),
     ) as { items: { literal: string }[] }
     for (const it of pack.items) cumulative.add(it.literal)
     result.set(level, new Set(cumulative))

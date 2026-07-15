@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Level, Manifest, VocabItem } from '@hikkoshi/schemas'
@@ -19,8 +20,11 @@ const CURATED_MODULES_DIR = join(CONTENT_DIR, 'curated', 'modules')
 async function loadVocabFromPacks(): Promise<VocabItem[]> {
   const all: VocabItem[] = []
   for (const level of LEVELS_IN_ORDER) {
+    // L0 carries only kana/strokes packs (D-023) — skip levels without this domain's file.
+    const path = join(PACKS_DIR, level.toLowerCase(), 'vocab.json')
+    if (!existsSync(path)) continue
     const pack = JSON.parse(
-      await readFile(join(PACKS_DIR, level.toLowerCase(), 'vocab.json'), 'utf8'),
+      await readFile(path, 'utf8'),
     ) as { items: VocabItem[] }
     all.push(...pack.items)
   }
