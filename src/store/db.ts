@@ -42,6 +42,13 @@ export async function appendJournal(entry: JournalEntry): Promise<void> {
   await (await db()).add('journal', entry)
 }
 
+/** Append many journal entries in one transaction — used when restoring an imported backup. */
+export async function appendJournalEntries(entries: readonly JournalEntry[]): Promise<void> {
+  if (entries.length === 0) return
+  const tx = (await db()).transaction('journal', 'readwrite')
+  await Promise.all([...entries.map((e) => tx.store.add(e)), tx.done])
+}
+
 /** The full append-only review log — read for leech detection (fails in a trailing window). */
 export async function getJournal(): Promise<JournalEntry[]> {
   return (await db()).getAll('journal') as Promise<JournalEntry[]>
