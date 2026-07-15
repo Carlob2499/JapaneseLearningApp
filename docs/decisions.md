@@ -718,3 +718,30 @@ Verified: validate green (29 packs / 15,481 items); live-browser both color sche
 Today, the full five-beat transit arc (honest MISS on a junk produce answer), the context beat lands on
 お出口は右側です among real announcement lines, receipt mixes words + the line — zero console errors.
 *Source: Session 17 (the Immersion Pass), 2026-07-15; Playwright verification.*
+
+### D-025: The Journey stamp book — progression made visible
+The Immersion Pass, slice 3 (the user chose the bolder travel-journal direction): the six life stages
+have been the app's spine since D-006, but there was nowhere to *see* the road. The Journey page makes
+it a **goshuinchō / eki-stamp travel record** — grounded in researched stamp culture (circular stamps,
+vermillion ink, collected as a pilgrimage record; Wikipedia "Eki stamp", Japan House LA, Hyperallergic):
+- **Six stamp rows**: reached stages are pressed vermillion circles (--accent IS hinomaru vermillion;
+  hand-pressed tilt, 着 for arrival then 一〜五), the stage being worked toward is a dashed ring whose
+  arc is the blocking level's real coverage (from `computeLifeStage`'s existing `coverageByLevel`), and
+  stages ahead wait as dotted circles. Stage 0 is always stamped — arriving is the one free stamp.
+  A kana preamble row ("learned on the flight over", 仮) tracks the L0 syllabary the same way.
+- **Klee One's scope widens deliberately**: D-019 reserved it for the celebration only; the
+  user-selected travel-journal direction makes it the *handwritten journal voice* — celebration +
+  per-stage journal lines ("Two suitcases and a phrasebook." → "Someone else's first day. I remember
+  mine."), model-written English framing only (D-002-safe). Unreached stages show "…" — the journal
+  hasn't been written yet. Kumiko remains the divider per its D-019 general-divider role; no reserved
+  motif was repurposed.
+- **The life-stage badge is the door** (now a real button, `·旅` hint): the number you already watch is
+  the handle to the record of how you got there. Journey loads the whole L0–L5 road when online and
+  degrades to on-device levels offline (undownloaded levels read honestly as "not downloaded yet").
+- **Honest numbers, disclosed in About**: coverage means items *met* at least once (the same
+  introduced-coverage proxy life stages already use, D-018), never claimed as mastery; a stamp presses
+  at the same 70% threshold that advances the stage.
+Verified: `stampStateFor` + glyph/note tables are pure and unit-tested (+4, 229 total); live-browser: a
+fresh beginner shows 1 stamped / 1 current / 4 ahead with kana 0/142, a placed-max profile shows all six
+pressed with kana 142/142 (dark mode), back-navigation clean — zero console errors.
+*Source: Session 17 (the Immersion Pass), 2026-07-15; eki-stamp design research + Playwright verification.*

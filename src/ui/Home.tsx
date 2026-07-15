@@ -25,10 +25,19 @@ const CELEBRATION_FRAMING: Record<number, string> = {
 }
 
 /** The felt life-stage-up moment (D-019): a stamp animation on the badge itself, plus a line
- *  of in-fiction framing that fades after a few seconds — inline, never a blocking dialog. */
-function LifeStageBadge({ name, celebrateStage }: { name: string; celebrateStage: number | null }) {
+ *  of in-fiction framing that fades after a few seconds — inline, never a blocking dialog.
+ *  The badge is also the door to the Journey stamp book (D-025). */
+function LifeStageBadge({
+  name,
+  celebrateStage,
+  onJourney,
+}: {
+  name: string
+  celebrateStage: number | null
+  onJourney: () => void
+}) {
   const [showFraming, setShowFraming] = useState(celebrateStage !== null)
-  const badgeRef = useRef<HTMLParagraphElement>(null)
+  const badgeRef = useRef<HTMLButtonElement>(null)
 
   useGSAP(
     () => {
@@ -45,9 +54,15 @@ function LifeStageBadge({ name, celebrateStage }: { name: string; celebrateStage
 
   return (
     <>
-      <p ref={badgeRef} className={celebrateStage !== null ? 'life-stage-badge celebrating' : 'life-stage-badge'}>
-        {name}
-      </p>
+      <button
+        type="button"
+        ref={badgeRef}
+        className={celebrateStage !== null ? 'life-stage-badge celebrating' : 'life-stage-badge'}
+        onClick={onJourney}
+        aria-label={`${name} — open your journey`}
+      >
+        {name} <span className="badge-hint" aria-hidden="true">·旅</span>
+      </button>
       {celebrateStage !== null && showFraming && <p className="life-stage-framing">{CELEBRATION_FRAMING[celebrateStage]}</p>}
     </>
   )
@@ -80,11 +95,13 @@ export default function Home({
   onToggleLevel,
   onStart,
   onStartScene,
+  onJourney,
 }: {
   levels: Level[]
   onToggleLevel: (level: Level) => void
   onStart: () => void
   onStartScene: (sceneId: string) => void
+  onJourney: () => void
 }) {
   const today = useToday(levels)
   const selectedCount = levels.reduce((sum, l) => sum + levelItemCount(l), 0)
@@ -110,7 +127,7 @@ export default function Home({
         )}
         {today.mode === 'ready' && today.lifeStage && (
           <>
-            <LifeStageBadge name={today.lifeStage.name} celebrateStage={today.celebrateStage} />
+            <LifeStageBadge name={today.lifeStage.name} celebrateStage={today.celebrateStage} onJourney={onJourney} />
             {today.dayPlan && today.dayPlan.tasks.length > 0 ? (
               <div className="today-tasks">
                 {today.dayPlan.tasks.map((task) =>

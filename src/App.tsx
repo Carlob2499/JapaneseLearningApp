@@ -1,6 +1,7 @@
 import { useState, type ReactNode, type RefObject } from 'react'
 import type { Level } from '@hikkoshi/schemas'
 import Home from './ui/Home'
+import Journey from './ui/Journey'
 import Onboarding from './ui/Onboarding'
 import PlacementProbe from './ui/PlacementProbe'
 import ReviewSession from './ui/ReviewSession'
@@ -9,7 +10,7 @@ import { useViewTransition } from './motion/useViewTransition'
 import { getActiveLevels, getOnboarded, levelsUpTo, setActiveLevels, setOnboarded } from './store/settings'
 import './App.css'
 
-type View = 'onboarding' | 'placement' | 'home' | 'review' | 'scene'
+type View = 'onboarding' | 'placement' | 'home' | 'review' | 'scene' | 'journey'
 
 export default function App() {
   const { view, containerRef, navigate } = useViewTransition<View>(() =>
@@ -46,6 +47,8 @@ export default function App() {
     content = <ReviewSession levels={levels} onHome={() => navigate('home')} />
   } else if (view === 'scene' && sceneId) {
     content = <SceneView levels={levels} sceneId={sceneId} onExit={() => navigate('home')} />
+  } else if (view === 'journey') {
+    content = <Journey onHome={() => navigate('home')} />
   } else {
     content = (
       <Home
@@ -56,6 +59,7 @@ export default function App() {
           setSceneId(id)
           navigate('scene')
         }}
+        onJourney={() => navigate('journey')}
       />
     )
   }

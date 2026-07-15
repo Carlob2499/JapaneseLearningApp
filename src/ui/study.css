@@ -429,11 +429,17 @@
   margin: 0;
   display: inline-block;
   border: 1px solid var(--accent);
+  background: transparent;
   color: var(--accent);
   border-radius: 999px;
   padding: 4px 14px;
   font-size: 15px;
   font-weight: 400;
+  cursor: pointer; /* the badge opens the Journey stamp book (D-025) */
+}
+.badge-hint {
+  font-size: 12px;
+  opacity: 0.7;
 }
 /* Ichimatsu (checkerboard) — reserved for this one moment, per D-019: the life-stage-up
    celebration, never a standing decoration elsewhere. */

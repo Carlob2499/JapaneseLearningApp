@@ -1,0 +1,96 @@
+/* The Journey stamp book (D-025) — a goshuinchō/eki-stamp travel record. Washi page, pressed
+   vermillion stamps (--accent IS hinomaru vermillion), Klee One as the handwritten journal voice
+   (its D-019 "one moment" scope widened to "journal voice" by the user's travel-journal
+   direction), kumiko dividers per D-019's general-divider rule. */
+
+.journey-page {
+  display: grid;
+  gap: 16px;
+}
+
+.journey-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.journey-title-ja {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.journey-head h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0 0 4px;
+  font-size: 28px;
+}
+.journey-head .fineprint {
+  margin: 0;
+}
+
+.journey-book {
+  background-color: var(--paper);
+  display: grid;
+  gap: 0;
+  padding: 20px 18px;
+}
+
+.journey-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 2px;
+}
+/* Kumiko lattice between entries — the stamp book's ruled pages. */
+.journey-row + .journey-row {
+  border-top: 0;
+  position: relative;
+}
+.journey-row + .journey-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2px;
+  right: 2px;
+  height: 3px;
+  background-image: var(--pattern-kumiko);
+  background-size: 26px 3px;
+}
+
+.stamp {
+  width: 64px;
+  height: 64px;
+}
+
+.journey-row-body h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 19px;
+}
+.journey-stage-ahead .journey-row-body h2 {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* The handwritten line — Klee One, the journal's voice. */
+.journey-note {
+  margin: 2px 0 0;
+  font-family: var(--font-celebrate);
+  font-size: 15px;
+  color: var(--accent-2);
+}
+.journey-stage-ahead .journey-note {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.journey-coverage {
+  margin: 4px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}

@@ -26,6 +26,12 @@ export default function About() {
           yet — they're built from the rows you learn here.
         </p>
         <p>
+          <strong>The journey page counts encounters, not mastery.</strong> Tap your life-stage badge
+          to open the stamp book. A level's number there means items you've <em>met</em> at least once —
+          the spaced-repetition schedule is what turns met into remembered, and a stage stamp presses
+          once 70% of a level has been met, in order.
+        </p>
+        <p>
           <strong>Placement is an estimate, not an exam.</strong> If you've studied before, a short
           adaptive quiz places you past the basics by marking words up to your level as “probably known.”
           The app then confirms each one the first time it comes up in review and quietly drops any it had
