@@ -19,7 +19,7 @@ function vocabPool(level: Level, count: number): VocabItem[] {
 }
 
 function content(vocab: VocabItem[]): Content {
-  return { vocab, kanji: [], grammar: [], sentences: [], phrases: [], scenes: [], strokesById: new Map() }
+  return { vocab, kanji: [], kana: [], grammar: [], sentences: [], phrases: [], scenes: [], strokesById: new Map() }
 }
 
 function stateFor(id: string): ItemState {

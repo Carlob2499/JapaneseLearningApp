@@ -82,6 +82,7 @@ function content(over: Partial<Content> = {}): Content {
   return {
     vocab: [],
     kanji: [],
+    kana: [],
     grammar: [],
     sentences: [],
     phrases: [],

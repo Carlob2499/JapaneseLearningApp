@@ -86,6 +86,7 @@ const pools: Pools = {
   vocabWord: ['食べる', '飲む', '青', '赤', '行く', '来る', '水', '火'],
   kanjiMeaning: ['one', 'two', 'three', 'below', 'above', 'tree', 'river', 'mountain'],
   kanjiLiteral: ['一', '二', '三', '下', '上', '木', '川', '山'],
+  kanaRomaji: ['a', 'i', 'u', 'e', 'o', 'ka', 'shi'],
   grammarGloss: ['permission', 'prohibition', 'obligation', 'desire', 'intention'],
   sentenceEn: ["I'm going.", 'No way!', 'You can search me!', 'It is raining.', 'Good morning.'],
 }
@@ -235,6 +236,7 @@ describe('buildPools', () => {
     const content: Content = {
       vocab: [vocab('v1', '食べる', [['to eat', 'to consume']]).item, vocab('v2', '飲む', [['to drink']]).item],
       kanji: [kanji('k1', '一', ['one', 'first']).item, kanji('k2', '二', ['two']).item],
+      kana: [],
       grammar: [grammar('g1', '〜てもいい', 'permission').item, grammar('g2', '〜たい', 'desire').item],
       sentences: [sentence('s1', '行くよ。', "I'm going.").item],
       phrases: [],

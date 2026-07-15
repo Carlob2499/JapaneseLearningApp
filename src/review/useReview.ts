@@ -4,6 +4,7 @@ import type {
   GrammarPoint,
   ItemState,
   JournalEntry,
+  KanaItem,
   KanjiItem,
   Level,
   Outcome,
@@ -27,6 +28,7 @@ import { buildChoices, buildPools, retrievalModeFor, type Choice, type Pools } f
 export type Reviewable =
   | { id: string; kind: 'vocab'; item: VocabItem }
   | { id: string; kind: 'kanji'; item: KanjiItem; stroke?: StrokeItem }
+  | { id: string; kind: 'kana'; item: KanaItem; stroke?: StrokeItem }
   | { id: string; kind: 'grammar'; item: GrammarPoint }
   | { id: string; kind: 'sentence'; item: SentenceItem }
 
@@ -41,8 +43,19 @@ export type Mode = 'loading' | 'review' | 'practice' | 'summary' | 'error'
 
 const PRACTICE_SIZE = 24
 
-/** Round-robin kanji/vocab/grammar/sentence so a fresh session's intro batch is varied (kanji first). */
+/**
+ * Kana first and BLOCKED (never interleaved — you can't read the other kinds without them,
+ * and blocking beats interleaving for brand-new symbol sets, E3/D-023; their pack order is the
+ * gojūon curriculum), then a round-robin of kanji/vocab/grammar/sentence so a fresh session's
+ * intro batch is varied (kanji first).
+ */
 function buildPool(c: Content): Reviewable[] {
+  const kana = c.kana.map<Reviewable>((k) => ({
+    id: k.id,
+    kind: 'kana',
+    item: k,
+    stroke: c.strokesById.get(k.kanjivgId),
+  }))
   const kanji = c.kanji.map<Reviewable>((k) => ({
     id: k.id,
     kind: 'kanji',
@@ -52,7 +65,7 @@ function buildPool(c: Content): Reviewable[] {
   const vocab = c.vocab.map<Reviewable>((v) => ({ id: v.id, kind: 'vocab', item: v }))
   const grammar = c.grammar.map<Reviewable>((g) => ({ id: g.id, kind: 'grammar', item: g }))
   const sentence = c.sentences.map<Reviewable>((s) => ({ id: s.id, kind: 'sentence', item: s }))
-  const out: Reviewable[] = []
+  const out: Reviewable[] = [...kana]
   const max = Math.max(kanji.length, vocab.length, grammar.length, sentence.length)
   for (let i = 0; i < max; i++) {
     if (kanji[i]) out.push(kanji[i])
@@ -99,6 +112,7 @@ export function useReview(levels: Level[]): ReviewApi {
     vocabWord: [],
     kanjiMeaning: [],
     kanjiLiteral: [],
+    kanaRomaji: [],
     grammarGloss: [],
     sentenceEn: [],
   })

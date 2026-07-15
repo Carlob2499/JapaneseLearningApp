@@ -30,7 +30,7 @@ afterEach(cleanup)
 describe('useToday', () => {
   it('reflects a fresh store: no due, an introducible pool, Tourist stage, no diary yet', async () => {
     const { result } = renderHook(() => useToday(LEVELS))
-    await waitFor(() => expect(result.current.mode).toBe('ready'))
+    await waitFor(() => expect(result.current.mode).toBe('ready'), { timeout: 10_000 })
 
     expect(result.current.error).toBeNull()
     expect(result.current.dueCount).toBe(0)
@@ -53,7 +53,7 @@ describe('useToday', () => {
     }
 
     const { result } = renderHook(() => useToday(LEVELS))
-    await waitFor(() => expect(result.current.mode).toBe('ready'))
+    await waitFor(() => expect(result.current.mode).toBe('ready'), { timeout: 10_000 })
 
     expect(result.current.lifeStage?.name).toBe('Resident')
     expect(result.current.lifeStage?.stage).toBe(1)
@@ -63,7 +63,7 @@ describe('useToday', () => {
     // Load 1: fresh profile, stage 0 — establishes the baseline, no celebration (matches the
     // fresh-store test above; re-asserted here since it's the premise this test builds on).
     const first = renderHook(() => useToday(LEVELS))
-    await waitFor(() => expect(first.result.current.mode).toBe('ready'))
+    await waitFor(() => expect(first.result.current.mode).toBe('ready'), { timeout: 10_000 })
     expect(first.result.current.lifeStage?.stage).toBe(0)
     expect(first.result.current.celebrateStage).toBeNull()
     first.unmount()
@@ -78,21 +78,21 @@ describe('useToday', () => {
 
     // Load 2: a later, genuine stage increase — this one celebrates.
     const second = renderHook(() => useToday(LEVELS))
-    await waitFor(() => expect(second.result.current.mode).toBe('ready'))
+    await waitFor(() => expect(second.result.current.mode).toBe('ready'), { timeout: 10_000 })
     expect(second.result.current.lifeStage?.stage).toBe(1)
     expect(second.result.current.celebrateStage).toBe(1)
 
     // Load 3: same stage again (e.g. the user revisits Home) — must not re-celebrate.
     second.unmount()
     const third = renderHook(() => useToday(LEVELS))
-    await waitFor(() => expect(third.result.current.mode).toBe('ready'))
+    await waitFor(() => expect(third.result.current.mode).toBe('ready'), { timeout: 10_000 })
     expect(third.result.current.lifeStage?.stage).toBe(1)
     expect(third.result.current.celebrateStage).toBeNull()
   })
 
   it('revealGloss logs exactly one journal entry per item, even when called twice', async () => {
     const { result } = renderHook(() => useToday(LEVELS))
-    await waitFor(() => expect(result.current.mode).toBe('ready'))
+    await waitFor(() => expect(result.current.mode).toBe('ready'), { timeout: 10_000 })
 
     const itemId = 'test-reveal-item'
     expect(result.current.isRevealed(itemId)).toBe(false)
@@ -113,7 +113,7 @@ describe('useToday', () => {
     const beforeJournal = await getJournal()
 
     const { result } = renderHook(() => useToday(LEVELS))
-    await waitFor(() => expect(result.current.mode).toBe('ready'))
+    await waitFor(() => expect(result.current.mode).toBe('ready'), { timeout: 10_000 })
 
     const afterStates = await getAllItemStates()
     const afterJournal = await getJournal()

@@ -5,12 +5,13 @@ import { useAudio } from '../audio/useAudio'
 import { EnterOnMount } from '../motion/EnterOnMount'
 import { useFlipLanding } from '../motion/useFlipLanding'
 import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
-import { ChoiceCard, GrammarCard, KanjiCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
+import { ChoiceCard, GrammarCard, KanaCard, KanjiCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
 
 const KIND_LABEL: Record<Reviewable['kind'], string> = {
   vocab: 'Vocabulary',
   kanji: 'Kanji',
+  kana: 'Kana',
   grammar: 'Grammar',
   sentence: 'Sentence',
 }
@@ -30,6 +31,8 @@ function RecallCard({
       return <VocabCard item={r.item} onGrade={onGrade} autoPlay={autoPlay} />
     case 'kanji':
       return <KanjiCard item={r.item} stroke={r.stroke} onGrade={onGrade} />
+    case 'kana':
+      return <KanaCard item={r.item} stroke={r.stroke} onGrade={onGrade} autoPlay={autoPlay} />
     case 'grammar':
       return <GrammarCard item={r.item} onGrade={onGrade} />
     case 'sentence':
@@ -54,6 +57,21 @@ function multipleChoicePrompt(
     return mode === 'production'
       ? { prompt: <span className="jp-lg">{r.item.meanings[0]}</span>, question: 'Which kanji?' }
       : { prompt: <span className="jp-xl">{r.item.literal}</span>, question: 'Which meaning?' }
+  }
+  if (r.kind === 'kana') {
+    // recognition only (typed replaces production for kana): the character cues its sound. The
+    // script label rides along — a beginner's first encounter should say which syllabary this is.
+    return {
+      prompt: (
+        <div className="kana-front">
+          <span className="kana-script">
+            {r.item.script === 'hiragana' ? 'ひらがな · hiragana' : 'カタカナ · katakana'}
+          </span>
+          <span className="jp-xl">{r.item.char}</span>
+        </div>
+      ),
+      question: 'Which sound?',
+    }
   }
   if (r.kind === 'grammar') {
     // recognition only: show the pattern and an example, ask for its function
@@ -92,6 +110,21 @@ function Card({
 }) {
   const { reviewable: r, mode, choices } = p
   if (mode === 'typed') {
+    if (r.kind === 'kana') {
+      // Type the SOUND: raw romaji input graded against Hepburn + acceptance alternates (D-023).
+      return (
+        <TypedCard
+          kind={KIND_LABEL[r.kind]}
+          prompt={<span className="jp-xl">{r.item.char}</span>}
+          answer={r.item.romaji}
+          accept={r.item.altRomaji}
+          raw
+          speakText={r.item.char}
+          onGrade={onGrade}
+          autoPlay={autoPlay}
+        />
+      )
+    }
     return r.kind === 'vocab' ? (
       <TypedCard
         kind={KIND_LABEL[r.kind]}

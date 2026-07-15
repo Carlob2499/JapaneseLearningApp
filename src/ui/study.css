@@ -28,6 +28,24 @@
   line-height: 1.5;
 }
 
+/* Kana cards (D-023): script label above the glyph; alternates note on the back. */
+.kana-front {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+.kana-script {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: none;
+  color: var(--muted);
+}
+.kana-alt {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* Register scaffold (D-015): a small, tinted label so politeness is a felt dimension. */
 .sentence-front {
   display: grid;

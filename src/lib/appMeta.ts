@@ -11,20 +11,28 @@ export function packItemCount(): number {
   return manifest.packs.reduce((sum, p) => sum + p.itemCount, 0)
 }
 
-/** Dataset-verified item count for one level (summed across its four domains). */
+/** Domains a learner actually studies — what the level picker's counts should mean. Strokes
+ *  join onto kanji/kana (not studied separately) and phrase/scene aren't graded directly. */
+const STUDYABLE_DOMAINS = new Set(['vocab', 'kanji', 'kana', 'grammar', 'sentence'])
+
+/** Studyable item count for one level — the honest number behind a level chip (D-023: without
+ *  this, L0 would double-count its stroke pack and read 284 instead of 142). */
 export function levelItemCount(level: Level): number {
-  return manifest.packs.filter((p) => p.level === level).reduce((sum, p) => sum + p.itemCount, 0)
+  return manifest.packs
+    .filter((p) => p.level === level && STUDYABLE_DOMAINS.has(p.domain))
+    .reduce((sum, p) => sum + p.itemCount, 0)
 }
 
 /**
- * Ids of the "reviewable" pool for one level in already-loaded content — the exact four kinds
- * `useReview.ts`'s `buildPool` draws `ItemState`s for (vocab/kanji/grammar/sentence; strokes join
- * onto kanji rather than getting their own state, and phrase/scene are never graded directly).
- * Note `SentenceItem` levels by `levelEstimate`, unlike every other domain's `level` field —
- * missing this silently undercounts a level's pool by its sentence share.
+ * Ids of the "reviewable" pool for one level in already-loaded content — the exact kinds
+ * `useReview.ts`'s `buildPool` draws `ItemState`s for (kana/vocab/kanji/grammar/sentence; strokes
+ * join onto kanji and kana rather than getting their own state, and phrase/scene are never graded
+ * directly). Note `SentenceItem` levels by `levelEstimate`, unlike every other domain's `level`
+ * field — missing this silently undercounts a level's pool by its sentence share.
  */
 export function reviewablePoolIds(content: Content, level: Level): string[] {
   const ids: string[] = []
+  for (const kn of content.kana) if (kn.level === level) ids.push(kn.id)
   for (const v of content.vocab) if (v.level === level) ids.push(v.id)
   for (const k of content.kanji) if (k.level === level) ids.push(k.id)
   for (const g of content.grammar) if (g.level === level) ids.push(g.id)
@@ -39,7 +47,7 @@ export function reviewablePoolCount(content: Content, level: Level): number {
 
 /** JLPT label for each internal level (L1≈N5 … L5≈N1); levels are community estimates (D-005). */
 export const JLPT_LABEL: Record<Level, string> = {
-  L0: 'pre-N5',
+  L0: 'Kana',
   L1: 'N5',
   L2: 'N4',
   L3: 'N3',

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useGSAP } from '@gsap/react'
 import { toHiragana, toKana } from 'wanakana'
-import type { GrammarPoint, KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
+import type { GrammarPoint, KanaItem, KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import type { Choice } from '../review/choices'
 import { useAudio } from '../audio/useAudio'
 import { pulsePass, shakeFail, staggerIn } from '../motion/timelines'
@@ -172,6 +172,47 @@ export function KanjiCard({
   )
 }
 
+/** One kana (D-023): the character cues its sound; the back shows romaji + stroke order. */
+export function KanaCard({
+  item,
+  stroke,
+  onGrade,
+  autoPlay,
+}: {
+  item: KanaItem
+  stroke?: StrokeItem
+  onGrade: (o: Outcome) => void
+  autoPlay?: boolean
+}) {
+  const { available, speak } = useAudio()
+  return (
+    <StudyCard
+      kind="Kana"
+      front={
+        <div className="kana-front">
+          <span className="kana-script">{item.script === 'hiragana' ? 'ひらがな · hiragana' : 'カタカナ · katakana'}</span>
+          <span className="jp-xl">{item.char}</span>
+        </div>
+      }
+      onGrade={onGrade}
+      onReveal={() => {
+        if (autoPlay && available) speak(item.char)
+      }}
+      back={
+        <>
+          <div className="reading">
+            {item.romaji} <SpeakButton text={item.char} />
+          </div>
+          {item.altRomaji && item.altRomaji.length > 0 && (
+            <p className="kana-alt">also typed: {item.altRomaji.join(', ')}</p>
+          )}
+          {stroke && <StrokeViewer item={stroke} />}
+        </>
+      }
+    />
+  )
+}
+
 export function SentenceCard({ item, onGrade }: { item: SentenceItem; onGrade: (o: Outcome) => void }) {
   return (
     <StudyCard
@@ -307,6 +348,11 @@ export function ChoiceCard({
  * Typed production: the learner types the reading (romaji auto-converts to kana via wanakana),
  * checks it against the verified reading, then advances. Correct → pass, wrong → fail. Grading
  * normalises both sides to hiragana so kana or romaji input both work.
+ *
+ * `raw` mode (D-023, kana cards): the answer IS romaji, so input stays as typed (no kana IME
+ * conversion) and grading is a case-folded match against the answer plus its `accept`
+ * alternates (shi/si, wo/o, …) — a correct learner can never be failed by a spelling variant.
+ * `speakText` overrides what the 🔊/auto-play voices (the kana character, not English romaji).
  */
 export function TypedCard({
   kind,
@@ -314,12 +360,18 @@ export function TypedCard({
   answer,
   onGrade,
   autoPlay,
+  raw,
+  accept,
+  speakText,
 }: {
   kind: string
   prompt: ReactNode
   answer: string
   onGrade: (o: Outcome) => void
   autoPlay?: boolean
+  raw?: boolean
+  accept?: string[]
+  speakText?: string
 }) {
   const [value, setValue] = useState('')
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
@@ -328,30 +380,33 @@ export function TypedCard({
   const { contextSafe } = useGSAP()
   useEffect(() => inputRef.current?.focus(), [])
 
-  const target = toHiragana(answer).trim()
+  const target = raw ? answer.trim().toLowerCase() : toHiragana(answer).trim()
+  const spoken = speakText ?? target
   // Feedback fires here, on check() — not on the later "Next →"/onGrade click, which unmounts
   // this card before a tween would ever paint.
   const check = contextSafe(() => {
     if (result !== null || value.trim() === '') return
-    const correct = toHiragana(value).trim() === target
+    const correct = raw
+      ? [target, ...(accept ?? []).map((a) => a.trim().toLowerCase())].includes(value.trim().toLowerCase())
+      : toHiragana(value).trim() === target
     setResult(correct ? 'correct' : 'wrong')
     if (inputRef.current) {
       if (correct) pulsePass(inputRef.current)
       else shakeFail(inputRef.current)
     }
-    if (autoPlay && available) speak(target) // hear the correct reading
+    if (autoPlay && available) speak(spoken) // hear the correct reading
   })
 
   return (
     <div className="study-card">
       <span className="card-kind">{kind}</span>
       <div className="card-front">{prompt}</div>
-      <p className="choice-q">Type the reading</p>
+      <p className="choice-q">{raw ? 'Type the sound (romaji)' : 'Type the reading'}</p>
       <input
         ref={inputRef}
         className={`typed-input${result ? ` ${result}` : ''}`}
         value={value}
-        onChange={(e) => setValue(toKana(e.target.value, { IMEMode: true }))}
+        onChange={(e) => setValue(raw ? e.target.value : toKana(e.target.value, { IMEMode: true }))}
         onKeyDown={(e) => {
           if (e.key === 'Enter') check()
         }}
@@ -369,7 +424,7 @@ export function TypedCard({
       ) : (
         <>
           <p className={`typed-feedback ${result}`} data-testid="typed-feedback">
-            {result === 'correct' ? '正解 · correct' : `Answer: ${target}`} <SpeakButton text={target} />
+            {result === 'correct' ? '正解 · correct' : `Answer: ${target}`} <SpeakButton text={spoken} />
           </p>
           <button className="next-btn" onClick={() => onGrade(result === 'correct' ? 'pass' : 'fail')}>
             Next →

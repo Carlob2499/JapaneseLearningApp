@@ -3,14 +3,17 @@ import type { Level } from '@hikkoshi/schemas'
 // Settings live in localStorage (D-001), separate from the IndexedDB progress store.
 
 const KEY = 'hikkoshi:levels'
-export const ALL_LEVELS: readonly Level[] = ['L1', 'L2', 'L3', 'L4', 'L5']
-const DEFAULT_LEVELS: Level[] = ['L1']
+export const ALL_LEVELS: readonly Level[] = ['L0', 'L1', 'L2', 'L3', 'L4', 'L5']
+/** A fresh profile studies kana + N5 together — the kana rows introduce first (pool order),
+ *  and the L1 items become readable as the syllabary lands (D-023). */
+const DEFAULT_LEVELS: Level[] = ['L0', 'L1']
 
-/** The active-level set for a placement result: L1 up to and including `level`, or the default
- *  (L1) for an unplaced learner (`L0` / anything off the L1–L5 scale). */
+/** The active-level set for a placement result: L0 up to and including `level`. An unplaced
+ *  learner (`L0` — "start at the beginning") gets the beginner default (kana + N5); any real
+ *  placement includes L0 too, since its kana are seeded as provisionally known (D-023). */
 export function levelsUpTo(level: Level): Level[] {
   const i = ALL_LEVELS.indexOf(level)
-  return i < 0 ? [...DEFAULT_LEVELS] : ALL_LEVELS.slice(0, i + 1)
+  return i <= 0 ? [...DEFAULT_LEVELS] : ALL_LEVELS.slice(0, i + 1)
 }
 
 /** The levels the learner has enabled, in canonical order. Always returns at least one. */

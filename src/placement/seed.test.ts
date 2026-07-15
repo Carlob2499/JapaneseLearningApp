@@ -22,6 +22,9 @@ function sentence(id: string, levelEstimate: Level): SentenceItem {
 const content: Content = {
   vocab: [vocab('v-l1', 'L1'), vocab('v-l2', 'L2'), vocab('v-l3', 'L3')],
   kanji: [kanji('k-l1', 'L1'), kanji('k-l2', 'L2')],
+  kana: [
+    { kind: 'kana', id: 'kana:あ', char: 'あ', script: 'hiragana', romaji: 'a', row: 'a', kanjivgId: '03042', level: 'L0' },
+  ],
   grammar: [],
   sentences: [sentence('s-l1', 'L1')],
   phrases: [], scenes: [], strokesById: new Map(),
@@ -33,12 +36,18 @@ describe('placementSeeds', () => {
     expect(placementSeeds(content, 'L0', now)).toEqual([])
   })
 
-  it('seeds exactly the reviewable pool up to and including the placed level', () => {
+  it('seeds exactly the reviewable pool up to and including the placed level, plus L0 kana', () => {
     const seeds = placementSeeds(content, 'L2', now)
     const ids = new Set(seeds.map((s) => s.itemId))
-    const expected = new Set([...reviewablePoolIds(content, 'L1'), ...reviewablePoolIds(content, 'L2')])
+    const expected = new Set([
+      ...reviewablePoolIds(content, 'L0'),
+      ...reviewablePoolIds(content, 'L1'),
+      ...reviewablePoolIds(content, 'L2'),
+    ])
     expect(ids).toEqual(expected)
     expect(seeds).toHaveLength(expected.size)
+    // A placed learner reads kana — the syllabary is provisionally known too (D-023).
+    expect(ids.has('kana:あ')).toBe(true)
     // L3 is above the placement — not seeded (it becomes the learning frontier).
     expect(ids.has('v-l3')).toBe(false)
   })

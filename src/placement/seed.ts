@@ -22,7 +22,10 @@ export function placementSeeds(content: Content, level: Level, now: number): Ite
   if (upTo < 0) return []
   const seeds: ItemState[] = []
   let i = 0
-  for (const band of PROBE_BANDS.slice(0, upTo + 1)) {
+  // Any real placement (≥ L1) implies the learner reads kana — they just answered kana-cued
+  // recognition questions — so the L0 syllabary is seeded provisionally too (D-023); the
+  // confirm-or-drop mechanic still catches individual gaps.
+  for (const band of ['L0' as Level, ...PROBE_BANDS.slice(0, upTo + 1)]) {
     for (const id of reviewablePoolIds(content, band)) {
       seeds.push({
         itemId: id,

@@ -2,6 +2,7 @@ import {
   Pack,
   type GrammarPoint,
   type Item,
+  type KanaItem,
   type KanjiItem,
   type Level,
   type PhraseTemplate,
@@ -16,6 +17,7 @@ import manifest from '../../content/packs/manifest.json'
 export interface Content {
   vocab: VocabItem[]
   kanji: KanjiItem[]
+  kana: KanaItem[]
   grammar: GrammarPoint[]
   sentences: SentenceItem[]
   phrases: PhraseTemplate[]
@@ -39,6 +41,12 @@ const L1_IMPORTS: Array<() => Promise<{ default: unknown }>> = [
   () => import('../../content/packs/l1/scene.json'),
 ]
 
+/** L0 kana packs are bundled/precached like L1 — a zero-beginner is a first install (D-023). */
+const L0_IMPORTS: Array<() => Promise<{ default: unknown }>> = [
+  () => import('../../content/packs/l0/kana.json'),
+  () => import('../../content/packs/l0/strokes.json'),
+]
+
 /** Validate a pack payload against the shared schema (D-002 enforced at runtime). */
 function parsePack(data: unknown): Item[] {
   return Pack.parse(data).items
@@ -51,10 +59,11 @@ async function fetchPack(path: string): Promise<Item[]> {
   return parsePack(await res.json())
 }
 
-/** All items for one level (across its four domains). */
+/** All items for one level (across its domains). */
 async function loadLevelItems(level: Level): Promise<Item[]> {
-  if (level === 'L1') {
-    const arrs = await Promise.all(L1_IMPORTS.map(async (imp) => parsePack((await imp()).default)))
+  const bundled = level === 'L0' ? L0_IMPORTS : level === 'L1' ? L1_IMPORTS : null
+  if (bundled) {
+    const arrs = await Promise.all(bundled.map(async (imp) => parsePack((await imp()).default)))
     return arrs.flat()
   }
   const entries = manifest.packs.filter((p) => p.level === level)
@@ -72,6 +81,7 @@ export async function loadLevels(levels: Level[]): Promise<Content> {
   return {
     vocab: all.filter((i): i is VocabItem => i.kind === 'vocab'),
     kanji: all.filter((i): i is KanjiItem => i.kind === 'kanji'),
+    kana: all.filter((i): i is KanaItem => i.kind === 'kana'),
     grammar: all.filter((i): i is GrammarPoint => i.kind === 'grammar'),
     sentences: all.filter((i): i is SentenceItem => i.kind === 'sentence'),
     phrases: all.filter((i): i is PhraseTemplate => i.kind === 'phrase'),

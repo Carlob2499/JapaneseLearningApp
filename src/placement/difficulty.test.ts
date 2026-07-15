@@ -13,7 +13,7 @@ function vocab(id: string, level: Level): VocabItem {
   return { kind: 'vocab', id, jmdictSeq: 1, expression: id, reading: 'か', senses: [{ gloss: ['g'], pos: [] }], level, modules: [] }
 }
 function content(kanjiItems: KanjiItem[], vocabItems: VocabItem[]): Content {
-  return { vocab: vocabItems, kanji: kanjiItems, grammar: [], sentences: [], phrases: [], scenes: [], strokesById: new Map() }
+  return { vocab: vocabItems, kanji: kanjiItems, kana: [], grammar: [], sentences: [], phrases: [], scenes: [], strokesById: new Map() }
 }
 
 describe('probeCandidates', () => {
