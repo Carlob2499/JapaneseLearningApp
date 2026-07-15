@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Hikkoshi — a Japanese learning game (JLPT N5–N1 + real-world survival Japanese) as an installable, offline-capable PWA.",
+  "description": "Hikkoshi \u2014 a Japanese learning game (JLPT N5\u2013N1 + real-world survival Japanese) as an installable, offline-capable PWA.",
   "workspaces": [
     "packages/*",
     "pipeline"
@@ -22,7 +22,8 @@
     "pipeline:build-grammar": "tsx pipeline/src/build-grammar.ts",
     "pipeline:build-modules": "tsx pipeline/src/build-modules.ts",
     "pipeline:build-scenes": "tsx pipeline/src/build-scenes.ts",
-    "pipeline:validate": "tsx pipeline/src/validate.ts"
+    "pipeline:validate": "tsx pipeline/src/validate.ts",
+    "pipeline:build-kana": "tsx pipeline/src/build-kana.ts"
   },
   "dependencies": {
     "@fontsource/klee-one": "^5.2.8",

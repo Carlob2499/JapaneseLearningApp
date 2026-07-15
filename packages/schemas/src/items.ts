@@ -104,6 +104,28 @@ export const SentenceItem = z.object({
 })
 export type SentenceItem = z.infer<typeof SentenceItem>
 
+/**
+ * One kana character (D-023) — the L0 foundation the rest of the app assumes. The character
+ * itself and its stroke data are dataset-verified (KanjiVG, via the matching L0 strokes pack,
+ * joined on `kanjivgId` exactly like kanji); the `romaji` reading follows the Hepburn
+ * romanization convention (cited at the pack level), with `altRomaji` acceptance variants
+ * (shi/si, ji/di, o/wo…) so typed grading never fails a correct learner. `row` is the gojūon
+ * row label (a, ka, sa…, plus ga… for voiced rows) — packs are emitted in gojūon order so the
+ * intro budget introduces kana row-by-row (blocked introduction, E3).
+ */
+export const KanaItem = z.object({
+  kind: z.literal('kana'),
+  id: z.string().min(1),
+  char: z.string().min(1),
+  script: z.enum(['hiragana', 'katakana']),
+  romaji: z.string().min(1),
+  altRomaji: z.array(z.string().min(1)).optional(),
+  row: z.string().min(1),
+  kanjivgId: z.string().min(1),
+  level: Level,
+})
+export type KanaItem = z.infer<typeof KanaItem>
+
 /** Kanji stroke-order data — from KanjiVG, ordered SVG path strings on a 109×109 canvas. */
 export const StrokeItem = z.object({
   kind: z.literal('strokes'),
@@ -179,6 +201,7 @@ export type SceneTemplate = z.infer<typeof SceneTemplate>
 export const Item = z.discriminatedUnion('kind', [
   VocabItem,
   KanjiItem,
+  KanaItem,
   GrammarPoint,
   SentenceItem,
   StrokeItem,

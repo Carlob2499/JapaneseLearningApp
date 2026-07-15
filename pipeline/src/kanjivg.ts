@@ -45,8 +45,9 @@ async function readValid(path: string): Promise<string | null> {
   return s.includes('</svg>') ? s : null
 }
 
-/** Fetch one SVG (cache → raw → jsDelivr, with retries); null if unreachable. */
-async function fetchOne(cp: string): Promise<string | null> {
+/** Fetch one SVG (cache → raw → jsDelivr, with retries); null if unreachable. Exported for the
+ *  kana builder (D-023), which draws stroke data from the same pinned KanjiVG tree. */
+export async function fetchKanjiVgSvg(cp: string): Promise<string | null> {
   const cached = join(KANJIVG_CACHE, `${cp}.svg`)
   const hit = await readValid(cached)
   if (hit) return hit
@@ -104,7 +105,7 @@ export async function buildStrokeItems(
     a.strokes.kanjivgId < b.strokes.kanjivgId ? -1 : a.strokes.kanjivgId > b.strokes.kanjivgId ? 1 : 0,
   )
 
-  const fetched = await pool(uniq, async (k) => ({ k, svg: await fetchOne(k.strokes.kanjivgId) }))
+  const fetched = await pool(uniq, async (k) => ({ k, svg: await fetchKanjiVgSvg(k.strokes.kanjivgId) }))
 
   const items: StrokeItem[] = []
   const unmatched: { literal: string; kanjivgId: string }[] = []

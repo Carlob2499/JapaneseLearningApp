@@ -141,7 +141,7 @@ export const JLPT_TO_LEVEL: Readonly<Record<'N5' | 'N4' | 'N3' | 'N2' | 'N1', Le
   N1: 'L5',
 }
 
-export const LEVELS_IN_ORDER = ['L1', 'L2', 'L3', 'L4', 'L5'] as const satisfies readonly Level[]
+export const LEVELS_IN_ORDER = ['L0', 'L1', 'L2', 'L3', 'L4', 'L5'] as const satisfies readonly Level[]
 
 /**
  * Target sentence register mix per level (D-015 "authentic balance"): polite-majority

@@ -16,6 +16,7 @@ const EXPECTED_STATUS: Partial<Record<ManifestEntry['domain'], string>> = {
   grammar: 'curated-cited',
   phrase: 'curated-cited',
   scene: 'curated-cited',
+  kana: 'curated-cited',
 }
 
 export function checkPack(entry: ManifestEntry, bytes: Buffer): string[] {

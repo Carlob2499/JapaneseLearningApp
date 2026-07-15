@@ -2,6 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type {
   GrammarPoint,
+  KanaItem,
   KanjiItem,
   Level,
   Manifest,
@@ -33,8 +34,16 @@ export interface LockSource {
   attribution: string
 }
 
-type Domain = 'vocab' | 'kanji' | 'grammar' | 'sentence' | 'strokes' | 'phrase' | 'scene'
-type AnyItem = VocabItem | KanjiItem | GrammarPoint | SentenceItem | StrokeItem | PhraseTemplate | SceneTemplate
+type Domain = 'vocab' | 'kanji' | 'kana' | 'grammar' | 'sentence' | 'strokes' | 'phrase' | 'scene'
+type AnyItem =
+  | VocabItem
+  | KanjiItem
+  | KanaItem
+  | GrammarPoint
+  | SentenceItem
+  | StrokeItem
+  | PhraseTemplate
+  | SceneTemplate
 
 const LEVEL_JLPT: Record<Level, string> = {
   L0: 'kana/survival',
@@ -83,6 +92,17 @@ const DOMAIN_META: Record<Domain, DomainMeta> = {
     licenseNotes: 'KANJIDIC2 data is CC BY-SA 4.0; JLPT level tags are community estimates (CC BY, Jonathan Waller).',
     levelTagSource: 'Jonathan Waller / tanos.co.uk via davidluzgouveia/kanji-data (jlpt_new)',
     verificationMethod: 'KANJIDIC2 literal join',
+  },
+  kana: {
+    domain: 'kana',
+    titleWord: 'Kana',
+    dataKeys: ['kanjivg'],
+    licenseSpdx: 'CC-BY-SA-4.0',
+    licenseNotes:
+      'The characters and their stroke data are dataset-verified via KanjiVG (© Ulrich Apel, CC BY-SA 3.0 — see the matching L0 strokes pack); romaji readings follow the Hepburn romanization convention (with kunrei/wāpuro acceptance variants per item), and the gojūon row structure is the standard chart order — curated, not generated (D-002).',
+    verificationStatus: 'curated-cited',
+    verificationMethod:
+      'gojūon table curated against the Unicode kana blocks; stroke data joined per character from KanjiVG; romaji per Hepburn convention',
   },
   grammar: {
     domain: 'grammar',
@@ -307,6 +327,16 @@ export function emitGrammarPacks(grammar: GrammarPoint[], lock: LockSource[], da
 /** Re-emit ONLY the per-level phrase packs (targeted rebuild) — mirrors `emitGrammarPacks`. */
 export function emitPhrasePacks(phrases: PhraseTemplate[], lock: LockSource[], date: string): Promise<ManifestEntry[]> {
   return emitDomainPacks(DOMAIN_META.phrase, phrases, (i) => (i as PhraseTemplate).level, lock, date)
+}
+
+/** Re-emit ONLY the kana packs (targeted rebuild, D-023) — mirrors `emitGrammarPacks`. */
+export function emitKanaPacks(kana: KanaItem[], lock: LockSource[], date: string): Promise<ManifestEntry[]> {
+  return emitDomainPacks(DOMAIN_META.kana, kana, (i) => (i as KanaItem).level, lock, date)
+}
+
+/** Re-emit ONLY the given strokes packs' levels (used by the kana build for the L0 strokes pack). */
+export function emitStrokePacks(strokes: StrokeItem[], lock: LockSource[], date: string): Promise<ManifestEntry[]> {
+  return emitDomainPacks(DOMAIN_META.strokes, strokes, (i) => (i as StrokeItem).level, lock, date)
 }
 
 /** Re-emit ONLY the per-level scene packs (targeted rebuild) — mirrors `emitGrammarPacks`. */
