@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { celebrate, enterTimeline, exitTimeline, pulsePass, shakeFail, staggerIn } from './timelines'
+import { ambientDrift, celebrate, enterTimeline, exitTimeline, pulsePass, shakeFail, staggerIn } from './timelines'
 
 function div(): HTMLDivElement {
   return document.createElement('div')
@@ -40,5 +40,11 @@ describe('motion timeline factories (reduced-motion branch)', () => {
     const tw = celebrate(div())
     expect(tw.duration()).toBeCloseTo(0.15)
     expect(tw.vars.ease).toBe('power2.out')
+  })
+
+  it('ambientDrift (Ken Burns) holds a photo perfectly still', () => {
+    const tw = ambientDrift(div())
+    expect(tw.duration()).toBe(0)
+    expect(tw.vars.repeat).toBeUndefined() // no infinite loop is ever created under reduced motion
   })
 })

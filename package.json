@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Hikkoshi \u2014 a Japanese learning game (JLPT N5\u2013N1 + real-world survival Japanese) as an installable, offline-capable PWA.",
+  "description": "Hikkoshi — a Japanese learning game (JLPT N5–N1 + real-world survival Japanese) as an installable, offline-capable PWA.",
   "workspaces": [
     "packages/*",
     "pipeline"
@@ -45,6 +45,7 @@
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^29.1.1",
     "oxlint": "^1.71.0",
+    "sharp": "^0.35.3",
     "tsx": "^4.23.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",

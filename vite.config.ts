@@ -80,7 +80,11 @@ export default defineConfig({
         // precache kept in sync with build). L1 packs are bundled JS chunks caught by the
         // glob; L2–L5 JSON and the D-019 webfonts are runtime-cached below (lazy, so first
         // load stays light) — woff2 is deliberately absent from this glob: see below.
-        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
+        // webp: the D-026 photo layer (four licensed, compressed stills ≈ 0.5 MB total) is part
+        // of the core visual identity, so it precaches like the app shell rather than arriving
+        // late over the network. Fonts stay runtime-cached (D-019) — their long tail is unlike
+        // this small fixed set.
+        globPatterns: ['**/*.{js,css,html,svg,png,webp,webmanifest}'],
         navigateFallback: `${BASE}index.html`,
         cleanupOutdatedCaches: true,
         runtimeCaching: [

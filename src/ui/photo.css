@@ -1,0 +1,76 @@
+/* Photo treatment system (D-026) — "photo is the world, vector is the story."
+   Licensed real-life photographs (see src/assets/photos/PHOTOS.md) are unified into the
+   shironeri/aizome identity by a duotone wash: an indigo/paper gradient overlay + gentle
+   desaturation, deepened to night in dark mode. The photo itself breathes via ambientDrift
+   (GSAP Ken Burns, stilled under reduced motion). */
+
+.photo-band {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.14);
+  isolation: isolate;
+}
+.photo-band img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(0.98);
+  will-change: transform;
+}
+/* The aizome wash — always present so every photo belongs to the same world. */
+.photo-band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-2) 26%, transparent) 0%, transparent 42%),
+    linear-gradient(0deg, color-mix(in srgb, var(--ink) 34%, transparent) 0%, transparent 46%),
+    color-mix(in srgb, var(--accent-2) 10%, transparent);
+}
+
+/* Time-of-day tints for the Home hero (D-026): the same street, your hour. */
+.photo-band.tod-morning::after {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #d9a24a 16%, transparent) 0%, transparent 48%),
+    linear-gradient(0deg, color-mix(in srgb, var(--ink) 30%, transparent) 0%, transparent 44%),
+    color-mix(in srgb, var(--accent-2) 6%, transparent);
+}
+.photo-band.tod-day::after {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-2) 14%, transparent) 0%, transparent 40%),
+    linear-gradient(0deg, color-mix(in srgb, var(--ink) 28%, transparent) 0%, transparent 42%),
+    color-mix(in srgb, var(--accent-2) 5%, transparent);
+}
+.photo-band.tod-dusk::after {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 20%, transparent) 0%, transparent 52%),
+    linear-gradient(0deg, color-mix(in srgb, var(--ink) 40%, transparent) 0%, transparent 48%),
+    color-mix(in srgb, #b3542f 12%, transparent);
+}
+.photo-band.tod-night::after {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-2) 42%, transparent) 0%, transparent 60%),
+    linear-gradient(0deg, color-mix(in srgb, var(--ink) 55%, transparent) 0%, transparent 55%),
+    color-mix(in srgb, var(--accent-2) 22%, transparent);
+}
+
+/* Dark scheme: it is night in the app's world, whatever the clock says. */
+@media (prefers-color-scheme: dark) {
+  .photo-band img {
+    filter: saturate(0.7) brightness(0.82) contrast(1.02);
+  }
+  .photo-band::after,
+  .photo-band.tod-morning::after,
+  .photo-band.tod-day::after,
+  .photo-band.tod-dusk::after,
+  .photo-band.tod-night::after {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--accent-2) 45%, transparent) 0%, transparent 62%),
+      linear-gradient(0deg, color-mix(in srgb, #0d0b13 62%, transparent) 0%, transparent 58%),
+      color-mix(in srgb, var(--accent-2) 24%, transparent);
+  }
+}

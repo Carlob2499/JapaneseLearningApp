@@ -58,6 +58,21 @@ export function shakeFail(target: gsap.TweenTarget): gsap.core.Tween {
   })
 }
 
+/**
+ * Ken Burns ambient drift for a photo layer (D-026): a very slow scale/pan breath that loops
+ * forever, making a real photograph feel alive without demanding attention. Under reduced
+ * motion the photo simply holds still (a zero-duration no-op tween, matching pulsePass's
+ * pattern). Callers own cleanup via useGSAP's context.
+ */
+export function ambientDrift(target: gsap.TweenTarget): gsap.core.Tween {
+  if (isReducedMotion()) return gsap.to(target, { scale: 1, duration: 0 })
+  return gsap.fromTo(
+    target,
+    { scale: 1.02, xPercent: -0.8, yPercent: 0.4 },
+    { scale: 1.07, xPercent: 0.8, yPercent: -0.4, duration: 26, ease: 'sine.inOut', yoyo: true, repeat: -1 },
+  )
+}
+
 /** A celebratory pop for the life-stage-up moment — bouncy elastic settle. */
 export function celebrate(target: gsap.TweenTarget): gsap.core.Tween {
   const reduced = isReducedMotion()
