@@ -133,12 +133,14 @@ export default function Home({
   onStart,
   onStartScene,
   onJourney,
+  onEmergency,
 }: {
   levels: Level[]
   onToggleLevel: (level: Level) => void
   onStart: () => void
   onStartScene: (sceneId: string) => void
   onJourney: () => void
+  onEmergency: () => void
 }) {
   const today = useToday(levels)
   const selectedCount = levels.reduce((sum, l) => sum + levelItemCount(l), 0)
@@ -241,6 +243,10 @@ export default function Home({
           progress saved on this device. Levels beyond N5 download once, then work offline.
         </p>
       </section>
+
+      <button type="button" className="emergency-link" onClick={onEmergency}>
+        <span aria-hidden="true">🆘</span> In an emergency · 緊急のとき
+      </button>
 
       <About />
     </main>

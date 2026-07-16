@@ -251,8 +251,8 @@
       "level": "L1",
       "domain": "phrase",
       "packVersion": "0.1.0",
-      "itemCount": 15,
-      "sha256": "c821859cb606ae2819f2418fb8146b1a0a64c5faa5d953b57e070be778bed364"
+      "itemCount": 21,
+      "sha256": "f157ad6cf74dbaeede85a42013e8fd73399bb222bc1b92cbc29c11c52e20fde0"
     },
     {
       "packId": "scene.l1.core",

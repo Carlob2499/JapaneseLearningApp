@@ -154,6 +154,11 @@ export const PhraseTemplate = z.object({
   module: ModuleTag,
   register: Register,
   pattern: z.string().min(1),
+  /** English meaning + Hepburn romaji — supporting annotations for phrases shown *standalone* as a
+   *  reference (the M9 emergency card, D-031), not the cited Japanese itself. Optional: scene NPC
+   *  lines (M2/M3) don't need them (their English lives in the model-written scene framing). */
+  gloss: z.string().min(1).optional(),
+  romaji: z.string().min(1).optional(),
   citations: z.array(Source).min(1),
 })
 export type PhraseTemplate = z.infer<typeof PhraseTemplate>

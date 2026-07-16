@@ -1,0 +1,116 @@
+[
+  {
+    "kind": "phrase",
+    "id": "phrase:m9:tasukete-kudasai",
+    "level": "L1",
+    "module": "M9_medical",
+    "register": "polite",
+    "pattern": "助けてください。",
+    "romaji": "tasukete kudasai",
+    "gloss": "Please help (me).",
+    "citations": [
+      {
+        "name": "Minato City, Tokyo — Easy-Japanese emergency & crime guide",
+        "url": "https://www.city.minato.tokyo.jp/easyjp/accidentanddisaster/crime.html",
+        "retrieved": "2026-07-16",
+        "license": "municipal government page — documents this as a standard call-for-help phrase (curriculum.md M9); phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m9:kaji-desu",
+    "level": "L1",
+    "module": "M9_medical",
+    "register": "polite",
+    "pattern": "火事です。",
+    "romaji": "kaji desu",
+    "gloss": "It's a fire.",
+    "citations": [
+      {
+        "name": "Tokyo Fire Department — How 119 emergency calls work (119番通報の仕組み)",
+        "url": "https://www.tfd.metro.tokyo.lg.jp/lfe/119/119.html",
+        "retrieved": "2026-07-16",
+        "license": "government fire-service page — documents this as the caller's verbatim answer to the operator (curriculum.md M9); phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m9:kyuukyuu-desu",
+    "level": "L1",
+    "module": "M9_medical",
+    "register": "polite",
+    "pattern": "救急です。",
+    "romaji": "kyūkyū desu",
+    "gloss": "It's a medical emergency.",
+    "citations": [
+      {
+        "name": "Tokyo Fire Department — How 119 emergency calls work (119番通報の仕組み)",
+        "url": "https://www.tfd.metro.tokyo.lg.jp/lfe/119/119.html",
+        "retrieved": "2026-07-16",
+        "license": "government fire-service page — documents this as the caller's verbatim answer to the operator (curriculum.md M9); phrase not copied from a proprietary list"
+      },
+      {
+        "name": "Tokyo Metropolitan Government, Bureau of Public Health — How to call an ambulance",
+        "url": "https://www.hokeniryo.metro.tokyo.lg.jp/iryo/iryo_hoken/medical_info_eng/emergency_call",
+        "retrieved": "2026-07-16",
+        "license": "government medical-info page — corroborates this documented response (curriculum.md M9)"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m9:kyuukyuusha-onegai",
+    "level": "L1",
+    "module": "M9_medical",
+    "register": "polite",
+    "pattern": "救急車をお願いします。",
+    "romaji": "kyūkyūsha o onegai shimasu",
+    "gloss": "An ambulance, please.",
+    "citations": [
+      {
+        "name": "Tokyo Metropolitan Government, Bureau of Public Health — How to call an ambulance",
+        "url": "https://www.hokeniryo.metro.tokyo.lg.jp/iryo/iryo_hoken/medical_info_eng/emergency_call",
+        "retrieved": "2026-07-16",
+        "license": "government medical-info page — documents this request phrase (curriculum.md M9); phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m9:kyuukyuusha-yonde",
+    "level": "L1",
+    "module": "M9_medical",
+    "register": "polite",
+    "pattern": "救急車を呼んでください。",
+    "romaji": "kyūkyūsha o yonde kudasai",
+    "gloss": "Please call an ambulance.",
+    "citations": [
+      {
+        "name": "Japan National Tourism Organization (JNTO) — For safe travels in Japan",
+        "url": "https://www.jnto.go.jp/emergency/eng/mi_guide.html",
+        "retrieved": "2026-07-16",
+        "license": "official tourism-organization guidance — documents this bystander phrase (curriculum.md M9); phrase not copied from a proprietary list"
+      }
+    ]
+  },
+  {
+    "kind": "phrase",
+    "id": "phrase:m9:keisatsu-yonde",
+    "level": "L1",
+    "module": "M9_medical",
+    "register": "polite",
+    "pattern": "警察を呼んでください。",
+    "romaji": "keisatsu o yonde kudasai",
+    "gloss": "Please call the police.",
+    "citations": [
+      {
+        "name": "Minato City, Tokyo — Easy-Japanese emergency & crime guide",
+        "url": "https://www.city.minato.tokyo.jp/easyjp/accidentanddisaster/crime.html",
+        "retrieved": "2026-07-16",
+        "license": "municipal government page — documents this bystander phrase (curriculum.md M9); phrase not copied from a proprietary list"
+      }
+    ]
+  }
+]

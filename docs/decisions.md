@@ -912,3 +912,32 @@ beginner never sees the shift (gate holds), a placed high-stage profile does, an
 through the keigo context beats to the receipt with the correct line rendering green, zero console
 errors.
 *Source: Session 19 (roadmap execution, Batch 4), 2026-07-16.*
+
+### D-031: The emergency reference — the one module taught from day one
+Roadmap Batch 5, the final batch. `docs/curriculum.md` §M9 carries an instruction no other module
+does: "N5 emergency micro-script (119, address, 助けてください) taught early **regardless of level**."
+- **A reference, not a drill.** Safety-critical survival Japanese belongs one tap from Home and
+  always readable — not spaced into SRS where you might not have seen it yet when it matters. The "In
+  an emergency" view (reached from a Home link, `🆘 In an emergency · 緊急のとき`) shows the two numbers
+  to dial (119 fire & ambulance, 110 police) in large vermillion numerals, then a set of cited "say
+  this" lines with romaji, English, and 🔊. It rides the bundled/precached L1 phrase pack, so it works
+  offline from first launch. Recorded call: the phrases are **not** added to the review pool — for
+  safety content, always-available-and-looked-up beats spaced-and-maybe-not-yet-introduced.
+- **Every Japanese line verified against Japanese-government / official-tourism sources** (a dedicated
+  research pass, per the session's "author cited content autonomously" directive): 助けてください
+  (Minato City), 火事です / 救急です (Tokyo Fire Department's documented 119 call script), 救急車を
+  お願いします (Tokyo Metropolitan Bureau of Public Health), 救急車を呼んでください (JNTO), 警察を
+  呼んでください (Minato City). Numbers cited to JNTO. Each phrase carries its own `citations` in the
+  pack — D-002 holds for safety-critical content exactly as for everything else; nothing invented.
+- **Two optional PhraseTemplate fields, `gloss` + `romaji`.** Scene NPC lines (M2/M3) get their
+  English from the model-written framing, but a standalone reference needs meaning + pronunciation on
+  the line itself. Optional, backward-compatible; only M9 uses them.
+- **Honest framing**: the card states up front it's a reference, "not medical or legal advice — if
+  you're in danger, call first," and notes 110/119 are free with interpreter support. About discloses
+  the same.
+- **Sokuon/chōon note**: unrelated to M9, but the D-029 deferral still stands; not revisited here.
+Verified: full gate (typecheck, lint, 242 unit tests, pipeline:validate at 15,560 items, build) and
+the e2e suite (now 30 checks × the three schemes, including a new emergency spec asserting the numbers
++ cited phrases render); plus a live screenshot pass in light and dark, zero console errors.
+*Source: Session 19 (roadmap execution, Batch 5), 2026-07-16; emergency phrasing verified against
+FDMA / Tokyo Fire Department / Tokyo Metropolitan Government / JNTO / Minato City guidance.*

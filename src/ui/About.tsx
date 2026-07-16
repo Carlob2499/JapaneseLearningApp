@@ -77,6 +77,15 @@ export default function About() {
           against public inventories (and, for N5–N4, a Genki chapter). The example sentences are pulled
           verbatim from Tatoeba — never invented. It’s a growing curated set, wider at the lower levels.
         </p>
+        <p>
+          <strong>Emergency words are one tap from Home, always offline.</strong> The “In an emergency”
+          card gathers the safety-critical basics — the numbers to dial (119 for fire and ambulance,
+          110 for police) and a few cited lines to say (ask for help, report a fire, request an
+          ambulance) with pronunciation. It's taught from day one regardless of your level, because
+          when it matters there's no time to look it up. It's a reference, not medical or legal advice
+          — every Japanese line is verified against documented emergency-services guidance, never
+          invented.
+        </p>
         <p className="attribution">
           Language data:{' '}
           <span>JMdict &amp; KANJIDIC2 © James William Breen / EDRDG (CC BY-SA 4.0)</span>;{' '}

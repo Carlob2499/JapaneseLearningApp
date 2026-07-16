@@ -1,5 +1,6 @@
 import { useState, type ReactNode, type RefObject } from 'react'
 import type { Level } from '@hikkoshi/schemas'
+import Emergency from './ui/Emergency'
 import Home from './ui/Home'
 import Journey from './ui/Journey'
 import Onboarding from './ui/Onboarding'
@@ -10,7 +11,7 @@ import { useViewTransition } from './motion/useViewTransition'
 import { getActiveLevels, getOnboarded, levelsUpTo, setActiveLevels, setOnboarded } from './store/settings'
 import './App.css'
 
-type View = 'onboarding' | 'placement' | 'home' | 'review' | 'scene' | 'journey'
+type View = 'onboarding' | 'placement' | 'home' | 'review' | 'scene' | 'journey' | 'emergency'
 
 export default function App() {
   const { view, containerRef, navigate } = useViewTransition<View>(() =>
@@ -49,6 +50,8 @@ export default function App() {
     content = <SceneView levels={levels} sceneId={sceneId} onExit={() => navigate('home')} />
   } else if (view === 'journey') {
     content = <Journey onHome={() => navigate('home')} />
+  } else if (view === 'emergency') {
+    content = <Emergency onHome={() => navigate('home')} />
   } else {
     content = (
       <Home
@@ -60,6 +63,7 @@ export default function App() {
           navigate('scene')
         }}
         onJourney={() => navigate('journey')}
+        onEmergency={() => navigate('emergency')}
       />
     )
   }

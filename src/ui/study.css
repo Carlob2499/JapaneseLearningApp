@@ -776,3 +776,88 @@
   cursor: pointer;
   padding: 0;
 }
+
+/* Emergency reference (M9 / D-031) — a calm but unmistakable safety card. The dial numbers use
+   hinomaru vermillion (--accent); everything reads from tokens so dark mode stays correct. */
+.emergency-link {
+  display: block;
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font: inherit;
+  font-size: 15px;
+  text-align: center;
+  cursor: pointer;
+}
+.emergency-page {
+  display: grid;
+  gap: 16px;
+}
+.emergency-head h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0 0 4px;
+  font-size: 28px;
+}
+.emergency-head .fineprint {
+  margin: 0;
+}
+.emergency-numbers {
+  display: grid;
+  gap: 12px;
+}
+.emergency-number {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.emergency-number .dial {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  min-width: 88px;
+  text-align: center;
+}
+.dial-body {
+  display: grid;
+  gap: 2px;
+}
+.emergency-numbers-note {
+  margin: 4px 0 0;
+}
+.emergency-phrases {
+  display: grid;
+  gap: 16px;
+}
+.emergency-phrases h2 {
+  margin: 0;
+}
+.emergency-phrase {
+  display: grid;
+  gap: 3px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.emergency-phrase:last-of-type {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.emergency-ja {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.emergency-romaji {
+  font-size: 14px;
+  color: var(--accent-2);
+  letter-spacing: 0.02em;
+}
+.emergency-gloss {
+  font-size: 15px;
+  color: var(--muted);
+}
