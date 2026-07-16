@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { ChoiceCard, GrammarCard, ListeningCard, SentenceCard, SpeakButton, TypedCard } from './cards'
+import { ChoiceCard, GrammarCard, KanaCard, ListeningCard, SentenceCard, SpeakButton, TypedCard } from './cards'
 import type { Choice } from '../review/choices'
-import type { GrammarPoint, SentenceItem } from '@hikkoshi/schemas'
+import type { GrammarPoint, KanaItem, SentenceItem, StrokeItem } from '@hikkoshi/schemas'
 
 afterEach(cleanup)
 
@@ -45,6 +45,38 @@ describe('ChoiceCard', () => {
     fireEvent.click(screen.getByText('to drink'))
     fireEvent.click(screen.getByText('Next →'))
     expect(onGrade).toHaveBeenCalledWith('fail')
+  })
+})
+
+describe('KanaCard (yōon, D-029)', () => {
+  const stroke = (literal: string, id: string): StrokeItem => ({
+    kind: 'strokes',
+    id: `strokes:${literal}`,
+    literal,
+    level: 'L0',
+    kanjivgId: id,
+    viewBox: '0 0 109 109',
+    strokes: ['M1', 'M2'],
+    strokeCount: 2,
+  })
+  const kya: KanaItem = {
+    kind: 'kana',
+    id: 'kana:きゃ',
+    char: 'きゃ',
+    script: 'hiragana',
+    romaji: 'kya',
+    row: 'kya',
+    kanjivgIds: ['0304d', '03083'],
+    level: 'L0',
+  }
+
+  it('shows a stroke chart for each component glyph of a yōon on reveal', () => {
+    render(<KanaCard item={kya} strokes={[stroke('き', '0304d'), stroke('ゃ', '03083')]} onGrade={() => {}} />)
+    fireEvent.click(screen.getByText('Reveal'))
+    expect(screen.getByText('kya')).toBeTruthy()
+    // Two component charts — one per glyph.
+    expect(screen.getByLabelText('Stroke order for き')).toBeTruthy()
+    expect(screen.getByLabelText('Stroke order for ゃ')).toBeTruthy()
   })
 })
 

@@ -105,13 +105,15 @@ export const SentenceItem = z.object({
 export type SentenceItem = z.infer<typeof SentenceItem>
 
 /**
- * One kana character (D-023) — the L0 foundation the rest of the app assumes. The character
- * itself and its stroke data are dataset-verified (KanjiVG, via the matching L0 strokes pack,
- * joined on `kanjivgId` exactly like kanji); the `romaji` reading follows the Hepburn
- * romanization convention (cited at the pack level), with `altRomaji` acceptance variants
- * (shi/si, ji/di, o/wo…) so typed grading never fails a correct learner. `row` is the gojūon
- * row label (a, ka, sa…, plus ga… for voiced rows) — packs are emitted in gojūon order so the
- * intro budget introduces kana row-by-row (blocked introduction, E3).
+ * One kana unit (D-023, extended for yōon in D-029) — the L0 foundation the rest of the app
+ * assumes. The character and its stroke data are dataset-verified (KanjiVG, via the matching L0
+ * strokes pack); the `romaji` reading follows the Hepburn romanization convention (cited at the
+ * pack level), with `altRomaji` acceptance variants (shi/si, sha/sya, ja/zya…) so typed grading
+ * never fails a correct learner. `row` is the gojūon row label (a, ka, sa…, ga… voiced, kya…
+ * yōon) — packs emit in gojūon order so the intro budget introduces kana row-by-row (blocked
+ * introduction, E3). `kanjivgIds` is one KanjiVG id per component glyph: a length-1 array for a
+ * base kana, length-2 for a yōon compound (e.g. きゃ = き + ゃ), each joined to its own stroke
+ * item so the card can show every component's stroke order.
  */
 export const KanaItem = z.object({
   kind: z.literal('kana'),
@@ -121,7 +123,7 @@ export const KanaItem = z.object({
   romaji: z.string().min(1),
   altRomaji: z.array(z.string().min(1)).optional(),
   row: z.string().min(1),
-  kanjivgId: z.string().min(1),
+  kanjivgIds: z.array(z.string().min(1)).min(1),
   level: Level,
 })
 export type KanaItem = z.infer<typeof KanaItem>

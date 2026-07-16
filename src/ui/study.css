@@ -365,6 +365,13 @@
   gap: 8px;
   justify-items: center;
 }
+/* A yōon (D-029) shows both component glyphs' stroke charts side by side (wraps if narrow). */
+.kana-strokes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
 .stroke-svg {
   width: 160px;
   height: 160px;

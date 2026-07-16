@@ -23,7 +23,7 @@ const content: Content = {
   vocab: [vocab('v-l1', 'L1'), vocab('v-l2', 'L2'), vocab('v-l3', 'L3')],
   kanji: [kanji('k-l1', 'L1'), kanji('k-l2', 'L2')],
   kana: [
-    { kind: 'kana', id: 'kana:あ', char: 'あ', script: 'hiragana', romaji: 'a', row: 'a', kanjivgId: '03042', level: 'L0' },
+    { kind: 'kana', id: 'kana:あ', char: 'あ', script: 'hiragana', romaji: 'a', row: 'a', kanjivgIds: ['03042'], level: 'L0' },
   ],
   grammar: [],
   sentences: [sentence('s-l1', 'L1')],

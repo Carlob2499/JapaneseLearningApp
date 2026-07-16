@@ -30,8 +30,10 @@ export default function About() {
           <strong>Kana are the front door.</strong> A brand-new profile starts with the syllabaries:
           hiragana, then katakana, introduced row by row in chart order, with stroke animations from
           KanjiVG and romaji per the Hepburn convention (typing a common variant like <em>si</em> or{' '}
-          <em>tu</em> is never marked wrong). Combined characters like きゃ aren't drilled separately
-          yet — they're built from the rows you learn here.
+          <em>tu</em> is never marked wrong). The contracted syllables (yōon — きゃ, しゅ, ちょ…) are
+          drilled too, as their own cards, each showing the stroke order of both parts. The small tsu
+          (っ, which doubles the next consonant) and the long-vowel mark (ー) aren't drilled as separate
+          sounds — they have none on their own — you meet them inside real words and sentences.
         </p>
         <p>
           <strong>The journey page counts encounters, not mastery.</strong> Tap your life-stage badge

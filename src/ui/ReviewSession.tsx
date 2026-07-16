@@ -32,7 +32,7 @@ function RecallCard({
     case 'kanji':
       return <KanjiCard item={r.item} stroke={r.stroke} onGrade={onGrade} />
     case 'kana':
-      return <KanaCard item={r.item} stroke={r.stroke} onGrade={onGrade} autoPlay={autoPlay} />
+      return <KanaCard item={r.item} strokes={r.strokes} onGrade={onGrade} autoPlay={autoPlay} />
     case 'grammar':
       return <GrammarCard item={r.item} onGrade={onGrade} />
     case 'sentence':

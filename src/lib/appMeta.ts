@@ -15,8 +15,9 @@ export function packItemCount(): number {
  *  join onto kanji/kana (not studied separately) and phrase/scene aren't graded directly. */
 const STUDYABLE_DOMAINS = new Set(['vocab', 'kanji', 'kana', 'grammar', 'sentence'])
 
-/** Studyable item count for one level — the honest number behind a level chip (D-023: without
- *  this, L0 would double-count its stroke pack and read 284 instead of 142). */
+/** Studyable item count for one level — the honest number behind a level chip. Strokes join onto
+ *  kana/kanji rather than being studied on their own, so they're excluded here (D-023): without
+ *  this, L0 would add its stroke pack on top of the kana count instead of reading the kana total. */
 export function levelItemCount(level: Level): number {
   return manifest.packs
     .filter((p) => p.level === level && STUDYABLE_DOMAINS.has(p.domain))

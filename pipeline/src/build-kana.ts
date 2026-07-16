@@ -6,21 +6,21 @@ import { emitKanaPacks, emitStrokePacks, type LockSource } from './emit'
 import { buildKanaItems, buildKanaStrokes } from './kana'
 
 /**
- * Targeted L0 kana build (D-023): the 142-character gojūon table + per-character KanjiVG stroke
- * data, emitted as l0/kana.json + l0/strokes.json with their manifest rows spliced in. Every
- * character must resolve stroke data — a partial kana set is not a foundation, so any unmatched
- * character fails the build loudly rather than shipping a gap (§1 honesty rule).
+ * Targeted L0 kana build (D-023, extended for yōon in D-029): the 208-unit gojūon table (142
+ * singles + 66 yōon) + per-component KanjiVG stroke data, emitted as l0/kana.json + l0/strokes.json
+ * with their manifest rows spliced in. Every component glyph must resolve stroke data — a partial
+ * kana set is not a foundation, so any unmatched glyph fails the build loudly (§1 honesty rule).
  */
 async function main(): Promise<void> {
   const kana = buildKanaItems()
-  console.log(`Built ${kana.length} kana items (gojūon order, hiragana → katakana).`)
+  console.log(`Built ${kana.length} kana items (singles then yōon, hiragana → katakana).`)
 
   const { strokes, unmatched } = await buildKanaStrokes(kana)
   if (unmatched.length > 0) {
-    console.error(`KanjiVG stroke data missing for ${unmatched.length} kana: ${unmatched.join(' ')}`)
+    console.error(`KanjiVG stroke data missing for ${unmatched.length} component glyphs: ${unmatched.join(' ')}`)
     process.exit(1)
   }
-  console.log(`Fetched stroke data for all ${strokes.length} kana from KanjiVG.`)
+  console.log(`Fetched stroke data for all ${strokes.length} component glyphs from KanjiVG.`)
 
   const lock = JSON.parse(await readFile(join(CONTENT_DIR, 'sources.lock.json'), 'utf8')) as {
     generatedAt: string

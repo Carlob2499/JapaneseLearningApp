@@ -29,7 +29,7 @@ import { buildChoices, buildPools, retrievalModeFor, type Choice, type Pools } f
 export type Reviewable =
   | { id: string; kind: 'vocab'; item: VocabItem }
   | { id: string; kind: 'kanji'; item: KanjiItem; stroke?: StrokeItem }
-  | { id: string; kind: 'kana'; item: KanaItem; stroke?: StrokeItem }
+  | { id: string; kind: 'kana'; item: KanaItem; strokes?: StrokeItem[] }
   | { id: string; kind: 'grammar'; item: GrammarPoint }
   | { id: string; kind: 'sentence'; item: SentenceItem }
 
@@ -55,7 +55,10 @@ function buildPool(c: Content): Reviewable[] {
     id: k.id,
     kind: 'kana',
     item: k,
-    stroke: c.strokesById.get(k.kanjivgId),
+    // A yōon joins two component strokes (base + small); a base kana joins one.
+    strokes: k.kanjivgIds
+      .map((id) => c.strokesById.get(id))
+      .filter((s): s is StrokeItem => s !== undefined),
   }))
   const kanji = c.kanji.map<Reviewable>((k) => ({
     id: k.id,

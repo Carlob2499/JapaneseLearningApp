@@ -201,15 +201,16 @@ export function KanjiCard({
   )
 }
 
-/** One kana (D-023): the character cues its sound; the back shows romaji + stroke order. */
+/** One kana (D-023): the character cues its sound; the back shows romaji + stroke order. A yōon
+ *  (D-029) carries two component glyphs, so the back shows a stroke chart for each. */
 export function KanaCard({
   item,
-  stroke,
+  strokes,
   onGrade,
   autoPlay,
 }: {
   item: KanaItem
-  stroke?: StrokeItem
+  strokes?: StrokeItem[]
   onGrade: (o: Outcome) => void
   autoPlay?: boolean
 }) {
@@ -235,7 +236,13 @@ export function KanaCard({
           {item.altRomaji && item.altRomaji.length > 0 && (
             <p className="kana-alt">also typed: {item.altRomaji.join(', ')}</p>
           )}
-          {stroke && <StrokeViewer item={stroke} />}
+          {strokes && strokes.length > 0 && (
+            <div className="kana-strokes">
+              {strokes.map((s) => (
+                <StrokeViewer key={s.id} item={s} />
+              ))}
+            </div>
+          )}
         </>
       }
     />

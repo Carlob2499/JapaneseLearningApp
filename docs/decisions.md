@@ -853,3 +853,33 @@ proving the no-voice fallback; and a live check with an injected fake voice + a 
 confirmed the audio-first card renders with the JP hidden then revealed, in light and dark, zero
 console errors.
 *Source: Session 19 (roadmap execution, Batch 2), 2026-07-16.*
+
+### D-029: Finishing the syllabary — yōon, and an honest line on sokuon/chōon
+Roadmap Batch 3. About had disclosed a gap since D-023: "Combined characters like きゃ aren't drilled
+separately yet." This closes it.
+- **Yōon (66 items)**: the 33 contracted syllables per script (きゃ, しゅ, ちょ…) — an i-row consonant
+  kana + a small ya/yu/yo. Each is one syllable with a single Hepburn romaji and is drilled exactly
+  like a base kana (recognition/typed/listening/recall), with kunrei/wāpuro accept-variants (sya,
+  tyu, zya/jya…) so a correct learner is never failed on spelling. The archaic ぢゃ row is omitted —
+  essentially unused in modern Japanese (standard teaching: Genki, Tofugu, WaniKani). L0 is now 208
+  kana; the manifest is 15,553 items.
+- **A schema migration, `kanjivgId` → `kanjivgIds: string[]`.** A yōon is two glyphs, so its stroke
+  data is two components' worth. Each kana now lists one KanjiVG id per component (`[...char]` mapped
+  to codepoints): length-1 for a base kana, length-2 for a yōon. The strokes pack holds one item per
+  unique component glyph — the 142 singles plus the 6 small ゃゅょ/ャュョ = 148 — and the KanaCard
+  renders a stroke chart for each part. The build's loud-fail honesty rule now covers every
+  component (verified: 0 unresolved).
+- **Curriculum order**: each script runs singles (base+voiced) then its yōon rows, hiragana before
+  katakana — so a beginner completes hiragana (singles → yōon) before katakana, the standard
+  sequence. `buildPool` still puts all kana first and blocked; pack order carries the rest.
+- **Sokuon (っ/ッ) and chōonpu (ー): deliberately deferred, and disclosed.** KanjiVG *does* have their
+  stroke data, but they are orthographic modifiers with no standalone syllable or romaji — forcing
+  them into the sound-drill MC (an explanation among "ka"/"shi" options) would be trivially guessable
+  and pedagogically wrong. They are better learned inside real words/sentences (きって, コーヒー), which
+  is exactly what About now says. A future "orthography concept card" could add them without the
+  sound-drill model; recorded here as considered-and-out-of-scope, not forgotten.
+Verified: full gate (typecheck, lint, 239 unit tests incl. updated kana table + a new yōon KanaCard
+render test, pipeline:validate at 15,553 items, build) and the e2e suite green; plus a live check
+seeding きゃ at a recall stage — the card shows "kya" and both component stroke charts (き 4 strokes,
+ゃ 3 strokes) in light and dark, zero console errors.
+*Source: Session 19 (roadmap execution, Batch 3), 2026-07-16.*
