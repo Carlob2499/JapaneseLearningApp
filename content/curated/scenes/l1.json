@@ -171,5 +171,92 @@
         "modelWritten": true
       }
     ]
+  },
+  {
+    "kind": "scene",
+    "id": "scene:l1:konbini-clerk",
+    "sceneKind": "konbini",
+    "level": "L1",
+    "title": "Your shift at the register",
+    "minStage": 2,
+    "modules": [
+      "M2_konbini"
+    ],
+    "beats": [
+      {
+        "id": "beat:clerk-greet",
+        "interaction": "context",
+        "slotIds": [
+          "line-greet"
+        ]
+      },
+      {
+        "id": "beat:clerk-warm",
+        "interaction": "context",
+        "slotIds": [
+          "line-warm"
+        ]
+      },
+      {
+        "id": "beat:clerk-ring",
+        "interaction": "produce",
+        "slotIds": [
+          "item-ring"
+        ]
+      },
+      {
+        "id": "beat:clerk-total",
+        "interaction": "context",
+        "slotIds": [
+          "line-total"
+        ]
+      },
+      {
+        "id": "beat:clerk-close",
+        "interaction": "context",
+        "slotIds": [
+          "line-close"
+        ]
+      }
+    ],
+    "framing": [
+      {
+        "text": "First shift behind the counter. Your name tag is straight, the drawer is counted, the hot case is stocked. The automatic door chimes — a customer steps in out of the rain.",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:clerk-greet",
+        "text": "They walk up to your register. Now it's your line to say — how do you greet them?",
+        "phraseId": "phrase:m2:irasshaimase",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:clerk-warm",
+        "text": "They set a cold bento on the counter. The manual says to offer to heat it — which line do you use?",
+        "phraseId": "phrase:m2:atatamemasu-ka",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:clerk-ring",
+        "text": "You pick up the next item to scan and read its label aloud as you ring it up — type the reading.",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:clerk-total",
+        "text": "The register settles on the total. Announce it the way you were trained — which line?",
+        "phraseId": "phrase:m2:kaikei-ichiman",
+        "modelWritten": true
+      },
+      {
+        "beatId": "beat:clerk-close",
+        "text": "Change counted back, bag handed over with both hands. They turn for the door — send them off properly.",
+        "phraseId": "phrase:m2:mata-okoshi-kudasaimase",
+        "modelWritten": true
+      },
+      {
+        "text": "The door slides shut behind them and the rain fills the quiet. First customer, handled. You straighten the counter mat and wait for the next chime.",
+        "modelWritten": true
+      }
+    ]
   }
 ]

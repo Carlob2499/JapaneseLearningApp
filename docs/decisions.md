@@ -883,3 +883,32 @@ render test, pipeline:validate at 15,553 items, build) and the e2e suite green; 
 seeding きゃ at a recall stage — the card shows "kya" and both component stroke charts (き 4 strokes,
 ゃ 3 strokes) in light and dark, zero console errors.
 *Source: Session 19 (roadmap execution, Batch 3), 2026-07-16.*
+
+### D-030: Behind the counter — the perspective flip, stage-gated to Part-timer
+Roadmap Batch 4. The curriculum's own escalation trace (§"Principle 2") and About both promised it:
+"Producing full keigo from behind the counter … arrives with the higher levels." The stamps already
+narrate Part-timer/Employee; this makes the job playable.
+- **A reversed konbini scene where you are the clerk** (`scene:l1:konbini-clerk`). It's built
+  entirely from the *existing cited M2 service lines* — no new language needed, D-002 satisfied by
+  reuse. The arc is four `context` beats + one `produce`: greet (いらっしゃいませ) → offer to heat the
+  bento (温めますか) → ring up an item (type its reading) → announce the total (お会計の方、1万円に
+  なります, the baito-keigo the FY2013 Bunkachō survey flags) → send the customer off (またお越し
+  くださいませ). Each context beat's distractors are the *other* cited M2 lines, so it's a real
+  register/situation judgment — scripted keigo produced by choosing the documented line, exactly
+  M7's "entry recognition, later production" shape. Free keigo composition and catching a coworker's
+  slips still sit at the higher levels (About says so).
+- **Two small, backward-compatible SceneTemplate fields**: `title` (errand-tile label override, so
+  two konbini scenes read distinctly — "Konbini checkout" vs. "Your shift at the register"), and
+  `minStage` (life-stage gate). `useToday` filters candidates by `isSceneUnlocked && sceneMeetsStage`
+  (a new pure predicate); the shift needs stage ≥ 2 (Part-timer) — you get the job before you can
+  work it. `buildDayPlan` prefers `scene.title` over the generic per-kind title.
+- **POV polish**: the shared context-beat sub-prompt was "Pick what the clerk says here" — third
+  person for a staff-POV scene. Neutralised to "Pick the line that fits.", which reads right both
+  when predicting the clerk's line (customer scene) and choosing your own (clerk scene).
+- **Reuses the konbini photo stage** (same `sceneKind: 'konbini'`), per the roadmap.
+Verified: full gate (typecheck, lint, 242 unit tests incl. title-override + `sceneMeetsStage` gate
+tests, pipeline:validate at 15,554, build, e2e suite); plus a live check in light and dark — a
+beginner never sees the shift (gate holds), a placed high-stage profile does, and the scene plays
+through the keigo context beats to the receipt with the correct line rendering green, zero console
+errors.
+*Source: Session 19 (roadmap execution, Batch 4), 2026-07-16.*

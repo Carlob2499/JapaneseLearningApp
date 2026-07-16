@@ -57,9 +57,12 @@ export default function About() {
           review screen uses: decode what the clerk means, name a word yourself, type one out, read one
           before a countdown runs out, then pick the service line that fits the moment — the picks are
           all real cited clerk lines, so it's a judgement call, not a guess. It uses the same
-          spaced-repetition tracking as review, so practicing there counts too. Producing full keigo
-          from behind the counter — and catching a coworker's register slips — arrives with the higher
-          levels.
+          spaced-repetition tracking as review, so practicing there counts too. Once you're settled
+          enough to hold a part-time job (the Part-timer life stage), a second konbini errand flips the
+          counter around: <em>you're</em> the clerk, choosing the right keigo service line for each
+          moment — greeting, offering to heat a bento, announcing the total, sending the customer off.
+          That's scripted keigo, produced by choosing the documented line; composing full keigo freely,
+          and catching a coworker's register slips, still arrives with the higher levels.
         </p>
         <p>
           <strong>Politeness register is scaffolded, GENKI-style.</strong> Each sentence carries a small

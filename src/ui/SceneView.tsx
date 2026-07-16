@@ -280,7 +280,9 @@ function ScenePlayer({
                 <ChoiceCard
                   kind="Errand · which line?"
                   prompt={<span className="scene-situation">Which line fits?</span>}
-                  question="Pick what the clerk says here."
+                  // POV-neutral: reads right whether you're predicting the clerk's line (customer
+                  // scene) or choosing your own from behind the counter (clerk scene, D-030).
+                  question="Pick the line that fits."
                   choices={beat.choices}
                   onGrade={api.grade}
                 />

@@ -6,6 +6,7 @@ import {
   isModuleUnlocked,
   isSceneUnlocked,
   moduleCoverage,
+  sceneMeetsStage,
   type ModuleCoverage,
 } from './moduleUnlock'
 
@@ -93,5 +94,21 @@ describe('isSceneUnlocked', () => {
     const twoModuleScene = scene('s1', ['M2_konbini', 'M3_transit'])
     // M3 unlocked (threshold 0), M2 locked (0% coverage < 50%) -> still overall locked.
     expect(isSceneUnlocked(content([]), [], twoModuleScene, thresholds)).toBe(false)
+  })
+})
+
+describe('sceneMeetsStage (D-030 life-stage gate)', () => {
+  it('is always available with no minStage', () => {
+    const s = scene('open', ['M2_konbini'])
+    expect(sceneMeetsStage(s, 0)).toBe(true)
+    expect(sceneMeetsStage(s, 5)).toBe(true)
+  })
+
+  it('gates a minStage scene until the learner reaches that stage', () => {
+    const shift = { ...scene('clerk', ['M2_konbini']), minStage: 2 }
+    expect(sceneMeetsStage(shift, 0)).toBe(false) // Tourist
+    expect(sceneMeetsStage(shift, 1)).toBe(false) // Resident — has the job but not started
+    expect(sceneMeetsStage(shift, 2)).toBe(true) // Part-timer — the shift opens
+    expect(sceneMeetsStage(shift, 4)).toBe(true)
   })
 })

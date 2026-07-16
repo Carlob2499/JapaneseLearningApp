@@ -59,3 +59,12 @@ export function isSceneUnlocked(
 ): boolean {
   return scene.modules.every((m) => isModuleUnlocked(moduleCoverage(content, states, m), m, thresholds[m] ?? 0))
 }
+
+/**
+ * Life-stage gate (D-030): a scene with a `minStage` only becomes an errand once the learner has
+ * reached that stage (the behind-the-counter shift waits for Part-timer, stage 2 — you get the job
+ * before you can work it). A scene without `minStage` is available at every stage.
+ */
+export function sceneMeetsStage(scene: SceneTemplate, stage: number): boolean {
+  return (scene.minStage ?? 0) <= stage
+}

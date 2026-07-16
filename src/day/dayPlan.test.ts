@@ -4,7 +4,7 @@ import { DAY_PLAN_MAX_TASKS, SCENE_KIND_TITLE, buildDayPlan, deriveSceneHistory 
 
 const DAY = 86_400_000
 
-function scene(id: string): SceneTemplate {
+function scene(id: string, extra: Partial<SceneTemplate> = {}): SceneTemplate {
   return {
     kind: 'scene',
     id,
@@ -13,6 +13,7 @@ function scene(id: string): SceneTemplate {
     modules: ['M2_konbini'],
     beats: [{ id: 'b1', interaction: 'recognize', slotIds: ['s1'] }],
     framing: [{ text: 'x', modelWritten: true }],
+    ...extra,
   }
 }
 
@@ -35,6 +36,19 @@ describe('buildDayPlan', () => {
       todayIndex: 0,
     })
     expect(plan.tasks).toEqual([{ kind: 'errand', sceneId: 's1', sceneKind: 'konbini', title: SCENE_KIND_TITLE.konbini }])
+  })
+
+  it("uses a scene's title override when present, else the generic per-kind title (D-030)", () => {
+    const plan = buildDayPlan({
+      dueCount: 0,
+      introCount: 0,
+      candidates: [scene('clerk', { title: 'Your shift at the register' })],
+      history: new Map(),
+      todayIndex: 0,
+    })
+    expect(plan.tasks).toEqual([
+      { kind: 'errand', sceneId: 'clerk', sceneKind: 'konbini', title: 'Your shift at the register' },
+    ])
   })
 
   it('reports the real due/intro counts on the review task verbatim, never fabricated', () => {
@@ -72,7 +86,7 @@ describe('buildDayPlan', () => {
   })
 
   it('caps the combined total at the configured limit, prioritizing review over errands', () => {
-    const candidates = ['a', 'b', 'c', 'd', 'e'].map(scene)
+    const candidates = ['a', 'b', 'c', 'd', 'e'].map((id) => scene(id))
     const plan = buildDayPlan({ dueCount: 5, introCount: 0, candidates, history: new Map(), todayIndex: 0, cap: 3 })
     expect(plan.tasks).toHaveLength(3)
     expect(plan.tasks[0]).toEqual({ kind: 'review', dueCount: 5, introCount: 0 })
@@ -80,7 +94,7 @@ describe('buildDayPlan', () => {
   })
 
   it('defaults the cap to DAY_PLAN_MAX_TASKS', () => {
-    const candidates = ['a', 'b', 'c', 'd', 'e'].map(scene)
+    const candidates = ['a', 'b', 'c', 'd', 'e'].map((id) => scene(id))
     const plan = buildDayPlan({ dueCount: 0, introCount: 0, candidates, history: new Map(), todayIndex: 0 })
     expect(plan.tasks).toHaveLength(DAY_PLAN_MAX_TASKS)
   })

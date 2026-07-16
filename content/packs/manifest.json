@@ -228,24 +228,6 @@
       "sha256": "d54677d47041746e2efe6fb00d5aa1bc760b4c476d52a1202ffeace192f7d85f"
     },
     {
-      "packId": "phrase.l1.core",
-      "path": "l1/phrase.json",
-      "level": "L1",
-      "domain": "phrase",
-      "packVersion": "0.1.0",
-      "itemCount": 15,
-      "sha256": "c821859cb606ae2819f2418fb8146b1a0a64c5faa5d953b57e070be778bed364"
-    },
-    {
-      "packId": "scene.l1.core",
-      "path": "l1/scene.json",
-      "level": "L1",
-      "domain": "scene",
-      "packVersion": "0.1.0",
-      "itemCount": 2,
-      "sha256": "6ab574de89a12b6f203b719f6e69695365cc3a9aa147d4444f972f67deb93f22"
-    },
-    {
       "packId": "kana.l0.core",
       "path": "l0/kana.json",
       "level": "L0",
@@ -262,6 +244,24 @@
       "packVersion": "0.1.0",
       "itemCount": 148,
       "sha256": "ed17513e748fc9f91d76df79ac53d286c053ddc84ec2258d7979bd5499841c89"
+    },
+    {
+      "packId": "phrase.l1.core",
+      "path": "l1/phrase.json",
+      "level": "L1",
+      "domain": "phrase",
+      "packVersion": "0.1.0",
+      "itemCount": 15,
+      "sha256": "c821859cb606ae2819f2418fb8146b1a0a64c5faa5d953b57e070be778bed364"
+    },
+    {
+      "packId": "scene.l1.core",
+      "path": "l1/scene.json",
+      "level": "L1",
+      "domain": "scene",
+      "packVersion": "0.1.0",
+      "itemCount": 3,
+      "sha256": "cea2015bad6cc2869a1380298fb901edb8c7168fcdf97a8e72c9a03a4fb9ff83"
     }
   ]
 }

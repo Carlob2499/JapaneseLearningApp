@@ -7,7 +7,7 @@ import { dayIndex, introBudget, shapeDueQueue } from '../scheduler/loadShaper'
 import { reviewablePoolIds } from '../lib/appMeta'
 import { getLastCelebratedStage, setLastCelebratedStage } from '../store/settings'
 import { computeLifeStage, decideCelebration, type LifeStage } from './lifeStage'
-import { isSceneUnlocked } from './moduleUnlock'
+import { isSceneUnlocked, sceneMeetsStage } from './moduleUnlock'
 import { buildDayPlan, deriveSceneHistory, type DayPlan } from './dayPlan'
 import { pickDiaryEntries, type DiaryEntry } from './diary'
 
@@ -74,9 +74,13 @@ export function useToday(levels: Level[]): TodayApi {
       const introIds = pickNewItems(allIds, states, introBudget(states, now))
 
       const history = deriveSceneHistory(journal)
-      const candidates = content.scenes.filter((s) => isSceneUnlocked(content, states, s))
-
       const stage = computeLifeStage(content, states, levels)
+      // A scene surfaces only when its module coverage gate opens AND the learner has reached its
+      // life-stage gate (D-030 — the behind-the-counter shift waits until Part-timer).
+      const candidates = content.scenes.filter(
+        (s) => isSceneUnlocked(content, states, s) && sceneMeetsStage(s, stage.stage),
+      )
+
       const celebration = decideCelebration(stage.stage, getLastCelebratedStage())
       if (celebration.newBaseline !== undefined) setLastCelebratedStage(celebration.newBaseline)
 

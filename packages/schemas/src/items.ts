@@ -185,6 +185,13 @@ export const SceneTemplate = z.object({
   sceneKind: z.enum(['konbini', 'transit']),
   level: Level,
   modules: z.array(ModuleTag).min(1),
+  /** Errand-tile title override (D-030); defaults to the sceneKind's generic title when absent —
+   *  lets two scenes of the same kind (customer vs. clerk) read distinctly on Today. */
+  title: z.string().min(1).optional(),
+  /** Life-stage gate (D-030): the scene only surfaces as an errand once the learner reaches this
+   *  stage (0 = Tourist … 5). Absent = always available. The behind-the-counter shift needs ≥ 2
+   *  (Part-timer) — you get the job before you can work it. */
+  minStage: z.number().int().min(0).max(5).optional(),
   beats: z.array(Beat).min(1),
   framing: z
     .array(

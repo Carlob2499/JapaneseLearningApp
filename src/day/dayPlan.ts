@@ -66,7 +66,14 @@ export function buildDayPlan(input: BuildDayPlanInput): DayPlan {
   )
   for (const scene of sorted) {
     if (tasks.length >= cap) break
-    tasks.push({ kind: 'errand', sceneId: scene.id, sceneKind: scene.sceneKind, title: SCENE_KIND_TITLE[scene.sceneKind] })
+    // A scene may override the generic per-kind title (D-030) — e.g. the clerk shift vs. the
+    // customer checkout, both konbini.
+    tasks.push({
+      kind: 'errand',
+      sceneId: scene.id,
+      sceneKind: scene.sceneKind,
+      title: scene.title ?? SCENE_KIND_TITLE[scene.sceneKind],
+    })
   }
   return { tasks }
 }
