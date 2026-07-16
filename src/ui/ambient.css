@@ -1,0 +1,36 @@
+/* The kisetsu ambient layer (D-033) — sparse seasonal weather drifting over the page. Fixed,
+   inert (pointer-events: none is e2e-critical), and colored only through --tint-season, the
+   season's designated tint token. Particles default to opacity 0; GSAP sets their resting
+   opacity when (and only when) the layer animates. */
+.ambient-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 30;
+}
+.ambient-p {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  will-change: transform;
+  color: color-mix(in srgb, var(--tint-season) 85%, var(--bg));
+}
+
+/* Tsuyu: thin rain streaks on a slight slant (the whole layer leans, scaled so no corner gaps). */
+.ambient-layer[data-season='tsuyu'] {
+  transform: rotate(6deg) scale(1.15);
+}
+.ambient-rain {
+  width: 1.5px;
+  height: 16px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--tint-season) 70%, transparent));
+}
+
+@media (prefers-color-scheme: dark) {
+  .ambient-p {
+    color: color-mix(in srgb, var(--tint-season) 70%, var(--ink));
+  }
+}

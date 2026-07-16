@@ -1,5 +1,6 @@
 import { useState, type ReactNode, type RefObject } from 'react'
 import type { Level } from '@hikkoshi/schemas'
+import AmbientLayer from './ui/AmbientLayer'
 import Emergency from './ui/Emergency'
 import Home from './ui/Home'
 import Journey from './ui/Journey'
@@ -8,6 +9,7 @@ import PlacementProbe from './ui/PlacementProbe'
 import ReviewSession from './ui/ReviewSession'
 import SceneView from './ui/SceneView'
 import { useViewTransition } from './motion/useViewTransition'
+import { useAmbientGround } from './ui/useAmbientGround'
 import { getActiveLevels, getOnboarded, levelsUpTo, setActiveLevels, setOnboarded } from './store/settings'
 import './App.css'
 
@@ -17,6 +19,7 @@ export default function App() {
   const { view, containerRef, navigate } = useViewTransition<View>(() =>
     getOnboarded() ? 'home' : 'onboarding',
   )
+  const ground = useAmbientGround()
   const [levels, setLevels] = useState<Level[]>(() => getActiveLevels())
   const [sceneId, setSceneId] = useState<string | null>(null)
 
@@ -68,5 +71,12 @@ export default function App() {
     )
   }
 
-  return <div ref={containerRef as RefObject<HTMLDivElement>}>{content}</div>
+  return (
+    <>
+      {/* The kisetsu weather layer sits outside the transition container — the shoji wipe and
+          view fades never touch it (D-033). */}
+      <AmbientLayer season={ground.season} />
+      <div ref={containerRef as RefObject<HTMLDivElement>}>{content}</div>
+    </>
+  )
 }

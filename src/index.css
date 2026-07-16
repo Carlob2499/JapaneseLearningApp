@@ -72,7 +72,42 @@
     transparent 0
   );
 
+  /* The living ground (D-033): a per-season tint, worn only by the body wash below and the
+     ambient particle layer (the season restraint rule — never on photos, cards, or text). */
+  --tint-season: transparent;
+
   color-scheme: light dark;
+}
+
+:root[data-season='spring'] {
+  --tint-season: #c47b93; /* sakura */
+}
+:root[data-season='tsuyu'] {
+  --tint-season: #4f7186; /* rain-grey indigo */
+}
+:root[data-season='summer'] {
+  --tint-season: #3f7d63; /* fresh green */
+}
+:root[data-season='autumn'] {
+  --tint-season: #b3542f; /* momiji */
+}
+:root[data-season='winter'] {
+  --tint-season: #7e93ad; /* snow-sky blue */
+}
+
+/* Whole-app ground shifts with the hour (D-033) — light scheme only: in dark scheme it is
+   always night in the app's world (the D-026 rule), so dark never re-tints by the clock. */
+@media (prefers-color-scheme: light) {
+  :root[data-tod='morning'] {
+    --bg: #f7f3ea;
+  }
+  :root[data-tod='dusk'] {
+    --bg: #f5f0ec;
+  }
+  :root[data-tod='night'] {
+    --bg: #efeff2;
+    --card: #fdfdfe;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,7 +132,11 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  /* The seasonal ground wash (D-033): the faintest breath of the season's tint at the top of
+     the page, gone by 360px — one of the season's two designated channels. */
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--tint-season) 6%, var(--bg)) 0, var(--bg) 360px)
+    fixed var(--bg);
   color: var(--ink);
   font-family:
     system-ui,
@@ -125,9 +164,19 @@ body {
   background-size: 24px 24px;
 }
 
+@media (prefers-color-scheme: dark) {
+  body {
+    /* Same wash, quieter: dark ground drinks color. */
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--tint-season) 4%, var(--bg)) 0, var(--bg) 360px)
+      fixed var(--bg);
+  }
+}
+
 .sw-toast {
   position: fixed;
   inset-inline: 0;
+  z-index: 90; /* above the ambient particle layer (D-033) */
   bottom: max(16px, env(safe-area-inset-bottom));
   margin-inline: auto;
   width: fit-content;
