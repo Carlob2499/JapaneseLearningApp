@@ -6,6 +6,12 @@ this file, pick the next batch, and ship it. Batches are ordered by recommendati
 slices, and **every slice lands green** (gate → live verify → commit → push) so an interrupted
 session still leaves the app deployable.
 
+> **Status (updated Session 19):** all five batches below shipped — Batch 1 → D-027, Batch 2 →
+> D-028, Batch 3 → D-029, Batch 4 → D-030, Batch 5 → D-031 (see `docs/decisions.md`). Batch 3
+> delivered yōon; sokuon/chōon were deferred within it (rationale in D-029). Batch 5 kept the
+> emergency phrases as a reference rather than adding them to the review pool (rationale in D-031).
+> The "Deferred (future)" list at the bottom is the live backlog for the next session.
+
 ## Standing rules (apply to every batch — these are settled, do not re-litigate)
 
 1. **D-002 is non-negotiable**: no invented Japanese, ever. Every expression/reading/sentence/level
