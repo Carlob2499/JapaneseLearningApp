@@ -105,6 +105,20 @@ function LifeStageBadge({
   )
 }
 
+/** A bilingual section header (D-032): a small Japanese eyebrow in the display mincho over the
+ *  English heading, on a short kumiko rule — the joinery motif in its designated divider role. */
+function SectionHead({ ja, en }: { ja: string; en: string }) {
+  return (
+    <div className="section-head">
+      <span className="section-ja" aria-hidden="true">
+        {ja}
+      </span>
+      <h2>{en}</h2>
+      <span className="section-rule" aria-hidden="true" />
+    </div>
+  )
+}
+
 function DiaryRow({ entry, revealed, onReveal }: { entry: DiaryEntry; revealed: boolean; onReveal: () => void }) {
   const idx = entry.ja.indexOf(entry.expression)
   const before = idx >= 0 ? entry.ja.slice(0, idx) : entry.ja
@@ -144,13 +158,15 @@ export default function Home({
 }) {
   const today = useToday(levels)
   const selectedCount = levels.reduce((sum, l) => sum + levelItemCount(l), 0)
+  // Real coverage per active level (share of its pool met at least once) — drives the chip bars.
+  const coverage = new Map((today.lifeStage?.coverageByLevel ?? []).map((c) => [c.level, c.ratio]))
 
   return (
     <main className="shell">
       <HomeHero />
 
       <section className="card today-card">
-        <h2>Today</h2>
+        <SectionHead ja="今日" en="Today" />
         {today.mode === 'loading' && <p className="loading">Loading your content…</p>}
         {today.mode === 'error' && (
           <p className="fineprint">
@@ -204,7 +220,7 @@ export default function Home({
 
       {today.diaryEntries.length > 0 && (
         <section className="card diary-card">
-          <h2>Diary</h2>
+          <SectionHead ja="日記" en="Diary" />
           <p className="fineprint">Today's words, in a sentence. Tap one to see what it means.</p>
           {today.diaryEntries.map((entry) => (
             <DiaryRow
@@ -218,10 +234,11 @@ export default function Home({
       )}
 
       <section className="card levels-card">
-        <h2>Levels</h2>
+        <SectionHead ja="レベル" en="Levels" />
         <div className="level-picker" role="group" aria-label="Levels to study">
           {ALL_LEVELS.map((lv) => {
             const on = levels.includes(lv)
+            const ratio = coverage.get(lv)
             return (
               <button
                 key={lv}
@@ -234,6 +251,14 @@ export default function Home({
                   {lv} · {JLPT_LABEL[lv]}
                 </span>
                 <span className="level-count">{levelItemCount(lv).toLocaleString()}</span>
+                {ratio !== undefined && (
+                  <span
+                    className="chip-progress"
+                    aria-label={`${Math.round(ratio * 100)}% met`}
+                  >
+                    <span style={{ width: `${Math.round(ratio * 100)}%` }} />
+                  </span>
+                )}
               </button>
             )
           })}

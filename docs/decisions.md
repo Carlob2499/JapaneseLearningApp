@@ -941,3 +941,31 @@ the e2e suite (now 30 checks × the three schemes, including a new emergency spe
 + cited phrases render); plus a live screenshot pass in light and dark, zero console errors.
 *Source: Session 19 (roadmap execution, Batch 5), 2026-07-16; emergency phrasing verified against
 FDMA / Tokyo Fire Department / Tokyo Metropolitan Government / JNTO / Minato City guidance.*
+
+### D-032: Considered surfaces — raising the floor on the everyday screens
+User feedback after the roadmap batches: the app "still feels quite bare." Fair — the identity work
+(photography, palette, the stamp book) was strong, but the *everyday* surfaces (the Today panel, the
+Levels picker, the review card) had defaulted to flat white boxes with centered grey labels, and the
+D-019 wagara tokens were each applied to a single screen. This pass raises the floor, using the
+existing D-017/D-019 system rather than adding new decoration (consulted the design skill's UI
+fundamentals: honor the system, encode state in form, break centered monotony, spend boldness once).
+- **Bilingual section headers.** Each section (Today/Diary/Levels) now opens with a Japanese eyebrow
+  in the display mincho (今日 / 日記 / レベル) over the English heading, left-anchored on a short kumiko
+  rule — the joinery motif in its designated divider role. Left-alignment breaks the everything-
+  centered monotony and carries the bilingual identity into the chrome, not just the content.
+- **Card material.** Primary panels warm from clinical `#fff` to the shironeri paper tone and gain a
+  soft two-layer shadow, so cards read as objects with lift rather than outlined regions. Dark scheme
+  gets its own shadow values.
+- **Level chips encode coverage.** Each active level's chip carries a quiet green progress bar showing
+  the share of that level's pool you've actually met — real information design from
+  `lifeStage.coverageByLevel` (already computed), so the picker *shows* progress instead of only a
+  count. Green (the `--ok` semantic token, not the brand accent) reads as growth.
+- **Review tactility.** The study card sits on warm paper with lift; the choice buttons gain a
+  hairline base edge and a small hover lift + active press, so they feel like keys. Both hover and the
+  bar's fill transition collapse under reduced motion.
+No new tokens, no blanket pattern-tiling (the exact anti-pattern D-019 warned against) — the kumiko
+stays in its divider role, the accent stays spent on the photography and the hinomaru CTA.
+Verified: full gate (typecheck, lint, 242 unit tests, pipeline:validate, build) + the e2e suite (30
+checks × three schemes, `.level-chip.on` and the review/scene flows unaffected); live screenshots of
+Home (beginner + placed), the review card, and dark mode confirm the richer surfaces read correctly.
+*Source: Session 19 (post-roadmap design pass), 2026-07-16; artifact-design skill UI fundamentals.*

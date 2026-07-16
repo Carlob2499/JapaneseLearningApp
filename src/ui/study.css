@@ -861,3 +861,125 @@
   font-size: 15px;
   color: var(--muted);
 }
+
+/* ── Considered surfaces (D-032) ─────────────────────────────────────────────────────────────
+   Raises the floor of the everyday surfaces so they read as crafted, not unfinished: bilingual
+   section headers on a kumiko rule, warmer card material with real lift, level chips that show
+   coverage, and review choices that feel like physical keys. Built on the D-017/D-019 tokens. */
+
+/* Bilingual section header: Japanese eyebrow (display mincho) over the English heading, left-
+   anchored on a short kumiko rule — breaking the centered monotony and carrying the identity. */
+.section-head {
+  justify-self: stretch;
+  text-align: left;
+  display: grid;
+  gap: 0;
+  margin-bottom: 2px;
+}
+.section-ja {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--accent-2);
+}
+.card .section-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.2;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+.section-rule {
+  margin-top: 6px;
+  height: 3px;
+  width: 44px;
+  border-radius: 2px;
+  background-image: var(--pattern-kumiko);
+  background-size: 22px 3px;
+}
+
+/* Card material: a soft two-layer shadow lifts cards off the ground; primary panels warm to the
+   shironeri paper tone rather than a flat clinical white. */
+.card {
+  box-shadow:
+    0 1px 2px rgb(38 34 46 / 0.05),
+    0 10px 26px rgb(38 34 46 / 0.06);
+}
+.today-card,
+.levels-card {
+  background: var(--paper);
+}
+@media (prefers-color-scheme: dark) {
+  .card {
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.3),
+      0 10px 26px rgb(0 0 0 / 0.35);
+  }
+}
+
+/* Level chips carry their coverage: a quiet green fill under the count shows how much of that
+   level you've actually met (D-032 — encode state in form, not just a number). */
+.level-chip {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 13px;
+}
+.chip-progress {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--line);
+}
+.chip-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--ok);
+  transition: width 0.4s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chip-progress > span {
+    transition: none;
+  }
+}
+
+/* Review surface: the study card is your worktable (warm paper + lift), and the choices are
+   keys you press — a hairline base edge and a small hover lift give them tactility. */
+.study-card {
+  background: var(--paper);
+  box-shadow:
+    0 1px 2px rgb(38 34 46 / 0.05),
+    0 12px 30px rgb(38 34 46 / 0.07);
+}
+@media (prefers-color-scheme: dark) {
+  .study-card {
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.3),
+      0 12px 30px rgb(0 0 0 / 0.4);
+  }
+}
+.choice {
+  box-shadow: 0 1.5px 0 var(--line);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.choice:not(:disabled):hover {
+  border-color: var(--accent-2);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 var(--line);
+}
+.choice:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 var(--line);
+}
+@media (prefers-reduced-motion: reduce) {
+  .choice:not(:disabled):hover {
+    transform: none;
+  }
+}
