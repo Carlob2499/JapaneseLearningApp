@@ -7,7 +7,9 @@ import { useToday } from '../day/useToday'
 import { APP_NAME, APP_NAME_JA, JLPT_LABEL, levelItemCount } from '../lib/appMeta'
 import { timeBucket } from '../lib/timeOfDay'
 import { stash } from '../motion/flipHandoff'
-import { ambientDrift, celebrate } from '../motion/timelines'
+import { isReducedMotion } from '../motion/reducedMotion'
+import { ambientDrift, celebrate, staggerIn } from '../motion/timelines'
+import { revealChars } from '../motion/typeReveal'
 import { ALL_LEVELS } from '../store/settings'
 import About from './About'
 import streetPhoto from '../assets/photos/street-yanaka.webp'
@@ -29,8 +31,15 @@ function HomeHero() {
   const heroRef = useRef<HTMLElement>(null)
   useGSAP(
     () => {
-      const img = heroRef.current?.querySelector('img')
+      const root = heroRef.current
+      if (!root) return
+      const img = root.querySelector('img')
       if (img) ambientDrift(img)
+      // The wordmark writes itself in over the street (D-033) — once per Home mount.
+      const mark = root.querySelector('.mark')
+      if (mark) revealChars(mark, { duration: 0.5, stagger: 0.07 })
+      const lines = staggerIn(root.querySelectorAll('h1, .tagline'))
+      if (!isReducedMotion()) lines.delay(0.35)
     },
     { scope: heroRef },
   )

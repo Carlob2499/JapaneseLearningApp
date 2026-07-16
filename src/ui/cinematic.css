@@ -1,0 +1,140 @@
+/* The set-pieces (D-033): arrival title sequence, scene title cards, day-end moment. All of
+   these are orchestrated by GSAP timelines in their components — this file is only their
+   staging. None of them ever mount under reduced motion. */
+
+/* ── Arrival title (first launch only) ────────────────────────────────────────────────────── */
+.arrival-title {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #10131c;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  cursor: pointer; /* the whole sequence is tap-skippable */
+}
+.arrival-title > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.75) brightness(0.85);
+  will-change: transform;
+}
+/* The aizome veil — same recipe family as photo.css's wash, pinned to night. */
+.arrival-title::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(19 27 43 / 0.55) 0%, transparent 55%),
+    linear-gradient(0deg, rgb(11 10 18 / 0.6) 0%, transparent 60%),
+    rgb(24 32 48 / 0.28);
+}
+.arrival-stack {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 0 24px;
+}
+.arrival-mark {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 14vw, 64px);
+  letter-spacing: 0.08em;
+  color: #fffaf2; /* shironeri, pinned: this overlay is always night */
+}
+.arrival-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.14em;
+  color: rgb(255 250 242 / 0.92);
+}
+.arrival-tag {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: rgb(255 250 242 / 0.66);
+}
+
+/* ── Scene title card (letterboxed film opening) ──────────────────────────────────────────── */
+.scene-title-card {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  cursor: pointer; /* tap-skippable */
+}
+.scene-title-veil {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+.letterbox-top,
+.letterbox-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 18vh;
+  background: color-mix(in srgb, var(--ink) 92%, black);
+}
+.letterbox-top {
+  top: 0;
+  transform-origin: top;
+}
+.letterbox-bottom {
+  bottom: 0;
+  transform-origin: bottom;
+}
+.scene-title-stack {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.scene-title-ja {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 11vw, 48px);
+  color: var(--paper);
+  text-shadow: 0 2px 14px rgb(0 0 0 / 0.4);
+}
+/* The corner brackets stay outside the SplitText element so only the word itself splits. */
+.scene-title-brackets::before {
+  content: '「';
+}
+.scene-title-brackets::after {
+  content: '」';
+}
+.scene-title-word {
+  display: inline-block; /* a clean box for SplitText's char masks */
+}
+.scene-title-en {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--paper) 78%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  .scene-title-ja {
+    color: var(--ink); /* --ink is near-white in dark scheme */
+  }
+  .scene-title-en {
+    color: color-mix(in srgb, var(--ink) 78%, transparent);
+  }
+}
+
+/* ── Day-end moment (session summary) ─────────────────────────────────────────────────────── */
+.day-end .day-end-count {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.maru-day-end {
+  width: 44px;
+  height: 44px;
+}

@@ -1,6 +1,8 @@
 import { useState, type ReactNode, type RefObject } from 'react'
 import type { Level } from '@hikkoshi/schemas'
 import AmbientLayer from './ui/AmbientLayer'
+import ArrivalTitle from './ui/ArrivalTitle'
+import { shouldPlayArrival } from './ui/arrivalGate'
 import Emergency from './ui/Emergency'
 import Home from './ui/Home'
 import Journey from './ui/Journey'
@@ -22,6 +24,8 @@ export default function App() {
   const ground = useAmbientGround()
   const [levels, setLevels] = useState<Level[]>(() => getActiveLevels())
   const [sceneId, setSceneId] = useState<string | null>(null)
+  // The one-time arrival title (D-033): first launch only, never under reduced motion.
+  const [arrival, setArrival] = useState<boolean>(() => !getOnboarded() && shouldPlayArrival())
 
   function toggleLevel(level: Level) {
     setLevels((prev) => {
@@ -77,6 +81,7 @@ export default function App() {
           view fades never touch it (D-033). */}
       <AmbientLayer season={ground.season} />
       <div ref={containerRef as RefObject<HTMLDivElement>}>{content}</div>
+      {arrival && <ArrivalTitle onDone={() => setArrival(false)} />}
     </>
   )
 }

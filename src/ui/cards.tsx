@@ -4,6 +4,7 @@ import { toHiragana, toKana } from 'wanakana'
 import type { GrammarPoint, KanaItem, KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import type { Choice } from '../review/choices'
 import { useAudio } from '../audio/useAudio'
+import { isReducedMotion } from '../motion/reducedMotion'
 import { hankoPop, pulsePass, shakeFail, staggerIn } from '../motion/timelines'
 import StrokeViewer from './StrokeViewer'
 import './study.css'
@@ -45,14 +46,18 @@ export function RegisterChip({ register }: { register: SentenceItem['register'] 
   )
 }
 
-/** The grader's vermillion maru (D-026) — the ○ a Japanese teacher presses beside a correct
- *  answer. Decorative reinforcement only (aria-hidden): the color change and the 正解 line
- *  already carry the result. The dash gap + tilt keep it hand-pressed, not geometric. */
-function MaruMark({ className }: { className: string }) {
+/** The grader's vermillion maru (D-026, brush-drawn since D-033) — the ○ a Japanese teacher
+ *  presses beside a correct answer. Decorative reinforcement only (aria-hidden): the color
+ *  change and the 正解 line already carry the result. `delay` lets a host timeline (the day-end
+ *  moment) hold the stamp for its payoff beat — ignored under reduced motion, where the mark
+ *  must simply be there. */
+export function MaruMark({ className, delay = 0 }: { className: string; delay?: number }) {
   const ref = useRef<SVGSVGElement>(null)
   useGSAP(
     () => {
-      if (ref.current) hankoPop(ref.current)
+      if (!ref.current) return
+      const tl = hankoPop(ref.current)
+      if (delay > 0 && !isReducedMotion()) tl.delay(delay)
     },
     { scope: ref },
   )

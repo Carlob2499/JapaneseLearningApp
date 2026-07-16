@@ -1,12 +1,18 @@
-import { useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import type { Level, Outcome } from '@hikkoshi/schemas'
 import { useReview, type Presentation, type Reviewable } from '../review/useReview'
 import { useAudio } from '../audio/useAudio'
 import { EnterOnMount } from '../motion/EnterOnMount'
 import { useFlipLanding } from '../motion/useFlipLanding'
+import { isReducedMotion } from '../motion/reducedMotion'
+import { staggerIn } from '../motion/timelines'
+import { revealChars } from '../motion/typeReveal'
 import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
-import { ChoiceCard, GrammarCard, KanaCard, KanjiCard, ListeningCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
+import { ChoiceCard, GrammarCard, KanaCard, KanjiCard, ListeningCard, MaruMark, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
+import './cinematic.css'
 
 const KIND_LABEL: Record<Reviewable['kind'], string> = {
   vocab: 'Vocabulary',
@@ -191,6 +197,82 @@ function Card({
   )
 }
 
+/**
+ * The day-end moment (D-033): the session summary as a small close-of-day ceremony — the
+ * 「今日はここまで」 eyebrow writes itself in, the reviewed count ticks up, and the grader's maru
+ * lands as the payoff. The JSX is static and final at first paint (reduced motion, jsdom, and
+ * e2e all see the finished state), the buttons are operable from the first frame (their fade
+ * starts at 0.35 opacity, never 0, never pointer-events off), and under reduced motion no
+ * timeline runs at all. Exported for tests.
+ */
+export function DayEndSummary({
+  reviewed,
+  onPracticeMore,
+  onHome,
+}: {
+  reviewed: number
+  onPracticeMore: () => void
+  onHome: () => void
+}) {
+  const rootRef = useRef<HTMLElement>(null)
+
+  useGSAP(
+    () => {
+      const root = rootRef.current
+      if (!root || isReducedMotion()) return
+      const countEl = root.querySelector('.day-end-count')
+      const proxy = { n: 0 }
+      const tl = gsap.timeline()
+      tl.call(() => {
+        if (countEl) countEl.textContent = '0'
+      })
+        .add(revealChars(root.querySelector('.section-ja')!, { duration: 0.4, stagger: 0.05 }), 0)
+        .add(staggerIn(root.querySelectorAll('h2, .day-end-line')), 0.25)
+        .to(
+          proxy,
+          {
+            n: reviewed,
+            duration: 0.7,
+            ease: 'power1.out',
+            snap: { n: 1 },
+            onUpdate: () => {
+              if (countEl) countEl.textContent = String(proxy.n)
+            },
+          },
+          0.3,
+        )
+        .fromTo('.summary-actions', { opacity: 0.35 }, { opacity: 1, duration: 0.25 }, 0.5)
+    },
+    { scope: rootRef },
+  )
+
+  return (
+    <section className="card summary day-end" ref={rootRef}>
+      <div className="section-head">
+        <span className="section-ja" aria-hidden="true">
+          今日はここまで
+        </span>
+        <h2>Session complete</h2>
+        <span className="section-rule" aria-hidden="true" />
+      </div>
+      <p className="day-end-line">
+        You reviewed <strong className="day-end-count">{reviewed}</strong>{' '}
+        {reviewed === 1 ? 'item' : 'items'}. The tracked ones return later — that spacing is the
+        point.
+      </p>
+      <MaruMark className="maru-day-end" delay={1} />
+      <div className="summary-actions">
+        <button className="start-btn" onClick={onPracticeMore}>
+          Practice more (untracked)
+        </button>
+        <button className="ghost-btn" onClick={onHome}>
+          Back home
+        </button>
+      </div>
+    </section>
+  )
+}
+
 export default function ReviewSession({ levels, onHome }: { levels: Level[]; onHome: () => void }) {
   const { mode, view, remaining, reviewed, sessionSize, error, grade, practiceMore } = useReview(levels)
   const { available: audioAvailable } = useAudio()
@@ -225,21 +307,7 @@ export default function ReviewSession({ levels, onHome }: { levels: Level[]; onH
   if (mode === 'summary') {
     return (
       <main className="shell">
-        <section className="card summary">
-          <h2>Session complete</h2>
-          <p>
-            You reviewed <strong>{reviewed}</strong> {reviewed === 1 ? 'item' : 'items'}. The tracked
-            ones return later — that spacing is the point.
-          </p>
-          <div className="summary-actions">
-            <button className="start-btn" onClick={practiceMore}>
-              Practice more (untracked)
-            </button>
-            <button className="ghost-btn" onClick={onHome}>
-              Back home
-            </button>
-          </div>
-        </section>
+        <DayEndSummary reviewed={reviewed} onPracticeMore={practiceMore} onHome={onHome} />
       </main>
     )
   }

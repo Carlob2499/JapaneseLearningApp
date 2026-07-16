@@ -1,17 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import type { Level, SceneTemplate, VocabItem } from '@hikkoshi/schemas'
 import { loadLevels, type Content } from '../content/packs'
 import type { Choice } from '../review/choices'
 import { EnterOnMount } from '../motion/EnterOnMount'
 import { useFlipLanding } from '../motion/useFlipLanding'
+import { isReducedMotion } from '../motion/reducedMotion'
 import { ambientDrift, enterTimeline, gentleSway } from '../motion/timelines'
+import { revealChars } from '../motion/typeReveal'
 import { useScene } from '../scenes/useScene'
+import { SCENE_KIND_TITLE } from '../day/dayPlan'
 import { ChoiceCard, SpeakButton, TypedCard } from './cards'
 import konbiniPhoto from '../assets/photos/konbini-heartin.webp'
 import transitPhoto from '../assets/photos/transit-mikunigaoka.webp'
 import './photo.css'
 import './scene.css'
+import './cinematic.css'
 
 /** Seconds a `speed` beat allows before the register "beeps" and it auto-fails. */
 const SPEED_SECONDS = 6
@@ -155,6 +160,87 @@ const SPEED_QUESTION: Record<SceneTemplate['sceneKind'], string> = {
   transit: 'Read it before the doors close.',
 }
 
+/** The film-title word per world (D-033) — generic place words, UI chrome like 今日/レベル. */
+const SCENE_TITLE_JA: Record<SceneTemplate['sceneKind'], string> = {
+  konbini: 'コンビニ',
+  transit: '駅',
+}
+
+/**
+ * The letterboxed scene opening (D-033): cinema bars close in, the place-name rises character
+ * by character between them, and the card clears — 1.6 s, tap anywhere to skip. It overlays the
+ * already-mounted stage (the scene beneath is live and queryable from t0), and it never mounts
+ * under reduced motion.
+ */
+function SceneTitleCard({
+  kind,
+  title,
+  onDone,
+}: {
+  kind: SceneTemplate['sceneKind']
+  title: string
+  onDone: () => void
+}) {
+  const rootRef = useRef<HTMLDivElement>(null)
+  const tlRef = useRef<gsap.core.Timeline | null>(null)
+  const doneRef = useRef(false)
+
+  const finish = () => {
+    if (doneRef.current) return
+    doneRef.current = true
+    onDone()
+  }
+
+  const { contextSafe } = useGSAP(
+    () => {
+      const root = rootRef.current
+      if (!root) return
+      const tl = gsap.timeline({ onComplete: finish })
+      tlRef.current = tl
+      tl.fromTo(root.querySelector('.scene-title-veil'), { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
+        .fromTo(
+          root.querySelectorAll('.letterbox-top, .letterbox-bottom'),
+          { scaleY: 0 },
+          { scaleY: 1, duration: 0.3, ease: 'power3.out' },
+          0,
+        )
+        .add(revealChars(root.querySelector('.scene-title-word')!, { duration: 0.45, stagger: 0.06 }), 0.25)
+        .fromTo(
+          root.querySelector('.scene-title-en'),
+          { opacity: 0, y: 8 },
+          { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },
+          0.7,
+        )
+        .to(root, { opacity: 0, duration: 0.35, ease: 'power2.in' }, 1.25)
+    },
+    { scope: rootRef },
+  )
+
+  const skip = contextSafe(() => {
+    if (doneRef.current) return
+    tlRef.current?.kill()
+    if (rootRef.current) {
+      gsap.to(rootRef.current, { opacity: 0, duration: 0.2, ease: 'power2.in', onComplete: finish })
+    } else {
+      finish()
+    }
+  })
+
+  return (
+    <div className="scene-title-card" ref={rootRef} onPointerDown={skip} aria-hidden="true">
+      <div className="scene-title-veil" />
+      <div className="letterbox-top" />
+      <div className="letterbox-bottom" />
+      <div className="scene-title-stack">
+        <span className="scene-title-ja scene-title-brackets">
+          <span className="scene-title-word">{SCENE_TITLE_JA[kind]}</span>
+        </span>
+        <p className="scene-title-en">{title}</p>
+      </div>
+    </div>
+  )
+}
+
 /** Who's speaking, per scene kind — a station's lines are announcements, not a clerk. */
 const SPEAKER_BY_KIND: Record<SceneTemplate['sceneKind'], string> = {
   konbini: '店員 · Clerk',
@@ -188,6 +274,8 @@ function ScenePlayer({
 }) {
   const api = useScene(scene, content)
   const progressRef = useFlipLanding<HTMLDivElement>('home-to-scene')
+  // The letterboxed opening (D-033): shown once per scene entry, never under reduced motion.
+  const [showTitle, setShowTitle] = useState(() => !isReducedMotion())
 
   if (api.mode === 'loading') {
     return (
@@ -258,6 +346,15 @@ function ScenePlayer({
       </div>
 
       <ScenePhotoStage kind={scene.sceneKind} urgent={api.beat?.render === 'mc' && api.beat.timed} />
+
+      {/* The stage above is live from t0 — the title card only overlays it (D-033). */}
+      {showTitle && (
+        <SceneTitleCard
+          kind={scene.sceneKind}
+          title={scene.title ?? SCENE_KIND_TITLE[scene.sceneKind]}
+          onDone={() => setShowTitle(false)}
+        />
+      )}
 
       <EnterOnMount key={api.stepIndex} className="scene-stage">
         {step?.kind === 'narration' && (
