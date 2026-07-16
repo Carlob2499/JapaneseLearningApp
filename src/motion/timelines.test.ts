@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, hankoPop, pulsePass, shakeFail, staggerIn, stampPress } from './timelines'
+import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, hankoPop, pulsePass, shakeFail, staggerIn, stampPress, strokeDrawIn } from './timelines'
 
 function div(): HTMLDivElement {
   return document.createElement('div')
@@ -61,9 +61,18 @@ describe('motion timeline factories (reduced-motion branch)', () => {
     expect(tw.delay()).toBe(0)
   })
 
-  it('hankoPop shows the maru instantly without the springy pop', () => {
-    const tw = hankoPop(div())
+  it('hankoPop shows the maru instantly, and never touches drawSVG (the jsdom law)', () => {
+    const tl = hankoPop(div())
+    expect(tl.duration()).toBe(0)
+    for (const child of tl.getChildren()) {
+      expect((child.vars as Record<string, unknown>).drawSVG).toBeUndefined()
+    }
+  })
+
+  it('strokeDrawIn renders the chart instantly, and never touches drawSVG (the jsdom law)', () => {
+    const tw = strokeDrawIn([div(), div()])
     expect(tw.duration()).toBe(0)
-    expect(tw.vars.scale).toBe(1) // pinned at rest, not popped from 1.8
+    expect((tw.vars as Record<string, unknown>).drawSVG).toBeUndefined()
+    expect(tw.vars.stagger).toBeUndefined()
   })
 })

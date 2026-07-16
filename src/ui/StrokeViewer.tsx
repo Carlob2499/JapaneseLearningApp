@@ -1,14 +1,25 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { useGSAP } from '@gsap/react'
 import type { StrokeItem } from '@hikkoshi/schemas'
+import { strokeDrawIn } from '../motion/timelines'
 import './study.css'
 
-const PER_STROKE_S = 0.55
-
-/** Animated KanjiVG stroke-order: each stroke draws in order via stroke-dashoffset. */
+/** Animated KanjiVG stroke order (DrawSVG since D-033): each stroke inks itself in, in order.
+ *  Replay remounts the SVG via `key`; reduced motion renders the finished chart instantly. */
 export default function StrokeViewer({ item }: { item: StrokeItem }) {
   const [runId, setRunId] = useState(0)
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      const paths = rootRef.current?.querySelectorAll('.stroke-path')
+      if (paths && paths.length > 0) strokeDrawIn(paths)
+    },
+    { dependencies: [runId], scope: rootRef },
+  )
+
   return (
-    <div className="stroke-viewer">
+    <div className="stroke-viewer" ref={rootRef}>
       <svg
         key={runId}
         viewBox={item.viewBox}
@@ -17,13 +28,7 @@ export default function StrokeViewer({ item }: { item: StrokeItem }) {
         aria-label={`Stroke order for ${item.literal}`}
       >
         {item.strokes.map((d, i) => (
-          <path
-            key={i}
-            d={d}
-            pathLength={1}
-            className="stroke-path"
-            style={{ animationDelay: `${i * PER_STROKE_S}s` }}
-          />
+          <path key={i} d={d} className="stroke-path" />
         ))}
       </svg>
       <button className="ghost-btn" onClick={() => setRunId((r) => r + 1)}>

@@ -153,3 +153,41 @@
   color: var(--muted);
   padding: 40px 0;
 }
+
+/* Shoji screen wipe (D-033) — THE navigation transition. Two paper panels sweep shut, the view
+   swaps beneath cover, and the doors part on the signature 'shoji' ease. The faint lattice here
+   is the wipe's one designated pattern placement (extending D-019's one-placement rule — kumiko
+   remains the divider). pointer-events: none is e2e-critical: input always reaches the app. */
+.shoji-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: none;
+  pointer-events: none;
+}
+.shoji-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5vw; /* slight overlap at the meeting line so no seam shows mid-wipe */
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--wood) 5%, transparent) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--wood) 5%, transparent) 0 1px, transparent 1px 44px);
+  will-change: transform;
+}
+.shoji-left {
+  left: 0;
+  border-right: 2px solid var(--wood-dark);
+  box-shadow: 6px 0 18px rgb(0 0 0 / 0.18);
+}
+.shoji-right {
+  right: 0;
+  border-left: 2px solid var(--wood-dark);
+  box-shadow: -6px 0 18px rgb(0 0 0 / 0.18);
+}
+@media (prefers-color-scheme: dark) {
+  .shoji-panel {
+    background-color: var(--card);
+  }
+}

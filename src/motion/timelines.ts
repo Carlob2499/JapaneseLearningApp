@@ -1,6 +1,14 @@
 import gsap from 'gsap'
+import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import { DURATION, EASE, STAGGER } from './tokens'
 import { isReducedMotion } from './reducedMotion'
+import { SIGNATURE_EASE } from './eases'
+
+// DrawSVG registers here, in its first consumer (D-033's register-at-first-consumer convention).
+// THE JSDOM LAW: reduced-motion branches must never carry a `drawSVG` property — the plugin's
+// init calls getTotalLength(), which jsdom lacks, and reduced=ON is the only branch unit tests
+// execute (D-019's test-env stub).
+gsap.registerPlugin(DrawSVGPlugin)
 
 /** Fade+rise entrance for a single element (a card mount, an incoming view). */
 export function enterTimeline(target: gsap.TweenTarget): gsap.core.Tween {
@@ -97,14 +105,35 @@ export function stampPress(targets: gsap.TweenTarget): gsap.core.Tween {
   )
 }
 
-/** The grader's maru pop (D-026): the vermillion ○ pressed beside a correct answer. Under
- *  reduced motion the mark simply appears — it still shows, it just doesn't move. */
-export function hankoPop(target: gsap.TweenTarget): gsap.core.Tween {
-  if (isReducedMotion()) return gsap.to(target, { scale: 1, opacity: 1, duration: 0 })
+/**
+ * The grader's maru (D-026, brush-drawn since D-033): the vermillion ○ pressed beside a correct
+ * answer now draws itself like a pen stroke (DrawSVG to '0% 92%' — the 92% endpoint reproduces
+ * the hand-pressed gap the static `strokeDasharray="66 8"` renders), then settles on the
+ * hankoPress ease. Under reduced motion the mark simply appears — the static dasharray is what
+ * renders there, and per the jsdom law this branch never carries a drawSVG property.
+ */
+export function hankoPop(mark: Element): gsap.core.Timeline {
+  const tl = gsap.timeline()
+  if (isReducedMotion()) return tl.set(mark, { opacity: 1, scale: 1 })
+  const stroke = mark.querySelector('circle, path') ?? mark
+  tl.set(mark, { opacity: 1, scale: 0.94, rotation: -3, transformOrigin: 'center' })
+    .fromTo(stroke, { drawSVG: '0%' }, { drawSVG: '0% 92%', duration: 0.34, ease: 'power2.out' })
+    .to(mark, { scale: 1, rotation: 0, duration: 0.22, ease: SIGNATURE_EASE.hanko }, '-=0.10')
+  return tl
+}
+
+/**
+ * KanjiVG stroke chart (D-033): strokes ink themselves in, in order — DrawSVG replacing the old
+ * CSS keyframe draw with the same cadence (0.5s per stroke, one starting every 0.55s). Under
+ * reduced motion (and therefore in jsdom) the paths render fully drawn: a zero-duration no-op
+ * that never touches drawSVG.
+ */
+export function strokeDrawIn(paths: gsap.TweenTarget): gsap.core.Tween {
+  if (isReducedMotion()) return gsap.to(paths, { duration: 0 })
   return gsap.fromTo(
-    target,
-    { scale: 1.8, opacity: 0 },
-    { scale: 1, opacity: 1, duration: DURATION.base, ease: 'back.out(2.4)' },
+    paths,
+    { drawSVG: '0%' },
+    { drawSVG: '100%', duration: 0.5, ease: 'power1.inOut', stagger: 0.55 },
   )
 }
 
