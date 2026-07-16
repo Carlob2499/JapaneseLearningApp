@@ -26,6 +26,12 @@ dist-ssr
 # vite-plugin-pwa dev artifacts
 dev-dist
 
+# Playwright e2e artifacts (D-027)
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+
 # content pipeline: raw downloads + normalized intermediates (never committed;
 # emitted packs under content/packs/** ARE committed)
 pipeline/.cache

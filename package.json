@@ -23,7 +23,8 @@
     "pipeline:build-modules": "tsx pipeline/src/build-modules.ts",
     "pipeline:build-scenes": "tsx pipeline/src/build-scenes.ts",
     "pipeline:validate": "tsx pipeline/src/validate.ts",
-    "pipeline:build-kana": "tsx pipeline/src/build-kana.ts"
+    "pipeline:build-kana": "tsx pipeline/src/build-kana.ts",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource/klee-one": "^5.2.8",
@@ -36,6 +37,7 @@
     "wanakana": "^5.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^24.13.2",

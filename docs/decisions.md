@@ -789,3 +789,37 @@ photographs** and **full sweep, prioritized** — shipped as four slices, each g
 Verified: 234 tests green; full three-scheme Playwright walkthrough (light placed profile end-to-end
 incl. a live typed-kana maru, dark, reduced-motion) — zero console errors in all runs.
 *Source: Session 18 (the Overhaul Pass), 2026-07-15; Commons API license metadata + Playwright verification.*
+
+### D-027: A checked-in Playwright smoke suite gates deploy — the first regression net
+Roadmap Batch 1. Every "Playwright-verified" note before this was an *interactive* session, not a
+committed test; the D-026 walkthrough caught a legibility regression (`.scene-view .choice.correct`
+out-cascaded to paper) that had shipped invisible since Phase 3. This converts that one-off protection
+into a permanent gate — the highest-leverage batch in the roadmap because it protects every batch after
+it.
+- **Runs against the deployed bytes, not the dev server.** `playwright.config.ts` boots
+  `vite preview` of the built `dist/` (base path, service worker, bundled L0/L1 packs and all), so a
+  green run proves the shipped bundle works — not a dev-mode approximation.
+- **Three projects = the non-negotiable rendering axes** (D-019/D-026): light, dark (`colorScheme`),
+  reduced motion (`reducedMotion: 'reduce'`). Nine specs × three projects = 27 checks in ~46 s (well
+  under the roadmap's 3-minute smoke budget).
+- **Zero console errors is enforced, not eyeballed.** A shared `test` fixture (`e2e/helpers.ts`)
+  attaches console-error + pageerror listeners and fails the test in teardown if anything logged — the
+  bar every past manual pass held, now automatic.
+- **Coverage**: onboarding (arrival band; both beginner and placement forks reach a ready Home);
+  review (a correct pick earns the maru and advances; reveal→grade); scene (konbini framing →
+  correct pick renders the `--ok` fill, **regression-pinning the D-026 cascade fix**, resolved from the
+  live token so it holds in both schemes; leave-to-Home); journey (badge → stamp book, the arrival
+  stamp pressed, reduced-motion asserts stamps present immediately); about (language + photo
+  attribution disclosed).
+- **CI: a hard gate.** The e2e run sits in `check-build` after `npm run build` and *before* the Pages
+  artifact upload, so a red suite blocks the artifact and therefore the deploy. CI installs its own
+  chromium (`playwright install --with-deps chromium`); local runs reuse the pre-installed browser via
+  `PW_EXECUTABLE_PATH` (the remote environment pins a browser build `playwright install` must not
+  re-fetch). A failed report uploads as an artifact for triage.
+- **Kept out of the other gates cleanly**: specs live in `e2e/**/*.spec.ts` (vitest globs
+  `src|packages|pipeline`, so no overlap); `tsc -b` doesn't include `e2e/` (Playwright transpiles it,
+  and running it green is the check); one oxlint override turns off `react/rules-of-hooks` for `e2e/`
+  because Playwright's fixture `use(...)` callback trips the heuristic (it is not a React hook).
+Verified: full gate green (typecheck, lint, 234 unit tests, pipeline:validate, build) plus the new
+27-check e2e suite across all three projects, zero console errors.
+*Source: Session 19 (roadmap execution, Batch 1), 2026-07-16.*
