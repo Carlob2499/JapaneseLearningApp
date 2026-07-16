@@ -254,6 +254,43 @@
   margin-right: 2px;
 }
 
+/* Listening card (D-028): audio-first recognition. The prompt is a big replay button in place of
+   any visible Japanese — the ear does the work — and the spoken text is revealed after answering. */
+.listen-prompt {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 20px 28px;
+  border: 1px dashed var(--accent-2);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--accent-2) 8%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+}
+.listen-icon {
+  font-size: 38px;
+  line-height: 1;
+}
+.listen-hint {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.choice-reveal {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+.listening-answer {
+  font-size: 18px;
+}
+.listening-reveal {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
 /* Grammar cards */
 .grammar-front {
   display: grid;

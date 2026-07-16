@@ -117,9 +117,33 @@ describe('retrievalModeFor', () => {
       [0, 1, 2, 3].map((seed) => retrievalModeFor('vocab', 6, { leech: true, seed })),
     )
     expect(seen.size).toBeGreaterThan(1) // not "more of the same"
-    // Sentences only have two modes to vary between.
+    // Sentences (no audio) vary between their two eye-modes.
     expect(retrievalModeFor('sentence', 6, { leech: true, seed: 0 })).toBe('recognition')
     expect(retrievalModeFor('sentence', 6, { leech: true, seed: 1 })).toBe('recall')
+  })
+
+  it('slots listening at stage 4 for listenable kinds — only with a device voice (D-028)', () => {
+    // With a Japanese voice, vocab/kana/sentence get an audio-first rep at stage 4.
+    expect(retrievalModeFor('vocab', 4, { audio: true })).toBe('listening')
+    expect(retrievalModeFor('kana', 4, { audio: true })).toBe('listening')
+    expect(retrievalModeFor('sentence', 4, { audio: true })).toBe('listening')
+    // Kanji and grammar are never voiced (ambiguous reading / not a heard unit).
+    expect(retrievalModeFor('kanji', 4, { audio: true })).toBe('recall')
+    expect(retrievalModeFor('grammar', 4, { audio: true })).toBe('recall')
+    // Without a voice, stage 4 is byte-identical to before D-028 — the eye-mode it always had.
+    expect(retrievalModeFor('vocab', 4)).toBe('typed')
+    expect(retrievalModeFor('kana', 4)).toBe('typed')
+    expect(retrievalModeFor('sentence', 4)).toBe('recall')
+    // Listening is confined to stage 4; its neighbours are unchanged even with audio.
+    expect(retrievalModeFor('vocab', 3, { audio: true })).toBe('production')
+    expect(retrievalModeFor('vocab', 5, { audio: true })).toBe('typed')
+  })
+
+  it('offers listening in the leech rotation only when audio is available', () => {
+    const withAudio = [0, 1, 2, 3, 4].map((seed) => retrievalModeFor('vocab', 6, { leech: true, seed, audio: true }))
+    expect(withAudio).toContain('listening')
+    const withoutAudio = [0, 1, 2, 3, 4].map((seed) => retrievalModeFor('vocab', 6, { leech: true, seed }))
+    expect(withoutAudio).not.toContain('listening')
   })
 })
 

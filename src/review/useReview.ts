@@ -14,6 +14,7 @@ import type {
   VocabItem,
 } from '@hikkoshi/schemas'
 import { loadLevels, type Content } from '../content/packs'
+import { hasJapaneseVoice } from '../audio/tts'
 import { appendJournal, getAllItemStates, getJournal, putItemState } from '../store/db'
 import { applyReview, dueItems, isLeech, LEECH_WINDOW_MS, newState, pickNewItems } from '../scheduler/srs'
 import {
@@ -79,10 +80,11 @@ function buildPool(c: Content): Reviewable[] {
 /**
  * Retrieval mode for an item (leech-aware), with one runtime guard the pure selector can't make:
  * typed reading only works when the reading is clean hiragana — katakana loanwords make romaji
- * long-vowel input too fiddly, so those fall back to free recall.
+ * long-vowel input too fiddly, so those fall back to free recall. `audio` gates the listening
+ * mode (D-028) so a device with no Japanese voice never schedules a silent card.
  */
-function resolveMode(r: Reviewable, st: ItemState | undefined): RetrievalMode {
-  const mode = retrievalModeFor(r.kind, st?.stage ?? 0, { leech: st?.leech, seed: st?.lapses })
+function resolveMode(r: Reviewable, st: ItemState | undefined, audio: boolean): RetrievalMode {
+  const mode = retrievalModeFor(r.kind, st?.stage ?? 0, { leech: st?.leech, seed: st?.lapses, audio })
   if (mode === 'typed' && r.kind === 'vocab' && !isHiragana(r.item.reading)) return 'recall'
   return mode
 }
@@ -117,6 +119,10 @@ export function useReview(levels: Level[]): ReviewApi {
     sentenceEn: [],
   })
   const shownAtRef = useRef<number>(Date.now())
+  // Whether a device Japanese voice exists — gates listening-mode scheduling (D-028). A ref, not
+  // state, so a mid-session voice load never re-modes the card already on screen; the next card
+  // reads the fresh value. Updated on `voiceschanged` (voices populate asynchronously).
+  const audioRef = useRef<boolean>(hasJapaneseVoice())
   const failTsRef = useRef<Map<string, number[]>>(new Map())
   // Due-day histogram, maintained incrementally so anti-clumping is O(1) per grade.
   const histRef = useRef<Map<number, number>>(new Map())
@@ -192,6 +198,17 @@ export function useReview(levels: Level[]): ReviewApi {
     }
   }, [levels])
 
+  // Keep the audio-availability gate current: voices load asynchronously (voiceschanged).
+  useEffect(() => {
+    const s = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null
+    if (!s) return
+    const update = () => {
+      audioRef.current = hasJapaneseVoice()
+    }
+    s.addEventListener('voiceschanged', update)
+    return () => s.removeEventListener('voiceschanged', update)
+  }, [])
+
   const grade = useCallback(
     (outcome: Outcome) => {
       const cur = queue[0]
@@ -200,8 +217,8 @@ export function useReview(levels: Level[]): ReviewApi {
       if (mode === 'review') {
         const now = Date.now()
         const prev = statesRef.current.get(cur.id) ?? newState(cur.id, now)
-        // Log the mode the user actually saw — pre-review stage, leech- and reading-aware.
-        const interaction = resolveMode(cur, prev)
+        // Log the mode the user actually saw — pre-review stage, leech-, reading- and audio-aware.
+        const interaction = resolveMode(cur, prev, audioRef.current)
         const latencyMs = Math.max(0, Math.round(now - shownAtRef.current))
         const next = applyReview(prev, outcome, now)
         // Track fail history and (re)flag leeches — 3 fails / 30 days (architecture §5).
@@ -249,8 +266,8 @@ export function useReview(levels: Level[]): ReviewApi {
   // Memoized per item so choices don't reshuffle on unrelated re-renders.
   const view = useMemo<Presentation | null>(() => {
     if (!current) return null
-    const rmode = resolveMode(current, statesRef.current.get(current.id))
-    // Recall and typed cards need no multiple-choice options.
+    const rmode = resolveMode(current, statesRef.current.get(current.id), audioRef.current)
+    // Recall and typed cards need no multiple-choice options; recognition and listening do.
     const choices =
       rmode === 'recall' || rmode === 'typed' ? undefined : buildChoices(current, rmode, poolsRef.current)
     return { reviewable: current, mode: rmode, choices }

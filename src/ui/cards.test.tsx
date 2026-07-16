@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { ChoiceCard, GrammarCard, SentenceCard, SpeakButton, TypedCard } from './cards'
+import { ChoiceCard, GrammarCard, ListeningCard, SentenceCard, SpeakButton, TypedCard } from './cards'
 import type { Choice } from '../review/choices'
 import type { GrammarPoint, SentenceItem } from '@hikkoshi/schemas'
 
@@ -45,6 +45,38 @@ describe('ChoiceCard', () => {
     fireEvent.click(screen.getByText('to drink'))
     fireEvent.click(screen.getByText('Next →'))
     expect(onGrade).toHaveBeenCalledWith('fail')
+  })
+})
+
+describe('ListeningCard', () => {
+  function renderListening(onGrade: (o: 'pass' | 'fail' | 'partial') => void) {
+    render(
+      <ListeningCard
+        kind="Vocabulary"
+        question="Which meaning?"
+        spokenText="たべる"
+        revealText={<span>食べる</span>}
+        choices={choices}
+        onGrade={onGrade}
+      />,
+    )
+  }
+
+  it('prompts by ear: a replay button and choices, with the Japanese hidden until answered', () => {
+    renderListening(() => {})
+    expect(screen.getByRole('button', { name: /play audio/i })).toBeTruthy()
+    expect(screen.getAllByTestId('choice')).toHaveLength(3)
+    // The written form is withheld — the ear does the work first.
+    expect(screen.queryByText('食べる')).toBeNull()
+  })
+
+  it('reveals the spoken text after a pick and grades on the correct choice', () => {
+    const onGrade = vi.fn()
+    renderListening(onGrade)
+    fireEvent.click(screen.getByText('to eat'))
+    expect(screen.getByText('食べる')).toBeTruthy() // revealed now
+    fireEvent.click(screen.getByText('Next →'))
+    expect(onGrade).toHaveBeenCalledWith('pass')
   })
 })
 

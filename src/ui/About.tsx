@@ -15,8 +15,16 @@ export default function About() {
         </p>
         <p>
           <strong>Early build.</strong> N5–N1 content with a spaced-repetition scheduler and several
-          retrieval modes (recognition, production, typed reading, free recall). Tap 🔊 to hear
-          pronunciation where your device has a Japanese voice. Progress is stored on this device only.
+          retrieval modes (recognition, production, typed reading, listening, free recall). Tap 🔊 to
+          hear pronunciation where your device has a Japanese voice. Progress is stored on this device
+          only.
+        </p>
+        <p>
+          <strong>Listening depends on your device's voice.</strong> Once a word, kana, or sentence is
+          well-known, a review sometimes comes by ear alone — you hear it and choose the meaning, then
+          the text is revealed. This uses your device's built-in Japanese text-to-speech, whose quality
+          varies by platform; on a device with <em>no</em> Japanese voice, listening reviews simply
+          never appear and everything else works exactly as before — no card is ever silent.
         </p>
         <p>
           <strong>Kana are the front door.</strong> A brand-new profile starts with the syllabaries:

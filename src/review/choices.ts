@@ -51,13 +51,19 @@ export function buildPools(content: Content): Pools {
   }
 }
 
-/** Retrieval modes available per kind, easiest → hardest — the leech variety cycle draws from here. */
+/** Kinds that can be tested by ear (D-028): a single spoken form maps cleanly to the audio prompt.
+ *  Kanji are excluded (a lone kanji has several readings — ambiguous to voice); grammar points
+ *  aren't a "heard" unit. So listening covers vocab, kana, and whole sentences. */
+const LISTENABLE: ReadonlySet<CardKind> = new Set<CardKind>(['vocab', 'kana', 'sentence'])
+
+/** Retrieval modes available per kind, easiest → hardest — the leech variety cycle draws from
+ *  here (listening only offered when a device voice exists; filtered in `retrievalModeFor`). */
 const MODES_BY_KIND: Record<CardKind, RetrievalMode[]> = {
-  vocab: ['recognition', 'production', 'typed', 'recall'],
+  vocab: ['recognition', 'production', 'typed', 'listening', 'recall'],
   kanji: ['recognition', 'production', 'recall'],
-  kana: ['recognition', 'typed', 'recall'],
+  kana: ['recognition', 'typed', 'listening', 'recall'],
   grammar: ['recognition', 'recall'],
-  sentence: ['recognition', 'recall'],
+  sentence: ['recognition', 'listening', 'recall'],
 }
 
 /**
@@ -68,17 +74,24 @@ const MODES_BY_KIND: Record<CardKind, RetrievalMode[]> = {
  * skip production MC and go recognition → typed romaji (2–5) → recall — typing the sound IS
  * their production. A leech (architecture §5) is forced into varied modes — cycling by `seed` —
  * rather than hammering the same failing drill.
+ *
+ * Listening (D-028) is an audio-first recognition rep slotted at stage 4 for listenable kinds
+ * (vocab/kana/sentence) — but only when `opts.audio` (a device Japanese voice exists). This is a
+ * *plan-time* gate, not a render-time one: a voiceless device never schedules a silent card, and
+ * stage 4 simply falls back to the eye-mode it had before (vocab/kana typed, sentence recall). So
+ * on a device without a Japanese voice, the whole ladder is byte-identical to before D-028.
  */
 export function retrievalModeFor(
   kind: CardKind,
   stage: number,
-  opts: { leech?: boolean; seed?: number } = {},
+  opts: { leech?: boolean; seed?: number; audio?: boolean } = {},
 ): RetrievalMode {
   if (opts.leech) {
-    const modes = MODES_BY_KIND[kind]
+    const modes = MODES_BY_KIND[kind].filter((m) => m !== 'listening' || opts.audio)
     return modes[(((opts.seed ?? 0) % modes.length) + modes.length) % modes.length]
   }
   if (stage <= 1) return 'recognition'
+  if (stage === 4 && opts.audio && LISTENABLE.has(kind)) return 'listening'
   if (kind === 'kana') return stage <= 5 ? 'typed' : 'recall'
   if (stage <= 3) return kind === 'sentence' || kind === 'grammar' ? 'recognition' : 'production'
   if (kind === 'vocab' && stage <= 5) return 'typed'

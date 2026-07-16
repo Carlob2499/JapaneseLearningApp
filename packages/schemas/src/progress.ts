@@ -6,13 +6,14 @@ export type Outcome = z.infer<typeof Outcome>
 
 /**
  * Retrieval direction for a study card, escalating with mastery (see the review loop):
- * `recognition` (cued: JP → meaning), `production` (harder: meaning → JP), `recall`
- * (uncued: reveal + self-grade). Logged into `JournalEntry.interaction` so the journal
+ * `recognition` (cued: JP → meaning), `production` (harder: meaning → JP), `typed` (produce the
+ * reading by typing it), `listening` (audio-first: hear the word, pick the meaning — D-028), and
+ * `recall` (uncued: reveal + self-grade). Logged into `JournalEntry.interaction` so the journal
  * records *how* an item was tested, not just which item. The `interaction` field stays a
  * free-form string (older entries recorded the item kind), so this is a labelling vocabulary,
  * not a runtime constraint on the journal.
  */
-export const RetrievalMode = z.enum(['recognition', 'production', 'typed', 'recall'])
+export const RetrievalMode = z.enum(['recognition', 'production', 'typed', 'listening', 'recall'])
 export type RetrievalMode = z.infer<typeof RetrievalMode>
 
 /**

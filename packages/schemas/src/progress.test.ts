@@ -18,7 +18,7 @@ describe('progress schemas', () => {
   })
 
   it('defines the retrieval modes and rejects an unknown one', () => {
-    for (const mode of ['recognition', 'production', 'typed', 'recall']) {
+    for (const mode of ['recognition', 'production', 'typed', 'listening', 'recall']) {
       expect(RetrievalMode.safeParse(mode).success).toBe(true)
     }
     expect(RetrievalMode.safeParse('speed').success).toBe(false)

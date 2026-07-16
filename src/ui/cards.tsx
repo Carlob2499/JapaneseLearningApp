@@ -314,6 +314,7 @@ export function ChoiceCard({
   choices,
   onGrade,
   onPick,
+  revealAfter,
 }: {
   kind: string
   prompt: ReactNode
@@ -323,6 +324,9 @@ export function ChoiceCard({
   /** Fires the moment an option is selected (before grading) — used by the speed beat to stop
    *  its countdown. Optional: the flashcard review doesn't pass it. */
   onPick?: () => void
+  /** Content revealed once an option is picked — e.g. the listening card's spoken text (D-028),
+   *  so an audio-first card teaches the written form after the ear has done the work. */
+  revealAfter?: ReactNode
 }) {
   const [selected, setSelected] = useState<Choice | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -365,12 +369,70 @@ export function ChoiceCard({
           )
         })}
       </div>
+      {selected && revealAfter && <div className="choice-reveal">{revealAfter}</div>}
       {selected && (
         <button className="next-btn" onClick={() => onGrade(selected.correct ? 'pass' : 'fail')}>
           Next →
         </button>
       )}
     </div>
+  )
+}
+
+/**
+ * Listening card (D-028): audio-first recognition. The prompt is a replay button and *no text* —
+ * the learner hears the word/sentence and picks the meaning from the same verbatim choice pool a
+ * recognition card uses. It auto-plays once on mount when auto-play is on, always offers replay,
+ * and reveals the spoken text after answering (so the card teaches, not only tests). Only reached
+ * when a device Japanese voice exists (the scheduler gates it), so it is never silent.
+ */
+export function ListeningCard({
+  kind,
+  question,
+  spokenText,
+  revealText,
+  choices,
+  onGrade,
+  autoPlay,
+}: {
+  kind: string
+  question: string
+  /** The Japanese voiced by 🔊 — the reading (vocab), the character (kana), or the sentence. */
+  spokenText: string
+  /** Shown after answering: the written form of what was heard. */
+  revealText: ReactNode
+  choices: Choice[]
+  onGrade: (o: Outcome) => void
+  autoPlay?: boolean
+}) {
+  const { available, speak } = useAudio()
+  const played = useRef(false)
+  useEffect(() => {
+    if (autoPlay && available && !played.current) {
+      played.current = true
+      speak(spokenText)
+    }
+  }, [autoPlay, available, speak, spokenText])
+  return (
+    <ChoiceCard
+      kind={kind}
+      prompt={
+        <button type="button" className="listen-prompt" onClick={() => speak(spokenText)} aria-label="Play audio, then choose">
+          <span className="listen-icon" aria-hidden="true">
+            🔊
+          </span>
+          <span className="listen-hint">Listen · tap to replay</span>
+        </button>
+      }
+      question={question}
+      choices={choices}
+      onGrade={onGrade}
+      revealAfter={
+        <span className="listening-answer">
+          {revealText} <SpeakButton text={spokenText} />
+        </span>
+      }
+    />
   )
 }
 

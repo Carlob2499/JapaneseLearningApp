@@ -823,3 +823,33 @@ it.
 Verified: full gate green (typecheck, lint, 234 unit tests, pipeline:validate, build) plus the new
 27-check e2e suite across all three projects, zero console errors.
 *Source: Session 19 (roadmap execution, Batch 1), 2026-07-16.*
+
+### D-028: Listening — the missing modality, gated on the device voice
+Roadmap Batch 2. The retrieval ladder tested only the eye (recognition/production/typed/recall);
+listening is a whole JLPT section, and `docs/curriculum.md`'s honest-limitations note already designed
+the shape: browser TTS, text-first, graceful degradation.
+- **A fifth mode, `listening`** (added to the `RetrievalMode` labelling enum): audio-first
+  recognition. The prompt is a replay button and *no visible Japanese* — you hear the word/kana/
+  sentence and pick the meaning from the same verbatim choice pool a recognition card uses; the
+  written form is revealed only after you answer, so the card teaches, not just tests. D-002 holds —
+  TTS voices already-verified dataset text and generates nothing.
+- **Availability is a plan-time gate, not a render-time one.** `retrievalModeFor` gains
+  `opts.audio`; the review hook passes `hasJapaneseVoice()` (kept current via `voiceschanged`, held
+  in a ref so a mid-session voice load never re-modes the card on screen). Listening slots in at
+  **stage 4** for the listenable kinds only (vocab, kana, sentence — kanji have several readings and
+  are ambiguous to voice; grammar isn't a heard unit), replacing the eye-mode that stage had. On a
+  device with **no** Japanese voice the whole ladder is byte-identical to before D-028: stage 4 falls
+  back to vocab/kana typed and sentence recall, and no card is ever silent. `MODES_BY_KIND` stays the
+  source of truth (listening added for the three kinds), so the leech variety rotation picks it up
+  automatically — filtered out when there's no voice.
+- **UI**: `ListeningCard` composes the existing `ChoiceCard` (a new optional `revealAfter` slot shows
+  the spoken text once picked), auto-plays once on mount when auto-play is on, always offers replay,
+  and inherits the maru/pulse/shake feedback unchanged. Dashed-indigo audio prompt, theme-aware in
+  both schemes.
+- **About** discloses the device-voice dependency and the silent-never guarantee.
+Verified: full gate green (typecheck, lint, 236 unit tests incl. new listening scheduler + card
+tests, pipeline:validate, build); the e2e suite (which runs on a voiceless browser) still green,
+proving the no-voice fallback; and a live check with an injected fake voice + a seeded stage-4 kana
+confirmed the audio-first card renders with the JP hidden then revealed, in light and dark, zero
+console errors.
+*Source: Session 19 (roadmap execution, Batch 2), 2026-07-16.*

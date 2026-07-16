@@ -5,7 +5,7 @@ import { useAudio } from '../audio/useAudio'
 import { EnterOnMount } from '../motion/EnterOnMount'
 import { useFlipLanding } from '../motion/useFlipLanding'
 import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
-import { ChoiceCard, GrammarCard, KanaCard, KanjiCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
+import { ChoiceCard, GrammarCard, KanaCard, KanjiCard, ListeningCard, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
 import './study.css'
 
 const KIND_LABEL: Record<Reviewable['kind'], string> = {
@@ -99,6 +99,30 @@ function multipleChoicePrompt(
   }
 }
 
+/** What the listening card (D-028) voices and reveals, per kind. Only vocab/kana/sentence ever
+ *  reach here (the scheduler's LISTENABLE gate); anything else falls back to a plain recall card. */
+function listeningCardFor(r: Reviewable): { spokenText: string; revealText: ReactNode; question: string } | null {
+  switch (r.kind) {
+    case 'vocab':
+      return {
+        spokenText: r.item.reading,
+        revealText: (
+          <span className="listening-reveal">
+            <span className="jp-lg">{r.item.expression}</span>
+            <span className="reading">{r.item.reading}</span>
+          </span>
+        ),
+        question: 'Which meaning?',
+      }
+    case 'kana':
+      return { spokenText: r.item.char, revealText: <span className="jp-xl">{r.item.char}</span>, question: 'Which sound?' }
+    case 'sentence':
+      return { spokenText: r.item.ja, revealText: <span className="jp-lg">{r.item.ja}</span>, question: 'Which translation?' }
+    default:
+      return null
+  }
+}
+
 function Card({
   p,
   onGrade,
@@ -109,6 +133,23 @@ function Card({
   autoPlay?: boolean
 }) {
   const { reviewable: r, mode, choices } = p
+  if (mode === 'listening') {
+    const spec = choices ? listeningCardFor(r) : null
+    if (spec && choices) {
+      return (
+        <ListeningCard
+          kind={KIND_LABEL[r.kind]}
+          question={spec.question}
+          spokenText={spec.spokenText}
+          revealText={spec.revealText}
+          choices={choices}
+          onGrade={onGrade}
+          autoPlay={autoPlay}
+        />
+      )
+    }
+    return <RecallCard r={r} onGrade={onGrade} autoPlay={autoPlay} />
+  }
   if (mode === 'typed') {
     if (r.kind === 'kana') {
       // Type the SOUND: raw romaji input graded against Hepburn + acceptance alternates (D-023).
