@@ -425,6 +425,25 @@
   cursor: pointer;
   min-width: 68px;
 }
+.level-chip {
+  transition:
+    border-color 0.15s ease,
+    transform 0.12s ease;
+}
+.level-chip:hover {
+  border-color: var(--accent-2);
+  transform: translateY(-1px);
+}
+.level-chip:active {
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .level-chip,
+  .level-chip:hover {
+    transition: none;
+    transform: none;
+  }
+}
 .level-chip.on {
   border-color: var(--accent);
   box-shadow: inset 0 0 0 1px var(--accent);
@@ -587,8 +606,18 @@
 .errand-btn.errand-tile:hover img {
   transform: scale(1.04);
 }
+/* Stepping through the door (D-033): the tile presses in under your finger. */
+.errand-btn.errand-tile {
+  transition: transform 0.12s ease;
+}
+.errand-btn.errand-tile:active {
+  transform: scale(0.985);
+}
 @media (prefers-reduced-motion: reduce) {
   .errand-tile img {
+    transition: none;
+  }
+  .errand-btn.errand-tile {
     transition: none;
   }
 }

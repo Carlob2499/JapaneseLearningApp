@@ -9,6 +9,16 @@ import { test as base, expect, type Page } from '@playwright/test'
  * freezes GSAP's ticker); these specs never touch `page.clock`, so the real flows run normally.
  */
 export const test = base.extend<{ consoleErrors: string[] }>({
+  // The pinned chromium build predates this Playwright's context-level emulation bundle, so
+  // `reducedMotion: 'reduce'` in the project config silently never reaches the browser (exposed
+  // by cinematic.spec.ts's never-mounts invariants, D-033). Enforce it per page instead —
+  // page.emulateMedia works across the version gap and is verified by those same invariants.
+  page: async ({ page }, use, testInfo) => {
+    if (testInfo.project.name === 'reduced') {
+      await page.emulateMedia({ reducedMotion: 'reduce' })
+    }
+    await use(page)
+  },
   consoleErrors: async ({ page }, use) => {
     const errors: string[] = []
     page.on('console', (m) => {

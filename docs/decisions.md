@@ -969,3 +969,65 @@ Verified: full gate (typecheck, lint, 242 unit tests, pipeline:validate, build) 
 checks × three schemes, `.level-chip.on` and the review/scene flows unaffected); live screenshots of
 Home (beginner + placed), the review card, and dark mode confirm the richer surfaces read correctly.
 *Source: Session 19 (post-roadmap design pass), 2026-07-16; artifact-design skill UI fundamentals.*
+
+### D-033: The cinematic evolution — set-pieces, a living world, and the shoji wipe
+The user commissioned an expansive visual evolution ("award-winning, bold, smooth, visually stunning
+sequences," full creative authority, one session). Research grounding: GSAP 3.15 now ships every
+formerly-premium plugin free (verified in node_modules), and the award-winning Japanese reference
+class (SHIFTBRAIN, Garden Eight, monopo — Awwwards/FWA) wins with *ma*: motion that paces, reveals,
+and gives weight — orchestrated sequences over scattered effects. Direction confirmed with the user:
+full cinematic set-pieces · seasons + time-of-day world layer · shoji screen wipe. **No WebGL** —
+the aesthetic is paper and ink, and GSAP+SVG+CSS reaches the bar at a fraction of the weight.
+- **Plugin adoption, register-at-first-consumer** (the Flip precedent): CustomEase → `eases.ts`
+  (two signature curves: `shoji` — fast launch, friction settle; `hankoPress` — press,
+  micro-compress, settle), DrawSVG → `timelines.ts`, SplitText → `typeReveal.ts`. Measured bundle
+  delta: 452→478KB min (+26KB), inside the +40KB ceiling; 21 precache entries unchanged.
+- **The shoji wipe is THE navigation transition.** A module-singleton overlay (paper panels, faint
+  lattice — the wipe's one designated pattern placement, extending D-019's one-placement rule;
+  kumiko remains the divider) closes in 0.18s, the view swaps beneath cover, and the doors part in
+  0.26s on the shoji ease — opened from the post-commit effect, so there is no flicker window. The
+  overlay is pointer-events:none; `pendingRef` held through the open preserves in-flight drop
+  semantics; a same-view guard prevents wedging. The reduced path is byte-identical to the D-019
+  fade — the overlay is never created there. **Flip verdict (walkthrough)**: kept — the container-
+  transform's tail plays as the doors part, and the composition reads as one gesture.
+- **The living world.** `season()` (spring 3–5 · tsuyu June · summer 7–8 · autumn 9–11 · winter
+  12/1/2) joins `timeBucket()`; `useAmbientGround` stamps both onto `<html data-tod data-season>`.
+  The page ground micro-shifts with the hour (light scheme only; dark is always night, D-026), and
+  ≤12 particles drift on recycling `repeatRefresh` tweens — petals, slanted rain, momiji, snow —
+  paused when the tab hides, absent under reduced motion and data-saver. **The season restraint
+  rule**: a season expresses through exactly two channels — the particle layer and the ground wash;
+  never photos (they carry tod), never cards or text. Summer is wash-only: the restraint beat.
+- **Set-piece laws.** The arrival title (wing over clouds, 引っ越し assembling char by char) plays
+  once per device, ≤2.4s, tap-skippable, flag written at mount, never under reduced motion, gated
+  fail-closed in `arrivalGate.ts`. Scene title cards (「コンビニ」/「駅」 — generic place words, UI
+  chrome like 今日/レベル) letterbox over an **already-live stage** and never gate interaction. The
+  day-end moment renders its JSX static and final at first paint; buttons fade from 0.35 opacity,
+  never 0, never pointer-events off. Every overlay is pointer-events:none or short-lived +
+  tap-skippable — e2e actionability retries absorb them; the reduced project never sees them.
+- **DrawSVG everywhere ink moves**: the stroke-order viewer (CSS keyframes deleted; same 0.5s/0.55s
+  cadence) and the grader's maru, which now draws itself to '0% 92%' (the hand-pressed gap) before
+  settling on hankoPress.
+- **The jsdom laws** (jsdom = reduced-ON always): reduced branches never carry a `drawSVG` property
+  (the plugin's init calls getTotalLength, absent in jsdom) and never construct a SplitText — both
+  pinned by unit tests. SplitText use is chars+mask only (CJK-safe), reverting on complete so React
+  re-renders can never orphan split spans.
+Verified: 257 unit tests (+15 this pass: eases curves, view-transition probe incl. same-view guard
+and no-overlay-under-reduced, DrawSVG/SplitText jsdom laws, season boundaries, ambient collapse,
+arrival gating, day-end first-paint operability); e2e grown to 34 checks including a new cinematic
+spec (arrival once-then-never, reduced-stills-everything, ambient inertness, letterbox-over-live-
+stage); live captures of the mid-wipe panels, mid-draw strokes and maru, all five seasons (8/12/7/
+10/0 particles), the arrival card, the letterboxed opening, and the day-end ceremony — zero console
+errors throughout.
+*Source: Session 20 (the Cinematic Evolution), 2026-07-16; GSAP 3.13+ free-plugin verification +
+Awwwards/FWA Japanese-studio research + Playwright verification.*
+
+**Two latent bugs the D-033 invariants exposed (both fixed in this pass):** (1) `isReducedMotion()`
+seeded `false` and only flipped when gsap.matchMedia's callback fired — a tick after registration,
+too late for the new *render-time* readers (the arrival gate, the ambient layer), which would have
+flashed set-pieces at reduced-motion users; the flag is now seeded synchronously from the native
+matchMedia and kept live by gsap.matchMedia. (2) Playwright's context-level `reducedMotion:
+'reduce'` silently never reached the pinned chromium build (a runner↔browser version gap) — the
+"reduced" e2e project had been running full motion since D-027, its assertions all eventually-true.
+The helpers now enforce `page.emulateMedia({ reducedMotion: 'reduce' })` per page on that project
+(verified working across the version gap), so the reduced guarantee is finally real and pinned by
+the never-mounts invariants that caught both bugs.

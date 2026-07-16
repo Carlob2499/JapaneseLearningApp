@@ -6,6 +6,7 @@ import type { DiaryEntry } from '../day/diary'
 import { useToday } from '../day/useToday'
 import { APP_NAME, APP_NAME_JA, JLPT_LABEL, levelItemCount } from '../lib/appMeta'
 import { timeBucket } from '../lib/timeOfDay'
+import { EnterOnMount } from '../motion/EnterOnMount'
 import { stash } from '../motion/flipHandoff'
 import { isReducedMotion } from '../motion/reducedMotion'
 import { ambientDrift, celebrate, staggerIn } from '../motion/timelines'
@@ -142,9 +143,11 @@ function DiaryRow({ entry, revealed, onReveal }: { entry: DiaryEntry; revealed: 
         {after}
       </p>
       {revealed && (
-        <p className="diary-gloss">
-          {entry.gloss} — <span className="diary-en">{entry.en}</span>
-        </p>
+        <EnterOnMount>
+          <p className="diary-gloss">
+            {entry.gloss} — <span className="diary-en">{entry.en}</span>
+          </p>
+        </EnterOnMount>
       )}
     </div>
   )
