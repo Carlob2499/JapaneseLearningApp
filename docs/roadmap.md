@@ -1,5 +1,9 @@
 # Roadmap — the next batches (written for execution)
 
+> **Superseded.** All five batches below shipped (D-027…D-031), followed by D-032 and D-033.
+> The active plan is **[docs/roadmap-2.md](roadmap-2.md)** — the Classroom Companion
+> (D-034…D-039). This file remains as the record of the first execution pass.
+
 Written at Session 18's close (after D-026, the Overhaul Pass). Each batch below is sized like one
 past session and is **self-contained**: an executor with no prior context should be able to open
 this file, pick the next batch, and ship it. Batches are ordered by recommendation; each ships in
