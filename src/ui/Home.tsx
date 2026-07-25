@@ -16,6 +16,7 @@ import {
   dismissClassDiscovery,
   getClassSettings,
   isClassDiscoveryDismissed,
+  WEEKDAY_NAMES,
 } from '../store/classSettings'
 import { ALL_LEVELS } from '../store/settings'
 import About from './About'
@@ -193,6 +194,7 @@ export default function Home({
   onJourney,
   onEmergency,
   onClassroom,
+  onClassSession,
 }: {
   levels: Level[]
   onToggleLevel: (level: Level) => void
@@ -201,6 +203,7 @@ export default function Home({
   onJourney: () => void
   onEmergency: () => void
   onClassroom: () => void
+  onClassSession: (itemIds: string[], label: string) => void
 }) {
   const today = useToday(levels)
   const selectedCount = levels.reduce((sum, l) => sum + levelItemCount(l), 0)
@@ -225,23 +228,42 @@ export default function Home({
             <LifeStageBadge name={today.lifeStage.name} celebrateStage={today.celebrateStage} onJourney={onJourney} />
             {today.dayPlan && today.dayPlan.tasks.length > 0 ? (
               <div className="today-tasks">
-                {today.dayPlan.tasks.map((task) =>
-                  task.kind === 'review' ? (
-                    <div className="today-task" key="review">
-                      <button
-                        className="start-btn"
-                        onClick={(e) => {
-                          stash('home-to-review', Flip.getState(e.currentTarget))
-                          onStart()
-                        }}
-                      >
-                        Start today's review
-                      </button>
-                      <p className="fineprint">
-                        {task.dueCount} due · {task.introCount} new
-                      </p>
-                    </div>
-                  ) : (
+                {today.dayPlan.tasks.map((task) => {
+                  if (task.kind === 'review') {
+                    return (
+                      <div className="today-task" key="review">
+                        <button
+                          className="start-btn"
+                          onClick={(e) => {
+                            stash('home-to-review', Flip.getState(e.currentTarget))
+                            onStart()
+                          }}
+                        >
+                          Start today's review
+                        </button>
+                        <p className="fineprint">
+                          {task.dueCount} due · {task.introCount} new
+                        </p>
+                      </div>
+                    )
+                  }
+                  if (task.kind === 'class-seed' || task.kind === 'class-capture') {
+                    const seed = task.kind === 'class-seed'
+                    const classDayName = WEEKDAY_NAMES[getClassSettings().classDay]
+                    return (
+                      <div className="today-task" key={task.kind}>
+                        <button
+                          className="start-btn class-task-btn"
+                          onClick={() => onClassSession(task.itemIds, seed ? '予習' : '復習')}
+                        >
+                          <span aria-hidden="true">{seed ? '予習' : '復習'}</span>{' '}
+                          {seed ? `Seed ${classDayName}'s class` : "Capture while it's warm"}
+                        </button>
+                        <p className="fineprint">{task.itemIds.length} items</p>
+                      </div>
+                    )
+                  }
+                  return (
                     <div className="today-task" key={task.sceneId}>
                       <button
                         className="errand-btn errand-tile"
@@ -254,8 +276,8 @@ export default function Home({
                         <span className="errand-tile-title">{task.title}</span>
                       </button>
                     </div>
-                  ),
-                )}
+                  )
+                })}
               </div>
             ) : (
               <p className="fineprint">Nothing due right now — check back later.</p>

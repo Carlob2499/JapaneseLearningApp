@@ -273,8 +273,20 @@ export function DayEndSummary({
   )
 }
 
-export default function ReviewSession({ levels, onHome }: { levels: Level[]; onHome: () => void }) {
-  const { mode, view, remaining, reviewed, sessionSize, error, grade, practiceMore } = useReview(levels)
+export default function ReviewSession({
+  levels,
+  onHome,
+  itemIds,
+  sessionLabel,
+}: {
+  levels: Level[]
+  onHome: () => void
+  /** Classroom seed/capture (D-035): review exactly these items instead of the scheduler's due/intro. */
+  itemIds?: string[]
+  /** Progress-bar label override for a seed/capture session ('予習' / '復習'); defaults to 'Review'. */
+  sessionLabel?: string
+}) {
+  const { mode, view, remaining, reviewed, sessionSize, error, grade, practiceMore } = useReview(levels, { itemIds })
   const { available: audioAvailable } = useAudio()
   const [autoPlay, setAutoPlay] = useState<boolean>(() => getAutoPlay())
   const sessionBarRef = useFlipLanding<HTMLDivElement>('home-to-review')
@@ -320,7 +332,7 @@ export default function ReviewSession({ levels, onHome }: { levels: Level[]; onH
           ← Home
         </button>
         <span className="progress-text">
-          {mode === 'practice' ? 'Practice' : 'Review'} · {done}/{sessionSize}
+          {mode === 'practice' ? 'Practice' : (sessionLabel ?? 'Review')} · {done}/{sessionSize}
         </span>
         {audioAvailable && (
           <button

@@ -17,6 +17,7 @@ import { loadLevels, type Content } from '../content/packs'
 import { hasJapaneseVoice } from '../audio/tts'
 import { appendJournal, getAllItemStates, getJournal, putItemState } from '../store/db'
 import { applyReview, dueItems, isLeech, LEECH_WINDOW_MS, newState, pickNewItems } from '../scheduler/srs'
+import { ALL_LEVELS } from '../store/settings'
 import {
   dayIndex,
   introBudget,
@@ -103,7 +104,18 @@ export interface ReviewApi {
   practiceMore: () => void
 }
 
-export function useReview(levels: Level[]): ReviewApi {
+/** When `itemIds` is set, the session reviews exactly those items (Classroom seed/capture,
+ *  D-035) instead of computing due/intro from the scheduler. An id with no existing state is
+ *  seeded `provisional` (D-021 semantics, reused as-is: a wrong first answer clears the flag and
+ *  resets to stage 0 without counting as a lapse) — the forgiving, guess-then-reveal grading the
+ *  pretesting-effect seed session needs, for free, from the scheduler's existing placement path.
+ *  An id that already has state (capture) reviews under its normal stage — no special handling. */
+export interface ReviewOptions {
+  itemIds?: string[]
+}
+
+export function useReview(levels: Level[], options: ReviewOptions = {}): ReviewApi {
+  const { itemIds } = options
   const [mode, setMode] = useState<Mode>('loading')
   const [error, setError] = useState<string | null>(null)
   const [queue, setQueue] = useState<Reviewable[]>([])
@@ -137,7 +149,10 @@ export function useReview(levels: Level[]): ReviewApi {
       let states: ItemState[]
       let journal: JournalEntry[]
       try {
-        content = await loadLevels(levels)
+        // A class session (D-035) isn't gated by the learner's active JLPT levels — the
+        // classbook spans whatever levels its real grammar/vocab lands at, independent of what
+        // the learner has toggled on for ordinary review — so it resolves against every level.
+        content = await loadLevels(itemIds ? [...ALL_LEVELS] : levels)
         ;[states, journal] = await Promise.all([getAllItemStates(), getJournal()])
       } catch (e) {
         if (!alive) return
@@ -154,6 +169,24 @@ export function useReview(levels: Level[]): ReviewApi {
       statesRef.current = new Map(states.map((s) => [s.itemId, s]))
 
       const now = Date.now()
+
+      if (itemIds) {
+        // Preserve the caller's order (seed/capture already sorted the lesson's own item order).
+        const session = itemIds
+          .map((id) => byIdRef.current.get(id))
+          .filter((r): r is Reviewable => r !== undefined)
+        for (const r of session) {
+          if (statesRef.current.has(r.id)) continue
+          const seeded: ItemState = { ...newState(r.id, now), provisional: true }
+          statesRef.current.set(r.id, seeded)
+          void putItemState(seeded)
+        }
+        histRef.current = loadHistogram([...statesRef.current.values()])
+        setQueue(session)
+        setSessionSize(session.length)
+        setMode(session.length > 0 ? 'review' : 'summary')
+        return
+      }
 
       // Fail history for leech detection (architecture §5) — pruned to the 30-day window at load.
       const failTs = new Map<string, number[]>()
@@ -199,7 +232,7 @@ export function useReview(levels: Level[]): ReviewApi {
     return () => {
       alive = false
     }
-  }, [levels])
+  }, [levels, itemIds])
 
   // Keep the audio-availability gate current: voices load asynchronously (voiceschanged).
   useEffect(() => {

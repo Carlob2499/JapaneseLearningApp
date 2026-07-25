@@ -812,6 +812,20 @@
   cursor: pointer;
 }
 
+/* The Classroom thread's day task (D-035) — solid accent-2, distinct from both the review CTA
+   (solid accent) and the errand tiles (accent-2 outline + photo). */
+.class-task-btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  background: var(--accent-2);
+  cursor: pointer;
+}
+
 /* The Classroom thread's front door on Home (D-034) — quiet once enabled, one dismissable
    invitation before that. Same weight class as .emergency-link, a different accent so the two
    never read as the same kind of button. */

@@ -25,6 +25,9 @@ export default function App() {
   const ground = useAmbientGround()
   const [levels, setLevels] = useState<Level[]>(() => getActiveLevels())
   const [sceneId, setSceneId] = useState<string | null>(null)
+  // Classroom seed/capture (D-035): set just before navigating to 'review', cleared on any other
+  // entry so a later plain "Start today's review" never accidentally inherits a stale filter.
+  const [classSession, setClassSession] = useState<{ itemIds: string[]; label: string } | null>(null)
   // The one-time arrival title (D-033): first launch only, never under reduced motion.
   const [arrival, setArrival] = useState<boolean>(() => !getOnboarded() && shouldPlayArrival())
 
@@ -53,7 +56,14 @@ export default function App() {
   } else if (view === 'placement') {
     content = <PlacementProbe onDone={finishOnboarding} />
   } else if (view === 'review') {
-    content = <ReviewSession levels={levels} onHome={() => navigate('home')} />
+    content = (
+      <ReviewSession
+        levels={levels}
+        onHome={() => navigate('home')}
+        itemIds={classSession?.itemIds}
+        sessionLabel={classSession?.label}
+      />
+    )
   } else if (view === 'scene' && sceneId) {
     content = <SceneView levels={levels} sceneId={sceneId} onExit={() => navigate('home')} />
   } else if (view === 'journey') {
@@ -67,7 +77,10 @@ export default function App() {
       <Home
         levels={levels}
         onToggleLevel={toggleLevel}
-        onStart={() => navigate('review')}
+        onStart={() => {
+          setClassSession(null)
+          navigate('review')
+        }}
         onStartScene={(id) => {
           setSceneId(id)
           navigate('scene')
@@ -75,6 +88,10 @@ export default function App() {
         onJourney={() => navigate('journey')}
         onEmergency={() => navigate('emergency')}
         onClassroom={() => navigate('classroom')}
+        onClassSession={(itemIds, label) => {
+          setClassSession({ itemIds, label })
+          navigate('review')
+        }}
       />
     )
   }
