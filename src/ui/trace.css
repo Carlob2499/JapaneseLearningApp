@@ -45,3 +45,52 @@
 .trace-progress {
   color: var(--muted);
 }
+
+/* The weekly kanji sheet (D-037): 2×3 trace cells, handout register. */
+.trace-sheet {
+  display: grid;
+  gap: 12px;
+}
+.trace-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.trace-sheet-head h3 {
+  margin: 0;
+}
+.trace-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.trace-cell {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 14px 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  font: inherit;
+  cursor: pointer;
+}
+.trace-cell:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.trace-cell-char {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--ink);
+}
+.trace-cell-status {
+  font-size: 11px;
+  color: var(--muted);
+}
+.trace-cell.traced {
+  border-color: var(--accent);
+}
+.trace-cell.traced .trace-cell-status {
+  color: var(--accent);
+}

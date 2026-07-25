@@ -27,7 +27,7 @@ const content: Content = {
   ],
   grammar: [],
   sentences: [sentence('s-l1', 'L1')],
-  phrases: [], scenes: [], strokesById: new Map(),
+  phrases: [], scenes: [], strokesById: new Map(), strokesByLiteral: new Map(),
 }
 const now = 1_000_000_000_000
 

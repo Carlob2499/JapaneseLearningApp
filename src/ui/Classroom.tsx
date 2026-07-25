@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
-import type { Classbook, GrammarPoint, ItemState, VocabItem } from '@hikkoshi/schemas'
+import type { Classbook, GrammarPoint, ItemState, JournalEntry, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import { loadClassbook, loadLevels, type Content } from '../content/packs'
 import { lessonReadiness } from '../day/classWeek'
-import { getAllItemStates } from '../store/db'
+import { isSheetComplete, kanjiWeekFor } from '../day/traceProgress'
+import { getAllItemStates, getJournal } from '../store/db'
 import { getClassSettings, setClassSettings, WEEKDAY_NAMES, type ClassSettings } from '../store/classSettings'
 import { ALL_LEVELS, getActiveLevels } from '../store/settings'
 import { staggerIn } from '../motion/timelines'
 import { SectionHead } from './SectionHead'
+import KanjiSheet from './KanjiSheet'
 import './classroom.css'
 
 const DAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
@@ -18,6 +20,8 @@ interface ClassroomData {
   vocabById: Map<string, VocabItem>
   stateById: Map<string, ItemState>
   states: ItemState[]
+  strokesByLiteral: Map<string, StrokeItem>
+  journal: JournalEntry[]
 }
 
 /** A grammar point's Classroom status: unseen, in review, or "solid" — earned once it's been
@@ -103,6 +107,7 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
   const [settings, setSettings] = useState<ClassSettings>(getClassSettings)
   const [data, setData] = useState<ClassroomData | null>(null)
   const [error, setError] = useState(false)
+  const [showSheet, setShowSheet] = useState(false)
   const pageRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -117,7 +122,7 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
         } catch {
           content = await loadLevels(getActiveLevels())
         }
-        const states: ItemState[] = await getAllItemStates()
+        const [states, journal] = await Promise.all([getAllItemStates(), getJournal()])
         if (!alive) return
 
         setData({
@@ -126,6 +131,8 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
           vocabById: new Map(content.vocab.map((v) => [v.id, v])),
           stateById: new Map(states.map((s) => [s.itemId, s])),
           states,
+          strokesByLiteral: content.strokesByLiteral,
+          journal,
         })
       } catch {
         if (alive) setError(true)
@@ -171,6 +178,19 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
   }
 
   const lesson = data.book.lessons.find((l) => l.lesson === settings.lesson) ?? data.book.lessons[0]
+
+  if (showSheet && lesson) {
+    return (
+      <main className="shell classroom-page" ref={pageRef}>
+        <KanjiSheet
+          literals={kanjiWeekFor(lesson, settings.lesson, settings.weeklyKanjiOverride)}
+          strokesByLiteral={data.strokesByLiteral}
+          lessonNumber={lesson.lesson}
+          onClose={() => setShowSheet(false)}
+        />
+      </main>
+    )
+  }
 
   return (
     <main className="shell classroom-page" ref={pageRef}>
@@ -229,6 +249,23 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
             </button>
           ))}
         </div>
+        <div className="term-stamps" role="group" aria-label="Weekly kanji sheets completed">
+          {data.book.lessons.map((l) => {
+            const chars = kanjiWeekFor(l, settings.lesson, settings.weeklyKanjiOverride)
+            const complete = isSheetComplete(chars, data.strokesByLiteral, data.journal)
+            return (
+              <span
+                key={l.lesson}
+                className={`term-stamp${complete ? ' stamped' : ''}`}
+                data-testid="term-stamp"
+                data-stamped={complete}
+                title={`Lesson ${l.lesson} kanji sheet${complete ? ', complete' : ''}`}
+              >
+                {l.lesson}
+              </span>
+            )
+          })}
+        </div>
       </section>
 
       {lesson && (
@@ -263,6 +300,9 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
               override={settings.weeklyKanjiOverride}
               onSave={(chars) => update({ weeklyKanjiOverride: chars })}
             />
+            <button type="button" className="ghost-btn kanji-practice-open" onClick={() => setShowSheet(true)}>
+              練習 Practice this week's six →
+            </button>
           </section>
         </>
       )}

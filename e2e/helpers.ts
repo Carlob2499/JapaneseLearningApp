@@ -56,7 +56,9 @@ export async function placeViaProbe(page: Page): Promise<void> {
   await page.waitForSelector('[data-testid="choice"]', { timeout: 30_000 })
   for (let i = 0; i < 8; i++) {
     await page.locator('[data-testid="choice"][data-correct="true"]').first().click()
-    await page.getByRole('button', { name: /next/i }).click()
+    // The specific class, not a role+name match: a distractor's own gloss can randomly be the
+    // literal word "next" (e.g. 次), which would make /next/i ambiguously match two buttons.
+    await page.locator('.next-btn').click()
     // Either the next question or the placing spinner; give the card a beat to swap.
     await page.waitForTimeout(200)
   }

@@ -1,6 +1,6 @@
-/* The set-pieces (D-033): arrival title sequence, scene title cards, day-end moment. All of
-   these are orchestrated by GSAP timelines in their components — this file is only their
-   staging. None of them ever mount under reduced motion. */
+/* The set-pieces (D-033, +D-037's kanji-sheet ceremony): arrival title sequence, scene title
+   cards, day-end moment, kanji-sheet-complete. All of these are orchestrated by GSAP timelines in
+   their components — this file is only their staging. None of them ever mount under reduced motion. */
 
 /* ── Arrival title (first launch only) ────────────────────────────────────────────────────── */
 .arrival-title {
@@ -137,4 +137,39 @@
 .maru-day-end {
   width: 44px;
   height: 44px;
+}
+
+/* ── Kanji-sheet-complete ceremony (D-037) ────────────────────────────────────────────────── */
+/* Same set-piece family as above, scoped smaller: a scrim over the current page rather than a
+   full-bleed photo — "a one-time small ceremony," not another arrival. */
+.kanji-ceremony {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: rgb(16 19 28 / 0.72);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.kanji-ceremony-stack {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 0 24px;
+}
+.kanji-ceremony-mark {
+  width: 64px;
+  height: 64px;
+}
+.kanji-ceremony-ja {
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 0.08em;
+  color: #fffaf2;
+}
+.kanji-ceremony-en {
+  margin: 0;
+  font-size: 14px;
+  color: rgb(255 250 242 / 0.78);
 }

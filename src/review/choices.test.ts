@@ -269,6 +269,7 @@ describe('buildPools', () => {
       phrases: [],
       scenes: [],
       strokesById: new Map(),
+      strokesByLiteral: new Map(),
     }
     const p = buildPools(content)
     expect(p.vocabGloss).toEqual(['to eat', 'to drink'])

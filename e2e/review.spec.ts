@@ -17,7 +17,7 @@ test.describe('review', () => {
     await expect(page.locator('.choice.correct')).toBeVisible()
 
     // Advancing moves to the next card (or the summary) without error.
-    await page.getByRole('button', { name: /next/i }).click()
+    await page.locator('.next-btn').click()
     await expect(page.locator('.study-card, .summary')).toBeVisible()
   })
 
@@ -39,11 +39,11 @@ test.describe('review', () => {
       // Otherwise it's a choice/typed card — answer it and move on.
       if (await page.locator('[data-testid="choice"]').count()) {
         await page.locator('[data-testid="choice"][data-correct="true"]').first().click()
-        await page.getByRole('button', { name: /next/i }).click()
+        await page.locator('.next-btn').click()
       } else if (await page.locator('[data-testid="typed-input"]').count()) {
         await page.locator('[data-testid="typed-input"]').fill('x')
         await page.getByRole('button', { name: /^check$/i }).click()
-        await page.getByRole('button', { name: /next/i }).click()
+        await page.locator('.next-btn').click()
       } else {
         break
       }
@@ -97,7 +97,7 @@ test.describe('review', () => {
     await page.locator('[data-testid="worksheet-input"]').fill('てもいい')
     await page.getByRole('button', { name: /^check$/i }).click()
     await expect(page.locator('.typed-feedback.correct')).toBeVisible()
-    await page.getByRole('button', { name: /next/i }).click()
+    await page.locator('.next-btn').click()
     await expect(page.locator('.study-card, .summary')).toBeVisible()
   })
 })

@@ -25,6 +25,9 @@ export interface Content {
   scenes: SceneTemplate[]
   /** Stroke data keyed by KanjiVG id, for the KanjiItem.strokes.kanjivgId join. */
   strokesById: Map<string, StrokeItem>
+  /** Stroke data keyed by the literal glyph (D-037) — for classbook kanji weeks, which name
+   *  their six characters directly rather than through a KanjiItem/kanjivgId join. */
+  strokesByLiteral: Map<string, StrokeItem>
 }
 
 /**
@@ -88,6 +91,7 @@ export async function loadLevels(levels: Level[]): Promise<Content> {
     phrases: all.filter((i): i is PhraseTemplate => i.kind === 'phrase'),
     scenes: all.filter((i): i is SceneTemplate => i.kind === 'scene'),
     strokesById: new Map(strokes.map((x) => [x.kanjivgId, x])),
+    strokesByLiteral: new Map(strokes.map((x) => [x.literal, x])),
   }
 }
 

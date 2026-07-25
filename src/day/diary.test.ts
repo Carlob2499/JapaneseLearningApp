@@ -43,6 +43,7 @@ function content(over: Partial<Content> = {}): Content {
     phrases: [],
     scenes: [],
     strokesById: new Map(),
+    strokesByLiteral: new Map(),
     ...over,
   }
 }

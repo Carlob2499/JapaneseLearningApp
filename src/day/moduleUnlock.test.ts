@@ -24,7 +24,7 @@ function vocab(id: string, modules: ModuleTag[]): VocabItem {
 }
 
 function content(vocab: VocabItem[]): Content {
-  return { vocab, kanji: [], kana: [], grammar: [], sentences: [], phrases: [], scenes: [], strokesById: new Map() }
+  return { vocab, kanji: [], kana: [], grammar: [], sentences: [], phrases: [], scenes: [], strokesById: new Map(), strokesByLiteral: new Map() }
 }
 
 function stateFor(id: string): ItemState {
