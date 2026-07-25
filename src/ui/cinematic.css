@@ -1,6 +1,7 @@
-/* The set-pieces (D-033, +D-037's kanji-sheet ceremony): arrival title sequence, scene title
-   cards, day-end moment, kanji-sheet-complete. All of these are orchestrated by GSAP timelines in
-   their components — this file is only their staging. None of them ever mount under reduced motion. */
+/* The set-pieces (D-033, +D-037's kanji-sheet ceremony, +D-038's lesson ceremony): arrival title
+   sequence, scene title cards, day-end moment, kanji-sheet-complete, lesson-complete. All of
+   these are orchestrated by GSAP timelines in their components — this file is only their
+   staging. None of them ever mount under reduced motion. */
 
 /* ── Arrival title (first launch only) ────────────────────────────────────────────────────── */
 .arrival-title {
@@ -172,4 +173,55 @@
   margin: 0;
   font-size: 14px;
   color: rgb(255 250 242 / 0.78);
+}
+
+/* ── Lesson hanko ceremony (D-038) ─────────────────────────────────────────────────────────── */
+/* Reuses the scene-title-card's letterbox bars (.letterbox-top/.letterbox-bottom) — the same
+   cinema-bar language, a bigger moment than the kanji-sheet's scrim: every point in a lesson
+   earned solid. */
+.lesson-ceremony {
+  position: fixed;
+  inset: 0;
+  z-index: 96;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.lesson-ceremony-veil {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ink) 60%, transparent);
+}
+.lesson-ceremony-stack {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 0 24px;
+}
+.lesson-ceremony-mark {
+  width: 56px;
+  height: 56px;
+}
+.lesson-ceremony-ja {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 9vw, 40px);
+  letter-spacing: 0.08em;
+  color: var(--paper);
+  text-shadow: 0 2px 14px rgb(0 0 0 / 0.4);
+}
+.lesson-ceremony-en {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--paper) 82%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  .lesson-ceremony-ja {
+    color: var(--ink);
+  }
+  .lesson-ceremony-en {
+    color: color-mix(in srgb, var(--ink) 82%, transparent);
+  }
 }

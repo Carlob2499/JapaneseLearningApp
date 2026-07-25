@@ -67,6 +67,10 @@
 .lesson-panel.future {
   opacity: 0.55;
 }
+.lesson-panel.locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 .lesson-panel-num {
   font-family: var(--font-display);
   font-size: 12px;
@@ -104,9 +108,34 @@
   margin-top: 8px;
 }
 
-.classroom-readiness {
+/* The lesson readiness dial (D-038): a brush arc, DrawSVG draw-in on value change, replacing the
+   old plain-text percentage. Static strokeDasharray/strokeDashoffset render the correct arc even
+   before any animation runs (reduced motion, or the instant before mount). */
+.readiness-dial {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin: 0 0 8px;
-  font-size: 12px;
+}
+.readiness-dial-svg {
+  width: 40px;
+  height: 40px;
+}
+.readiness-track {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 5;
+}
+.readiness-arc {
+  fill: none;
+  stroke: var(--accent-2);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+.readiness-pct {
+  font-size: 13px;
   letter-spacing: 0.04em;
   color: var(--accent-2);
   font-variant-numeric: tabular-nums;

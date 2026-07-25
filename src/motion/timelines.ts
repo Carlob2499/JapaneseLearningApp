@@ -166,6 +166,18 @@ export function traceWrong(guide: gsap.TweenTarget): gsap.core.Timeline {
   return tl
 }
 
+/**
+ * Readiness dial draw-in (D-038): the brush arc animates from empty to the current value on
+ * mount/value-change. Reduced motion: a zero-duration no-op that never touches drawSVG (the
+ * jsdom law) — the circle's own static strokeDasharray/strokeDashoffset attributes (set in the
+ * component, not here) already render the correct final arc without any animation.
+ */
+export function readinessDrawIn(circle: gsap.TweenTarget, value: number): gsap.core.Tween {
+  if (isReducedMotion()) return gsap.to(circle, { duration: 0 })
+  const pct = `${Math.round(Math.max(0, Math.min(1, value)) * 100)}%`
+  return gsap.fromTo(circle, { drawSVG: '0%' }, { drawSVG: pct, duration: 0.6, ease: 'power2.out' })
+}
+
 /** A celebratory pop for the life-stage-up moment — bouncy elastic settle. */
 export function celebrate(target: gsap.TweenTarget): gsap.core.Tween {
   const reduced = isReducedMotion()

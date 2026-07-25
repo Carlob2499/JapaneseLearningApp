@@ -15,11 +15,12 @@ import {
 import { reviewablePoolIds } from '../lib/appMeta'
 import { getClassSettings } from '../store/classSettings'
 import { getLastCelebratedStage, setLastCelebratedStage } from '../store/settings'
-import { buildClassTask, phaseFor } from './classWeek'
+import { buildClassTask, lessonReadiness, phaseFor } from './classWeek'
 import { computeLifeStage, decideCelebration, type LifeStage } from './lifeStage'
 import { isSceneUnlocked, sceneMeetsStage } from './moduleUnlock'
 import { buildDayPlan, deriveSceneHistory, type DayPlan } from './dayPlan'
 import { pickDiaryEntries, type DiaryEntry } from './diary'
+import { daysInJapan, isLapsedReturn, weekCells, type WeekCell } from './rhythm'
 
 export type TodayMode = 'loading' | 'ready' | 'error'
 
@@ -36,6 +37,14 @@ export interface TodayApi {
   diaryEntries: DiaryEntry[]
   isRevealed: (itemId: string) => boolean
   revealGloss: (itemId: string) => void
+  /** The return loop's rhythm data (D-038) — the current week's 7 cells and "days in Japan," for
+   *  Home's header strip. */
+  weekCells: WeekCell[]
+  daysInJapan: number
+  isLapsedReturn: boolean
+  /** The current lesson's readiness (0-1), null when class mode is off — reused from the same
+   *  classbook fetch buildClassTask already needs, for the class-eve glow (D-038). */
+  classReadiness: number | null
 }
 
 /**
@@ -55,6 +64,10 @@ export function useToday(levels: Level[]): TodayApi {
   const [dayPlan, setDayPlan] = useState<DayPlan | null>(null)
   const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([])
   const [revealed, setRevealed] = useState<Set<string>>(new Set())
+  const [weekCellsState, setWeekCellsState] = useState<WeekCell[]>([])
+  const [daysInJapanState, setDaysInJapanState] = useState(1)
+  const [lapsed, setLapsed] = useState(false)
+  const [classReadinessState, setClassReadinessState] = useState<number | null>(null)
 
   useEffect(() => {
     let alive = true
@@ -102,11 +115,15 @@ export function useToday(levels: Level[]): TodayApi {
       // the classbook can't be reached (offline before its first fetch).
       const classSettings = getClassSettings()
       let classTask = null
+      let classReadiness: number | null = null
       if (classSettings.enabled) {
         try {
           const book = await loadClassbook(classSettings.book)
           const lesson = book.lessons.find((l) => l.lesson === classSettings.lesson)
-          if (lesson) classTask = buildClassTask(phaseFor(new Date(now), classSettings), lesson, states)
+          if (lesson) {
+            classTask = buildClassTask(phaseFor(new Date(now), classSettings), lesson, states)
+            classReadiness = lessonReadiness(lesson, states)
+          }
         } catch {
           // offline or not-yet-cached — Today still works, just without the class task
         }
@@ -117,6 +134,10 @@ export function useToday(levels: Level[]): TodayApi {
       setIntroCount(introIds.length)
       setLifeStage(stage)
       setCelebrateStage(celebration.celebrate ? stage.stage : null)
+      setWeekCellsState(weekCells(now, journal, classSettings))
+      setDaysInJapanState(daysInJapan(journal, now))
+      setLapsed(isLapsedReturn(journal, now))
+      setClassReadinessState(classReadiness)
       setDayPlan(
         buildDayPlan({
           dueCount: keep.length,
@@ -159,5 +180,9 @@ export function useToday(levels: Level[]): TodayApi {
     diaryEntries,
     isRevealed,
     revealGloss,
+    weekCells: weekCellsState,
+    daysInJapan: daysInJapanState,
+    isLapsedReturn: lapsed,
+    classReadiness: classReadinessState,
   }
 }

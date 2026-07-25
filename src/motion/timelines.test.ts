@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, hankoPop, pulsePass, shakeFail, staggerIn, stampPress, strokeDrawIn, traceInk, traceWrong } from './timelines'
+import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, hankoPop, pulsePass, readinessDrawIn, shakeFail, staggerIn, stampPress, strokeDrawIn, traceInk, traceWrong } from './timelines'
 
 function div(): HTMLDivElement {
   return document.createElement('div')
@@ -86,5 +86,11 @@ describe('motion timeline factories (reduced-motion branch)', () => {
     const tl = traceWrong(div())
     expect(tl.duration()).toBe(0)
     expect(tl.getChildren().length).toBe(0)
+  })
+
+  it('readinessDrawIn renders the arc instantly, and never touches drawSVG (the jsdom law)', () => {
+    const tw = readinessDrawIn(div(), 0.72)
+    expect(tw.duration()).toBe(0)
+    expect((tw.vars as Record<string, unknown>).drawSVG).toBeUndefined()
   })
 })

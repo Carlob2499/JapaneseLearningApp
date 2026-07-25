@@ -3,6 +3,7 @@ import { useGSAP } from '@gsap/react'
 import { Flip } from 'gsap/Flip'
 import type { Level, SceneTemplate } from '@hikkoshi/schemas'
 import type { DiaryEntry } from '../day/diary'
+import type { WeekCell } from '../day/rhythm'
 import { useToday } from '../day/useToday'
 import { APP_NAME, APP_NAME_JA, JLPT_LABEL, levelItemCount } from '../lib/appMeta'
 import { timeBucket } from '../lib/timeOfDay'
@@ -67,6 +68,34 @@ function HomeHero() {
 }
 
 /**
+ * The return loop's header strip (D-038): this week's 7 cells (kept/not, today marked) and
+ * "day N in Japan" — a streak reframed as narrative continuity rather than a number that resets
+ * to zero. A lapsed return (>3 days idle) adds a quiet おかえり line; the capped session itself
+ * is handled where the day's review task is built (Slice A's warm-return cap), not here.
+ */
+function WeekRing({ cells, daysInJapan, lapsed }: { cells: WeekCell[]; daysInJapan: number; lapsed: boolean }) {
+  if (cells.length === 0) return null
+  const keptCount = cells.filter((c) => c.kept).length
+  return (
+    <div className="week-ring-strip">
+      <div className="week-ring" role="img" aria-label={`This week: ${keptCount} of 7 days kept`}>
+        {cells.map((c, i) => (
+          <span key={i} className={`week-cell${c.kept ? ' kept' : ''}${c.isToday ? ' today' : ''}`} aria-hidden="true" />
+        ))}
+      </div>
+      <p className="week-ring-days">
+        {lapsed && (
+          <span className="week-ring-okaeri">
+            <span aria-hidden="true">おかえり</span> — welcome back ·{' '}
+          </span>
+        )}
+        <span aria-hidden="true">日本で{daysInJapan}日目</span> · Day {daysInJapan} in Japan
+      </p>
+    </div>
+  )
+}
+
+/**
  * Five hand-written framing lines (D-019) — stage 5's name is already a full sentence ("You
  * handle it for someone else."), so no single "Your X now reads: {name}" template covers all
  * five; stage 0 (Tourist) never celebrates (decideCelebration), so it needs none.
@@ -123,19 +152,28 @@ function LifeStageBadge({
   )
 }
 
+/** The class-eve glow threshold (D-038): the readiness a lesson needs, the evening before class,
+ *  to earn the warm highlight — high enough to mean something, not a rubber stamp. */
+const CLASS_EVE_GLOW_READINESS = 0.85
+
 /** The Classroom thread's front door on Home (D-034): once enabled, a quiet reminder of how far
- *  class is; before that, a single dismissable invitation — never both, never pushy. */
-function ClassroomEntry({ onClassroom }: { onClassroom: () => void }) {
+ *  class is; before that, a single dismissable invitation — never both, never pushy. Glows on
+ *  class eve once the lesson's readiness clears 85% (D-038) — a felt "you're ready," not a nag. */
+function ClassroomEntry({ onClassroom, readiness }: { onClassroom: () => void; readiness: number | null }) {
   const [settings] = useState(getClassSettings)
   const [dismissed, setDismissed] = useState(isClassDiscoveryDismissed)
 
   if (settings.enabled) {
     const days = daysUntilClass(new Date(), settings.classDay)
     const when = days === 0 ? 'today' : days === 1 ? 'tomorrow' : `in ${days} days`
+    const glowing = days === 1 && (readiness ?? 0) >= CLASS_EVE_GLOW_READINESS
     return (
-      <button type="button" className="class-entry" onClick={onClassroom}>
-        <span aria-hidden="true">授業</span> Class {when} · Lesson {settings.lesson}
-      </button>
+      <div className="class-entry-wrap">
+        <button type="button" className={`class-entry${glowing ? ' glowing' : ''}`} onClick={onClassroom}>
+          <span aria-hidden="true">授業</span> Class {when} · Lesson {settings.lesson}
+        </button>
+        {glowing && <p className="class-eve-line fineprint">Ready for tomorrow.</p>}
+      </div>
     )
   }
   if (dismissed) return null
@@ -213,6 +251,9 @@ export default function Home({
   return (
     <main className="shell">
       <HomeHero />
+      {today.mode === 'ready' && (
+        <WeekRing cells={today.weekCells} daysInJapan={today.daysInJapan} lapsed={today.isLapsedReturn} />
+      )}
 
       <section className="card today-card">
         <SectionHead ja="今日" en="Today" />
@@ -286,7 +327,7 @@ export default function Home({
         )}
       </section>
 
-      <ClassroomEntry onClassroom={onClassroom} />
+      <ClassroomEntry onClassroom={onClassroom} readiness={today.classReadiness} />
 
       {today.diaryEntries.length > 0 && (
         <section className="card diary-card">
