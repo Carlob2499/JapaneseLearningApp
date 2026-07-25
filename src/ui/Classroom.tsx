@@ -16,8 +16,15 @@ interface ClassroomData {
   book: Classbook
   grammarById: Map<string, GrammarPoint>
   vocabById: Map<string, VocabItem>
-  metById: Set<string>
+  stateById: Map<string, ItemState>
   states: ItemState[]
+}
+
+/** A grammar point's Classroom status: unseen, in review, or "solid" — earned once it's been
+ *  produced correctly on 3 distinct days (Serfaty & Serrano 2024, D-036). */
+function grammarStatus(state: ItemState | undefined): 'not-started' | 'in-review' | 'solid' {
+  if (!state) return 'not-started'
+  return (state.productionStreak ?? 0) >= 3 ? 'solid' : 'in-review'
 }
 
 /** Weekly kanji sheet (D-034): shows the current lesson's default week, or the learner's own
@@ -117,7 +124,7 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
           book,
           grammarById: new Map(content.grammar.map((g) => [g.id, g])),
           vocabById: new Map(content.vocab.map((v) => [v.id, v])),
-          metById: new Set(states.map((s) => s.itemId)),
+          stateById: new Map(states.map((s) => [s.itemId, s])),
           states,
         })
       } catch {
@@ -236,13 +243,13 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
               {lesson.grammarIds.map((id) => {
                 const g = data.grammarById.get(id)
                 if (!g) return null
+                const status = grammarStatus(data.stateById.get(id))
+                const label = status === 'solid' ? 'solid' : status === 'in-review' ? 'in review' : 'not started'
                 return (
                   <div className="grammar-row" key={id}>
                     <span className="grammar-row-name">{g.name}</span>
                     <span className="grammar-row-gloss">{g.gloss}</span>
-                    <span className={`grammar-row-status${data.metById.has(id) ? ' met' : ''}`}>
-                      {data.metById.has(id) ? 'in review' : 'not started'}
-                    </span>
+                    <span className={`grammar-row-status ${status}`}>{label}</span>
                   </div>
                 )
               })}

@@ -3,6 +3,7 @@ import { useGSAP } from '@gsap/react'
 import { toHiragana, toKana } from 'wanakana'
 import type { GrammarPoint, KanaItem, KanjiItem, Outcome, SentenceItem, StrokeItem, VocabItem } from '@hikkoshi/schemas'
 import type { Choice } from '../review/choices'
+import type { ClozePrompt } from '../review/worksheet'
 import { useAudio } from '../audio/useAudio'
 import { isReducedMotion } from '../motion/reducedMotion'
 import { hankoPop, pulsePass, shakeFail, staggerIn } from '../motion/timelines'
@@ -530,6 +531,85 @@ export function TypedCard({
           <p className={`typed-feedback ${result}`} data-testid="typed-feedback">
             {result === 'correct' && <MaruMark className="maru-on-line" />}
             {result === 'correct' ? '正解 · correct' : `Answer: ${target}`} <SpeakButton text={spoken} />
+          </p>
+          <button className="next-btn" onClick={() => onGrade(result === 'correct' ? 'pass' : 'fail')}>
+            Next →
+          </button>
+        </>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Grammar production, on paper (D-036): fill the blank in a real sentence (cloze) or produce the
+ * whole pattern from the point's name and an English gloss alone (transform, no Japanese
+ * context) — the same underlying `ClozePrompt`, the UI just hides more for the harder mode. The
+ * genkōyōshi-style ruled cell is the worksheet register; grading reuses the maru/shake vocabulary
+ * every other card already presses.
+ */
+export function WorksheetCard({
+  point,
+  prompt,
+  mode,
+  onGrade,
+}: {
+  point: GrammarPoint
+  prompt: ClozePrompt
+  mode: 'cloze' | 'transform'
+  onGrade: (o: Outcome) => void
+}) {
+  const [value, setValue] = useState('')
+  const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { contextSafe } = useGSAP()
+  useEffect(() => inputRef.current?.focus(), [])
+
+  const check = contextSafe(() => {
+    if (result !== null || value.trim() === '') return
+    const correct = toHiragana(value).trim() === prompt.blank
+    setResult(correct ? 'correct' : 'wrong')
+    if (inputRef.current) {
+      if (correct) pulsePass(inputRef.current)
+      else shakeFail(inputRef.current)
+    }
+  })
+
+  return (
+    <div className="study-card worksheet-card">
+      <span className="card-kind">Grammar · {mode === 'cloze' ? 'Fill the blank' : 'Produce the pattern'}</span>
+      <p className="worksheet-name">{point.name}</p>
+      <p className="worksheet-en">{prompt.translationEn}</p>
+      <div className="worksheet-line">
+        {mode === 'cloze' && <span className="worksheet-context">{prompt.before}</span>}
+        <input
+          ref={inputRef}
+          className={`worksheet-blank${result ? ` ${result}` : ''}`}
+          value={value}
+          onChange={(e) => setValue(toKana(e.target.value, { IMEMode: true }))}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') check()
+          }}
+          disabled={result !== null}
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          aria-label="Fill in the pattern"
+          data-testid="worksheet-input"
+        />
+        {mode === 'cloze' && <span className="worksheet-context">{prompt.after}</span>}
+      </div>
+      {result === null ? (
+        <button className="next-btn" onClick={check} disabled={value.trim() === ''}>
+          Check
+        </button>
+      ) : (
+        <>
+          <p className={`typed-feedback ${result}`} data-testid="typed-feedback">
+            {result === 'correct' && <MaruMark className="maru-on-line" />}
+            {result === 'correct'
+              ? '正解 · correct'
+              : `${prompt.before}${prompt.blank}${prompt.after}`}
           </p>
           <button className="next-btn" onClick={() => onGrade(result === 'correct' ? 'pass' : 'fail')}>
             Next →

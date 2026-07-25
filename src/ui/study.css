@@ -1063,3 +1063,66 @@
     transform: none;
   }
 }
+
+/* The worksheet card (D-036) — grammar production on paper. A faint genkōyōshi (原稿用紙) square
+   ruling stands in for the classroom's own grid pages; the blank is a brush-underlined gap, not
+   a boxed input, so the sentence still reads as one line. */
+.worksheet-card {
+  background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      color-mix(in srgb, var(--line) 45%, transparent) 27px,
+      color-mix(in srgb, var(--line) 45%, transparent) 28px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 27px,
+      color-mix(in srgb, var(--line) 45%, transparent) 27px,
+      color-mix(in srgb, var(--line) 45%, transparent) 28px
+    );
+}
+.worksheet-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+}
+.worksheet-en {
+  margin: -8px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.worksheet-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 20px;
+}
+.worksheet-context {
+  white-space: pre-wrap;
+}
+.worksheet-blank {
+  min-width: 84px;
+  max-width: 200px;
+  border: none;
+  border-bottom: 2px solid var(--accent-2);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 20px;
+  text-align: center;
+  padding: 2px 4px;
+}
+.worksheet-blank:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.worksheet-blank.correct {
+  border-color: var(--ok);
+}
+.worksheet-blank.wrong {
+  border-color: #b3402f;
+}

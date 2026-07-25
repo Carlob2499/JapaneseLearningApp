@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { ChoiceCard, GrammarCard, KanaCard, ListeningCard, SentenceCard, SpeakButton, TypedCard } from './cards'
+import { ChoiceCard, GrammarCard, KanaCard, ListeningCard, SentenceCard, SpeakButton, TypedCard, WorksheetCard } from './cards'
 import type { Choice } from '../review/choices'
+import { clozeFor } from '../review/worksheet'
 import type { GrammarPoint, KanaItem, SentenceItem, StrokeItem } from '@hikkoshi/schemas'
 
 afterEach(cleanup)
@@ -132,6 +133,54 @@ describe('TypedCard', () => {
     fireEvent.change(screen.getByTestId('typed-input'), { target: { value: 'みる' } })
     fireEvent.click(screen.getByText('Check'))
     expect(screen.getByTestId('typed-feedback').textContent).toContain('たべる')
+    fireEvent.click(screen.getByText('Next →'))
+    expect(onGrade).toHaveBeenCalledWith('fail')
+  })
+})
+
+describe('WorksheetCard', () => {
+  const grammarPoint: GrammarPoint = {
+    kind: 'grammar',
+    id: 'grammar:l3:you-ni-naru',
+    name: '〜ようになる',
+    level: 'L3',
+    gloss: 'come to',
+    summary: 'summary',
+    citations: [{ name: 'x', url: 'https://x', retrieved: '2026-01-01', license: 'x' }],
+    patterns: ['ようになりました'],
+    examples: [
+      {
+        ja: '毎日歩くようになりました。',
+        en: 'I came to walk every day.',
+        tatoebaId: 1,
+        attribution: { author: 'a', license: 'CC-BY-2.0-FR' },
+      },
+    ],
+  }
+  const prompt = clozeFor(grammarPoint)!
+
+  it('cloze mode shows the surrounding sentence and grades the typed blank', () => {
+    const onGrade = vi.fn()
+    render(<WorksheetCard point={grammarPoint} prompt={prompt} mode="cloze" onGrade={onGrade} />)
+    expect(screen.getByText('毎日歩く')).toBeTruthy()
+    fireEvent.change(screen.getByTestId('worksheet-input'), { target: { value: 'ようになりました' } })
+    fireEvent.click(screen.getByText('Check'))
+    fireEvent.click(screen.getByText('Next →'))
+    expect(onGrade).toHaveBeenCalledWith('pass')
+  })
+
+  it('transform mode hides the surrounding Japanese context', () => {
+    render(<WorksheetCard point={grammarPoint} prompt={prompt} mode="transform" onGrade={() => {}} />)
+    expect(screen.queryByText('毎日歩く')).toBeNull()
+    expect(screen.getByText('I came to walk every day.')).toBeTruthy()
+  })
+
+  it('grades fail and reveals the full sentence when the typed pattern is wrong', () => {
+    const onGrade = vi.fn()
+    render(<WorksheetCard point={grammarPoint} prompt={prompt} mode="cloze" onGrade={onGrade} />)
+    fireEvent.change(screen.getByTestId('worksheet-input'), { target: { value: 'たべる' } })
+    fireEvent.click(screen.getByText('Check'))
+    expect(screen.getByTestId('typed-feedback').textContent).toContain('毎日歩くようになりました。')
     fireEvent.click(screen.getByText('Next →'))
     expect(onGrade).toHaveBeenCalledWith('fail')
   })

@@ -121,8 +121,12 @@
   color: var(--muted);
   white-space: nowrap;
 }
-.grammar-row-status.met {
+.grammar-row-status.in-review {
   color: var(--accent-2);
+}
+.grammar-row-status.solid {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .kanji-week-grid {
