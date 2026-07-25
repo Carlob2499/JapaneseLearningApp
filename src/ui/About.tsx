@@ -78,6 +78,16 @@ export default function About() {
           verbatim from Tatoeba — never invented. It’s a growing curated set, wider at the lower levels.
         </p>
         <p>
+          <strong>Classroom mode lines the app up with your own class — never Quartet's content.</strong>{' '}
+          Turning it on (Classroom → settings) only tells the app your class day and where you are
+          in Quartet I by lesson number; no school, teacher, or date ever leaves your device. The
+          six lesson themes and their grammar-point names are published facts, cross-checked
+          against public grammar indexes; the weekly kanji and theme vocabulary are our own
+          curated selection drawn from the same open-data pools as the rest of the app — never
+          Quartet's own vocabulary lists, glosses, dialogues, or exercises. Not affiliated with or
+          endorsed by The Japan Times; no textbook content is reproduced.
+        </p>
+        <p>
           <strong>Emergency words are one tap from Home, always offline.</strong> The “In an emergency”
           card gathers the safety-critical basics — the numbers to dial (119 for fire and ambulance,
           110 for police) and a few cited lines to say (ask for help, report a fire, request an
@@ -92,7 +102,7 @@ export default function About() {
           <span>KanjiVG © Ulrich Apel (CC BY-SA 3.0)</span>;{' '}
           <span>example sentences from Tatoeba (CC BY 2.0 FR)</span>;{' '}
           <span>JLPT tags from J. Waller (CC BY)</span>.{' '}
-          <a href={`${REPO_URL}/blob/claude/jlpt-game-research-7a5aoe/content/ATTRIBUTION.md`}>
+          <a href={`${REPO_URL}/blob/main/content/ATTRIBUTION.md`}>
             Full attribution
           </a>
           .
@@ -103,7 +113,7 @@ export default function About() {
           <span>Mikunigaoka Station platform by そらみみ (CC BY-SA 4.0)</span>;{' '}
           <span>wing above the clouds by Harry Knight (CC0)</span>. Shown with a duotone wash;
           the underlying works are unmodified beyond crop/resize.{' '}
-          <a href={`${REPO_URL}/blob/claude/jlpt-game-research-7a5aoe/src/assets/photos/PHOTOS.md`}>
+          <a href={`${REPO_URL}/blob/main/src/assets/photos/PHOTOS.md`}>
             Photo ledger
           </a>
           .

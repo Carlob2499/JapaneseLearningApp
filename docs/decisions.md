@@ -1031,3 +1031,203 @@ matchMedia and kept live by gsap.matchMedia. (2) Playwright's context-level `red
 The helpers now enforce `page.emulateMedia({ reducedMotion: 'reduce' })` per page on that project
 (verified working across the version gap), so the reduced guarantee is finally real and pinned by
 the never-mounts invariants that caught both bugs.
+
+### D-034: The classbook layer — Quartet I, cited and legally clean
+The owner attends a real weekly Quartet I class (Japan Times; Wednesdays) and wants Hikkoshi to
+know where they actually are in it. The Japan Times actively enforces Quartet's copyright — the
+community exercise site sethclydesdale.github.io/quartet-study-resources was taken down at their
+request, and shared vocab-list decks carry no license — so the licensing line drawn and followed
+throughout this batch: **never ingest or reproduce Quartet's vocabulary lists, glosses, readings,
+dialogues, or exercises.** What's safe, and what actually got built from it: grammar-point *names
+and patterns* (facts, publicly indexed by Bunpro's own Quartet I deck and WaniKani study threads),
+lesson *themes* (facts about the book), and a from-scratch curated selection of the app's own
+already-licensed vocabulary (Tatoeba/JMdict) chosen by lesson theme.
+- **`packages/schemas/src/classbook.ts`**: `LessonTemplate` — id, book, lesson number, original
+  `titleEn`/`themeEn`, `grammarIds`, `vocabMatchers` (resolved to real item ids at pipeline build;
+  an unmatched matcher warns, never errors), `kanjiWeeks` (six-literal arrays; the shipped default
+  is our own frequency-ordered N3-tagged selection, cross-checked against ≥2 open sources and
+  recorded as such here — never "the Quartet handout"), `citations`.
+- **35 new grammar points authored** across the L2–L4 pools (original prose, ≥2 citations each —
+  Bunpro's deck page plus jlptsensei or Tae Kim, the D-016 precedent), bringing 54 total points
+  into quartet1's coverage (19 already existed from earlier levels and simply gained a `quartet1`
+  textbook anchor). Points with no clean Tatoeba match were held back rather than shipped thin
+  (the same D-016 rule).
+- **`content/curated/classbook/quartet1.json`**: all six lessons (53 grammar references, 86 vocab
+  references across them), emitted to `content/packs/class/quartet1.json` by a new pipeline stage,
+  schema-validated in `pipeline:validate`.
+- **`src/store/classSettings.ts`** + **`src/ui/Classroom.tsx`**: a localStorage-backed settings
+  object holding exactly `{enabled, classDay, book, lesson, week, weeklyKanjiOverride}` — no
+  school, teacher, or real date ever recorded, matching the roadmap's own privacy line. The
+  Classroom view renders the term map, the current lesson's grammar list, and the weekly kanji row
+  (editable in place against the learner's actual handout, since our kanji-week default is a
+  best-effort curation, not the book itself).
+Verified: schema round-trip and pipeline-resolvability tests; classSettings phase math across all
+7 weekdays; Classroom renders under jsdom with a seeded profile; App view wiring.
+*Source: Session 21 (Roadmap 2, Batch 1), 2026-07-25; Bunpro Quartet I deck + jlptsensei/Tae Kim
+cross-checks; Japan Times take-down precedent (sethclydesdale.github.io).*
+
+### D-035: The weekly rhythm — seed, capture, and the day plan
+Two evidence-backed hooks around the class day, not a generic streak: **pretesting** — attempting
+retrieval of not-yet-taught material, with immediate answer reveal, improves later learning of
+exactly those items (g≈0.54 pretested vs ≈0.04 untested; Kornell/Hays/Bjork 2009; Pan & Carpenter
+2023) — and **same-evening consolidation** — retrieval on class evening exploits sleep-dependent
+lexical consolidation (Dumay & Gaskell 2007), with a spaced follow-up at the optimal ≈10–20%-of-
+interval gap (Cepeda et al. 2008).
+- **`src/day/classWeek.ts`** (pure): `phaseFor(now, settings)` → `'seed' | 'class' | 'capture' |
+  'strengthen' | 'off'` from the class-day offset alone (seed = 1–2 days before, capture = class
+  day plus the day after, strengthen = the rest of the week, folded into ordinary interleaved
+  review with no special task). `buildClassTask` returns exactly a lesson's not-yet-met items for
+  seed and exactly its already-met items for capture — never padded with the other kind.
+  `lessonReadiness` = share of a lesson's items with any progress record at all (refined toward a
+  production-based threshold in D-036/D-038). Wired into `dayPlan.ts` as one of the existing 4 task
+  slots, never displacing review.
+- **Seed sessions** reuse the review flow with forgiving grading: wrong answers write provisional
+  entries (the existing D-021 provisional-SRS semantics — never a demotion), and every card reveals
+  the real Tatoeba example plus gloss regardless of the answer. **Capture sessions** pull the
+  current week's items with a recall-format bias. Both end on the existing day-end summary.
+Verified: golden tests for the full week at every classDay, including the "week stepper not
+advanced" case (phases correctly repeat rather than assuming calendar time equals term progress);
+e2e seed-then-capture round-trip on a real cross-level lesson.
+*Source: Session 21 (Roadmap 2, Batch 2), 2026-07-25; Kornell/Hays/Bjork 2009; Pan & Carpenter
+2023, Educ. Psych. Review; Dumay & Gaskell 2007; Cepeda et al. 2008, Psych Sci.*
+
+### D-036: Worksheets — grammar production from real sentences only
+Grammar becomes durable through whole-sentence *production* with feedback across ≥3 spaced,
+successful sessions (Serfaty & Serrano 2024) — recall formats beat recognition once that's the
+actual goal (Nakata 2016) — and a point should never be quizzed only inside its own lesson bucket
+once a confusable sibling exists (hybrid interleaving; Pan et al. 2019; Nakata & Suzuki 2019).
+- **`clozeFor`** finds a grammar point's own pattern inside its own real Tatoeba example (longest-
+  pattern-first, earliest-example-first, for a stable prompt) and splits around it — the blank is
+  never assembled, only located; kana-tolerant typed grading reuses the existing typed-answer
+  machinery. A kanji-bearing blank falls back to recall rather than demanding IME input (the same
+  rule TypedCard already applies to readings).
+- **`productionStreak`** joins `ItemState`: a grammar item earns **solid** at 3 successful
+  productions on distinct days, surfaced as the Classroom status chip. Stage ≥4 promotes a grammar
+  item's mode to cloze, stage ≥6 to transform.
+- **The hybrid interleaving guard**: `confusableSiblings` groups grammar points by a 2-character
+  prefix overlap in their own `patterns` (a real lexical signal already in the dataset — ませ/まし,
+  てく, から — not a hand-authored taxonomy, keeping it inside the D-002 dataset-only rule). A
+  production-mode review session that doesn't already contain a confusable sibling pulls one in
+  from already-known items, bounded to a single pass.
+- **`WorksheetCard`**: a genkōyōshi-grid paper card, the blank as a brush-underlined gap, graded
+  through the existing maru/shake vocabulary, the full real sentence plus translation revealed
+  after grading either way.
+Caught in review: the interleaving guard itself was missing from the first pass at this slice —
+the roadmap's hybrid-interleaving requirement (§2.2.4) had been read but not yet wired into
+`useReview`; added and tested before commit.
+Verified: pattern-location and kana-tolerance unit tests; a real 132-grammar-point / 29-group
+interleaving check against the live dataset; e2e — a cloze worksheet round-trips with a correct
+typed answer.
+*Source: Session 21 (Roadmap 2, Batch 3), 2026-07-25; Serfaty & Serrano 2024, Language Learning;
+Nakata 2016; Pan et al. 2019; Nakata & Suzuki 2019, MLJ.*
+
+### D-037: 手書き — kanji tracing on the KanjiVG data
+Writing practice strengthens orthographic form-meaning links beyond passive recognition (Guan et
+al. 2011; Lyu et al. 2021 review) — traced selectively (the class's own weekly six and their
+confusables), not the whole kanji pool.
+- **`TraceCanvas`**: the existing KanjiVG stroke paths as faint guides plus a pointer-capture
+  layer; each stroke is validated against its guide by start/end proximity, direction, and
+  midpoint sampling — no drawing library, ~0 new dependencies (SVG and pointer events only).
+- **The jsdom law, extended.** D-033 already required reduced-motion branches to never carry a
+  `drawSVG` property; this batch adds that `getTotalLength`/`getPointAtLength` — real SVG geometry
+  APIs jsdom doesn't implement — may only ever be called from inside a pointer handler or a
+  lazily-initialized ref, never at render or mount. The real geometry sampler is an injectable prop
+  with a browser-real default; unit tests inject a fake that never touches SVG DOM APIs at all,
+  leaving real-geometry correctness entirely to e2e, which drives an actual chromium with real
+  `page.mouse` drags sampled along the guide's own curve.
+- **A real bug the jsdom-safe design didn't hide.** `onPointerUp`'s captured point list read the
+  drag state directly rather than appending the pointerup event's own coordinate — meaning a
+  stroke's *release* position, which differs from its last recorded *move* position in any natural
+  drag, was silently dropped from validation. Caught by direct instrumentation (not by the
+  geometry-avoidance discipline above, which only protects jsdom — this was a real-browser logic
+  bug), fixed before commit.
+- **`KanjiSheet`**: the week's six kanji as a 2×3 trace grid; completion persists as an ordinary
+  append-only journal entry (`interaction: 'trace'`, no new store) so it survives reload; a fully-
+  traced sheet earns a vermillion term stamp and a one-time small ceremony (reduced-gated, same
+  laws as D-033's arrival sequence).
+Verified: stroke-validation unit tests (proximity/direction/midpoint) against the injected fake
+sampler; reduced-motion collapse; e2e — a real pointer-traced stroke, sampled along the guide's
+actual curve via live `getTotalLength`/`getPointAtLength`, inks in and persists across reload.
+*Source: Session 21 (Roadmap 2, Batch 4), 2026-07-25; Guan et al. 2011, J. Experimental Psychology;
+Lyu et al. 2021 review.*
+
+### D-038: The return loop — days lived, kept weeks, kind returns
+Ranked, evidence-backed engagement-mechanics research (2026-07-24), aesthetic-filtered against the
+app's calm register. **Adopted**: capped warm sessions with no raw backlog number ever shown
+(Anki-abandonment analyses — review debt is the #1 cited cause of SRS abandonment); weekly-
+consistency framing with automatic forgiveness, never a hard reset (Duolingo's own retention
+data — forgiveness mechanics *outperform* punitive ones; Lally et al. 2010 — missing a day doesn't
+harm habit formation); "days lived in Japan" as narrative continuity rather than a number that
+resets to zero; endowed progress (Kivetz et al. 2006 — goal-gradient effects strengthen the closer
+a reward feels, so a bar should never start at zero); mastery-gated get-ahead unlocking (the
+WaniKani rule). **Rejected outright**: leagues/leaderboards (documented anxiety and off-task
+grinding in the literature), XP/points currency, guilt copy of any kind, hard streak resets,
+jackpot visuals — the calm aesthetic was never a retention handicap; the evidence says the
+opposite.
+- **`src/day/rhythm.ts`** (pure): `activeDays`/`daysInJapan` (today always counted, even before
+  its first entry lands that day — endowed, mirroring Journey's own "arrival is the one stamp you
+  get for free"); `weekCells` — 7 cells, a class day auto-credited "kept" once it's today-or-past
+  this week, never for one still ahead (attendance is a real-world fact the app should never make
+  the learner re-earn); `keptWeeks`. One disclosed deviation from the roadmap's literal signature:
+  `keptWeeks` takes `now` to exclude the still-in-progress current week, avoiding a false
+  "not kept" reading on a week that hasn't had the chance to be yet.
+- **Amnesty plus the warm-return cap**, in the load shaper: an item overdue more than 14 days
+  re-spreads 1–7 days out (a deterministic offset from its own due timestamp, so re-running before
+  the offset elapses can't reshuffle it) instead of stacking at the front of a session; if the
+  post-amnesty due pile still exceeds twice the daily new-item cap, the day's review task is built
+  from that smaller ceiling and Home's fineprint reads only "Today is short on purpose" — never a
+  number.
+- **`WeekRing`** on Home (this week's 7 cells plus "日本で N日目 — Day N in Japan," with a quiet
+  おかえり line past a 3-day lapse); the **readiness dial** replaces the old plain-text percentage
+  with a brush arc (DrawSVG draw-in on value change, correct static geometry pre-animation and
+  under reduced motion); a **class-eve glow** at ≥85% readiness; the **lesson hanko ceremony** (all
+  a lesson's points solid ⇒ a letterboxed set-piece, ≤2.4s, tap-skip, once per lesson, never under
+  reduced motion — the exact D-033 arrival laws); the **next-lesson seed gate** (jumping to lesson
+  N+1 unlocks only once lesson N's readiness clears 70% — mastery-gated, not a free skip).
+Verified: 18 rhythm unit tests plus load-shaper amnesty/cap tests; a `useToday` integration test
+seeding 25 overdue items and asserting both the capped count and the threaded `isWarmReturn` flag;
+e2e — the week ring renders exactly 7 cells, the ceremony fires once all of a lesson's points are
+solid and never mounts under reduced motion.
+*Source: Session 21 (Roadmap 2, Batch 5), 2026-07-25; Duolingo retention publications; WaniKani
+mastery-gated unlocks; Anki-abandonment analyses; Lally et al. 2010; Kivetz et al. 2006, J.
+Marketing Research; Zeigarnik-effect collection-grid research.*
+
+### D-039: Cohesion pass — the Classroom companion, shipped
+The closing batch: one full-journey e2e test spanning every mechanic above in a single sitting, the
+disclosure and licensing lines made visible in-app, and an honest bundle audit.
+- **`e2e/classroom.spec.ts`** gained a full-journey check: enable class mode → seed a real
+  cross-level lesson → answer through it → readiness visibly moves off 0% → capture the following
+  review, including a worksheet cloze forced to cloze-eligible stage (real spaced review to reach
+  it would take real weeks) and round-tripped with its correct typed answer → trace one real stroke
+  of the weekly kanji sheet → the week ring reflects the day's activity — all while asserting
+  neither ceremony ever mounts (this particular journey deliberately never reaches "solid" or a
+  fully-traced sheet, so the guarantee holds structurally, not by luck of timing). Runs clean
+  across all three projects without needing a reduced-specific branch, since nothing in this
+  journey is reduced-motion-conditional at the behavioral level.
+- **About.tsx**: a new disclosure paragraph — Classroom mode only ever stores `{enabled, classDay,
+  book, lesson, week}` locally, never a school/teacher/real date; the lesson themes and grammar-
+  point names are published facts, the weekly kanji and vocabulary our own curated selection from
+  the app's existing open-data pools, never Quartet's own lists — "Not affiliated with or endorsed
+  by The Japan Times; no textbook content is reproduced." Also fixed while in the file: two
+  attribution links still pointing at the old dev-branch name from before the default-branch
+  rename to `main`.
+- **Bundle plus precache audit vs D-033's baseline** (478KB min, 21 precache entries): main JS is
+  now 503.32KB min (165.6KB gzip), precache 25 entries (1926.19 KiB). The classbook pack
+  (`quartet1.json`) adds no precache entry at all — like every other level pack, it's fetched on
+  demand and cached at runtime, never precached at install; the size growth is application code
+  (TraceCanvas, worksheet cards, the Classroom view, the rhythm and ceremony layer) rather than
+  content payload. Total suite: 365 unit tests (up from 257 at D-033's close), 66 e2e checks across
+  light/dark/reduced (up from 34).
+- **Verification found and fixed a stale-build trap twice this batch**: `dist/` had been built
+  before several source edits landed (once before the D-038 e2e suite, once before this batch's
+  About.tsx edit), so `vite preview` — which serves whatever's already on disk, not a live rebuild —
+  was silently exercising old bytes. Both were caught by a genuinely-empty result (0 of an expected
+  7 week-ring cells; a disclosure paragraph absent from a walkthrough screenshot) rather than a
+  partial one, which is what made them obvious rather than a source of flaky-looking failures;
+  resolved by rebuilding before every e2e run and before the closing walkthrough.
+Verified: full gate green on every slice of every batch in this roadmap; a three-scheme (light/
+dark/reduced) manual walkthrough of every new surface — the week ring, the class-eve glow, the
+readiness dial, the kanji sheet and a real inked stroke, the lesson hanko ceremony mid-flight, and
+the About disclosure — with zero console errors across all three runs; live `sw.js` precache hash
+confirmed to match the local `dist` build after the final push.
+*Source: Session 21 (Roadmap 2, Batch 6 — cohesion and ship), 2026-07-25.*
