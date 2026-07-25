@@ -37,6 +37,7 @@ function grammar(id: string, level: GrammarPoint['level']): GrammarPoint {
     summary: 's',
     citations: [{ name: 'x', url: 'https://x', retrieved: '2026-07-13', license: 'ref' }],
     examples: [{ ja: 'x', en: 'x', tatoebaId: 1, attribution: { author: 'x', license: 'CC-BY-2.0-FR' } }],
+    patterns: ['x'],
   }
 }
 

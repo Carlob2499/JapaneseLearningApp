@@ -26,6 +26,7 @@ import {
   snapToLightestDay,
 } from '../scheduler/loadShaper'
 import { buildChoices, buildPools, retrievalModeFor, type Choice, type Pools } from './choices'
+import { clozeFor, clozeIsTypeable, confusableSiblings } from './worksheet'
 
 export type Reviewable =
   | { id: string; kind: 'vocab'; item: VocabItem }
@@ -90,6 +91,10 @@ function buildPool(c: Content): Reviewable[] {
 function resolveMode(r: Reviewable, st: ItemState | undefined, audio: boolean): RetrievalMode {
   const mode = retrievalModeFor(r.kind, st?.stage ?? 0, { leech: st?.leech, seed: st?.lapses, audio })
   if (mode === 'typed' && r.kind === 'vocab' && !isHiragana(r.item.reading)) return 'recall'
+  if ((mode === 'cloze' || mode === 'transform') && r.kind === 'grammar') {
+    const prompt = clozeFor(r.item)
+    if (!prompt || !clozeIsTypeable(prompt)) return 'recall'
+  }
   return mode
 }
 
@@ -225,6 +230,27 @@ export function useReview(levels: Level[], options: ReviewOptions = {}): ReviewA
       histRef.current = loadHistogram([...statesRef.current.values()])
 
       const session = [...due, ...intro]
+
+      // Hybrid interleaving guard (D-036, §2.2.4): a production-mode (cloze/transform) grammar
+      // item never sits alone in its session — if the due/intro mix didn't already pull in a
+      // confusable sibling (patterns-prefix family), add the first already-known one. Only
+      // already-introduced siblings qualify (never bypasses the daily intro-budget cap above).
+      // A single pass over the original session bounds this to at most one insert per qualifying
+      // item — no unbounded cascade through the sibling graph.
+      const sessionIds = new Set(session.map((r) => r.id))
+      for (const r of [...session]) {
+        if (r.kind !== 'grammar') continue
+        const rmode = resolveMode(r, statesRef.current.get(r.id), audioRef.current)
+        if (rmode !== 'cloze' && rmode !== 'transform') continue
+        const siblings = confusableSiblings(r.item, content.grammar)
+        if (siblings.some((s) => sessionIds.has(s.id))) continue
+        const known = siblings.find((s) => statesRef.current.has(s.id))
+        const reviewable = known && byIdRef.current.get(known.id)
+        if (!reviewable) continue
+        session.push(reviewable)
+        sessionIds.add(reviewable.id)
+      }
+
       setQueue(session)
       setSessionSize(session.length)
       setMode(session.length > 0 ? 'review' : 'summary')
@@ -264,6 +290,20 @@ export function useReview(levels: Level[], options: ReviewOptions = {}): ReviewA
           failTsRef.current.set(cur.id, arr)
         }
         next.leech = isLeech(failTsRef.current.get(cur.id) ?? [], now)
+        // A grammar point is "solid" after 3 successful production sessions on distinct days
+        // (Serfaty & Serrano 2024, D-036) — a fail resets the streak (the pattern needs re-earning,
+        // not just a skipped day), and `lastProductionDay` stops one session from double-counting.
+        if (interaction === 'cloze' || interaction === 'transform') {
+          if (outcome === 'pass') {
+            const today = dayIndex(now)
+            if (next.lastProductionDay !== today) {
+              next.productionStreak = (prev.productionStreak ?? 0) + 1
+              next.lastProductionDay = today
+            }
+          } else {
+            next.productionStreak = 0
+          }
+        }
         // Anti-clumping via the incrementally-maintained histogram: move cur's slot, then snap.
         const h = histRef.current
         const oldDay = dayIndex(prev.due)
@@ -303,9 +343,10 @@ export function useReview(levels: Level[], options: ReviewOptions = {}): ReviewA
   const view = useMemo<Presentation | null>(() => {
     if (!current) return null
     const rmode = resolveMode(current, statesRef.current.get(current.id), audioRef.current)
-    // Recall and typed cards need no multiple-choice options; recognition and listening do.
-    const choices =
-      rmode === 'recall' || rmode === 'typed' ? undefined : buildChoices(current, rmode, poolsRef.current)
+    // Recall, typed, and worksheet (cloze/transform) cards need no multiple-choice options;
+    // recognition and listening do.
+    const NO_CHOICES: RetrievalMode[] = ['recall', 'typed', 'cloze', 'transform']
+    const choices = NO_CHOICES.includes(rmode) ? undefined : buildChoices(current, rmode, poolsRef.current)
     return { reviewable: current, mode: rmode, choices }
   }, [current])
 

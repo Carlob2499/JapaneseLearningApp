@@ -178,6 +178,7 @@ describe('GrammarCard', () => {
     citations: [{ name: 'JLPT Sensei', url: 'https://x', retrieved: '2026-07-13', license: 'ref' }],
     textbookAnchors: [{ book: 'genki1', chapter: 6 }],
     examples: [{ ja: '帰ってもいいです。', en: 'You may go home.', tatoebaId: 1, attribution: { author: 'x', license: 'CC-BY-2.0-FR' } }],
+    patterns: ['てもいいです', 'てもいい'],
   }
 
   it('cues with the pattern, then reveals the gloss, summary, and a verified example', () => {

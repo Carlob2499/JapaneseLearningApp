@@ -225,7 +225,7 @@
       "domain": "grammar",
       "packVersion": "0.1.0",
       "itemCount": 25,
-      "sha256": "1a4a8b05819dabab36e0c0c01cdb0d125db46442a6ae31c1831247af225db5ba"
+      "sha256": "8e61fd73466659ce20340e96c633eb2a16378bc188f4b841058bed19810d2a33"
     },
     {
       "packId": "grammar.l2.core",
@@ -234,7 +234,7 @@
       "domain": "grammar",
       "packVersion": "0.1.0",
       "itemCount": 31,
-      "sha256": "4e8a20e8cc80b27219b13cede4a46020c45f20f29c1d6b3dbdc0a99e77905c1a"
+      "sha256": "a96d5618201bbaa43be856af173180cd47031826e0f0990ae87c8316dca21624"
     },
     {
       "packId": "grammar.l3.core",
@@ -243,7 +243,7 @@
       "domain": "grammar",
       "packVersion": "0.1.0",
       "itemCount": 37,
-      "sha256": "1e8191794fa9bc3ecfef8250545bda7b3ad81e02ede686a40d5c2e6aa968d8c7"
+      "sha256": "b0385e2ef44755f8cb029e77900ceea4be210c82f66c1a4aa128ab6bd5485d71"
     },
     {
       "packId": "grammar.l4.core",
@@ -252,7 +252,7 @@
       "domain": "grammar",
       "packVersion": "0.1.0",
       "itemCount": 25,
-      "sha256": "5938c3c0c9190f252945483a8e5fa0dfd57d8bfff48e7f5549825104c9f72563"
+      "sha256": "1ec25e19273502032eddf2ac5c016c08b3bfcadbe89fac94f864f4883fc8b65b"
     },
     {
       "packId": "grammar.l5.core",
@@ -261,7 +261,7 @@
       "domain": "grammar",
       "packVersion": "0.1.0",
       "itemCount": 14,
-      "sha256": "d54677d47041746e2efe6fb00d5aa1bc760b4c476d52a1202ffeace192f7d85f"
+      "sha256": "1e69c3fd56de888cdaf0e58b583cd360aaa4bb1075ee381a977d3a710dfcdf02"
     }
   ]
 }

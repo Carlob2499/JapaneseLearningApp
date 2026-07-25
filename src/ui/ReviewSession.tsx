@@ -10,7 +10,18 @@ import { isReducedMotion } from '../motion/reducedMotion'
 import { staggerIn } from '../motion/timelines'
 import { revealChars } from '../motion/typeReveal'
 import { getAutoPlay, setAutoPlay as saveAutoPlay } from '../store/settings'
-import { ChoiceCard, GrammarCard, KanaCard, KanjiCard, ListeningCard, MaruMark, RegisterChip, SentenceCard, TypedCard, VocabCard } from './cards'
+import {
+  ChoiceCard,
+  GrammarCard,
+  KanaCard,
+  KanjiCard,
+  ListeningCard,
+  MaruMark,
+  RegisterChip,
+  SentenceCard,
+  TypedCard,
+  VocabCard,
+} from './cards'
 import './study.css'
 import './cinematic.css'
 
@@ -184,6 +195,9 @@ function Card({
       <RecallCard r={r} onGrade={onGrade} autoPlay={autoPlay} />
     )
   }
+  // Worksheet UI lands in D-036 pt 2; the engine-side mode escalation (pt 1) degrades to recall
+  // until then — the same fallback recognition/production already use once past the choice modes.
+  if (mode === 'cloze' || mode === 'transform') return <RecallCard r={r} onGrade={onGrade} autoPlay={autoPlay} />
   if (mode === 'recall' || !choices) return <RecallCard r={r} onGrade={onGrade} autoPlay={autoPlay} />
   const { prompt, question } = multipleChoicePrompt(r, mode)
   return (

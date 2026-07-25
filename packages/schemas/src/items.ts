@@ -67,7 +67,10 @@ export type GrammarExample = z.infer<typeof GrammarExample>
  * Grammar point — curated (D-005). The `name` (pattern), short `gloss`, and fuller `summary`
  * are original prose (the D-005 exception: no importable open grammar inventory exists), each
  * with ≥1 `citation` cross-referencing public inventories and a textbook anchor. `examples`
- * are drawn verbatim from Tatoeba at build time (D-002) — every shipped point has ≥1.
+ * are drawn verbatim from Tatoeba at build time (D-002) — every shipped point has ≥1. `patterns`
+ * (the literal Japanese substrings used to find those examples) ship too, not just consumed at
+ * build time — the worksheet engine (D-036) needs them at runtime to find which substring of a
+ * real example sentence to blank for a cloze prompt.
  */
 export const GrammarPoint = z.object({
   kind: z.literal('grammar'),
@@ -83,6 +86,7 @@ export const GrammarPoint = z.object({
     .array(z.object({ book: z.string().min(1), chapter: z.number().int() }))
     .optional(),
   examples: z.array(GrammarExample).min(1),
+  patterns: z.array(z.string().min(1)).min(1),
 })
 export type GrammarPoint = z.infer<typeof GrammarPoint>
 

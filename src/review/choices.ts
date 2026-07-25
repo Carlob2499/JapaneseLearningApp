@@ -62,18 +62,21 @@ const MODES_BY_KIND: Record<CardKind, RetrievalMode[]> = {
   vocab: ['recognition', 'production', 'typed', 'listening', 'recall'],
   kanji: ['recognition', 'production', 'recall'],
   kana: ['recognition', 'typed', 'listening', 'recall'],
-  grammar: ['recognition', 'recall'],
+  grammar: ['recognition', 'cloze', 'transform', 'recall'],
   sentence: ['recognition', 'listening', 'recall'],
 }
 
 /**
  * Retrieval mode for a card, escalating with mastery: recognition (stage 0–1) → production
  * (2–3) → typed reading (4–5, vocab only) → free recall (6+). Kanji have no unambiguous typed
- * answer (multiple on/kun readings) so they go straight to recall at 4+; sentences and grammar
- * points have no production/typed form and stay recognition until recall at 4+. Kana (D-023)
- * skip production MC and go recognition → typed romaji (2–5) → recall — typing the sound IS
- * their production. A leech (architecture §5) is forced into varied modes — cycling by `seed` —
- * rather than hammering the same failing drill.
+ * answer (multiple on/kun readings) so they go straight to recall at 4+; sentences stay
+ * recognition until recall at 4+. Kana (D-023) skip production MC and go recognition → typed
+ * romaji (2–5) → recall — typing the sound IS their production. Grammar (D-036) escalates
+ * recognition (0–3) → cloze — fill the blanked pattern in a real sentence (4–5) → transform —
+ * produce the whole pattern from the point's name and an English gloss alone, no visible
+ * Japanese context (6+); a point never repeats bare recognition once it's earned cloze. A leech
+ * (architecture §5) is forced into varied modes — cycling by `seed` — rather than hammering the
+ * same failing drill.
  *
  * Listening (D-028) is an audio-first recognition rep slotted at stage 4 for listenable kinds
  * (vocab/kana/sentence) — but only when `opts.audio` (a device Japanese voice exists). This is a
@@ -93,7 +96,11 @@ export function retrievalModeFor(
   if (stage <= 1) return 'recognition'
   if (stage === 4 && opts.audio && LISTENABLE.has(kind)) return 'listening'
   if (kind === 'kana') return stage <= 5 ? 'typed' : 'recall'
-  if (stage <= 3) return kind === 'sentence' || kind === 'grammar' ? 'recognition' : 'production'
+  if (kind === 'grammar') {
+    if (stage <= 3) return 'recognition'
+    return stage <= 5 ? 'cloze' : 'transform'
+  }
+  if (stage <= 3) return kind === 'sentence' ? 'recognition' : 'production'
   if (kind === 'vocab' && stage <= 5) return 'typed'
   return 'recall'
 }

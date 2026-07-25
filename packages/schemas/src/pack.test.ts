@@ -37,6 +37,7 @@ const grammar = {
       attribution: { author: 'alice', license: 'CC-BY-2.0-FR' },
     },
   ],
+  patterns: ['てもいいです', 'てもいい'],
 }
 
 const phrase = {

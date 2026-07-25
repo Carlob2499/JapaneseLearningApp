@@ -77,6 +77,7 @@ function grammar(id: string, name: string, gloss: string): Extract<Reviewable, {
       summary: 'summary',
       citations: [{ name: 'src', url: 'https://x', retrieved: '2026-07-13', license: 'ref' }],
       examples: [{ ja: 'れい。', en: 'example', tatoebaId: 1, attribution: { author: 'x', license: 'CC-BY-2.0-FR' } }],
+      patterns: ['れい'],
     },
   }
 }
@@ -106,9 +107,11 @@ describe('retrievalModeFor', () => {
     // sentences have no production/typed form
     expect(retrievalModeFor('sentence', 2)).toBe('recognition')
     expect(retrievalModeFor('sentence', 5)).toBe('recall')
-    // grammar behaves like sentences: recognition until recall at 4+, never production/typed
+    // grammar (D-036): recognition through stage 3, cloze at 4-5, transform at 6+
     expect(retrievalModeFor('grammar', 3)).toBe('recognition')
-    expect(retrievalModeFor('grammar', 4)).toBe('recall')
+    expect(retrievalModeFor('grammar', 4)).toBe('cloze')
+    expect(retrievalModeFor('grammar', 5)).toBe('cloze')
+    expect(retrievalModeFor('grammar', 6)).toBe('transform')
   })
 
   it('forces varied modes for a leech, cycling by seed instead of the stage default', () => {
@@ -129,7 +132,7 @@ describe('retrievalModeFor', () => {
     expect(retrievalModeFor('sentence', 4, { audio: true })).toBe('listening')
     // Kanji and grammar are never voiced (ambiguous reading / not a heard unit).
     expect(retrievalModeFor('kanji', 4, { audio: true })).toBe('recall')
-    expect(retrievalModeFor('grammar', 4, { audio: true })).toBe('recall')
+    expect(retrievalModeFor('grammar', 4, { audio: true })).toBe('cloze')
     // Without a voice, stage 4 is byte-identical to before D-028 — the eye-mode it always had.
     expect(retrievalModeFor('vocab', 4)).toBe('typed')
     expect(retrievalModeFor('kana', 4)).toBe('typed')

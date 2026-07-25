@@ -139,8 +139,8 @@ export function linkExamples(
       shortfalls.push({ id: p.id, name: p.name, level: p.level })
       continue
     }
-    const { patterns: _patterns, ...rest } = p
-    items.push({ ...rest, examples: matches.map((m) => m.example) })
+    // `patterns` ships on the runtime GrammarPoint too (D-036 needs them for cloze-blanking).
+    items.push({ ...p, examples: matches.map((m) => m.example) })
     statsByLevel[p.level] = (statsByLevel[p.level] ?? 0) + 1
   }
   return { items, shortfalls, statsByLevel }

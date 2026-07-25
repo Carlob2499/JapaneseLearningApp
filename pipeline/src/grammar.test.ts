@@ -41,8 +41,8 @@ describe('linkExamples', () => {
     expect(items[0].examples[0].ja).toBe('ここでたべてもいいですか。')
     expect(items[0].examples[0].ja).toContain('てもいい') // verbatim, contains the pattern
     expect(items[0].examples[0].en).toBe('May I eat here?')
-    // the emitted item must not carry the build-time `patterns`
-    expect('patterns' in items[0]).toBe(false)
+    // patterns ship on the runtime item too (D-036 needs them for cloze-blanking)
+    expect(items[0].patterns).toEqual(['てもいい'])
   })
 
   it('holds back a point with no matching example (never ships example-less)', () => {
