@@ -811,6 +811,53 @@
   text-align: center;
   cursor: pointer;
 }
+
+/* The Classroom thread's front door on Home (D-034) — quiet once enabled, one dismissable
+   invitation before that. Same weight class as .emergency-link, a different accent so the two
+   never read as the same kind of button. */
+.class-entry {
+  display: block;
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--accent-2) 40%, var(--line));
+  background: color-mix(in srgb, var(--accent-2) 8%, transparent);
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font: inherit;
+  font-size: 15px;
+  text-align: center;
+  cursor: pointer;
+}
+.class-discovery {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+.class-discovery p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.class-discovery-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.class-discovery-dismiss {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
 .emergency-page {
   display: grid;
   gap: 16px;

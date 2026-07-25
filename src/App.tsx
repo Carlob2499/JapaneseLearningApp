@@ -3,6 +3,7 @@ import type { Level } from '@hikkoshi/schemas'
 import AmbientLayer from './ui/AmbientLayer'
 import ArrivalTitle from './ui/ArrivalTitle'
 import { shouldPlayArrival } from './ui/arrivalGate'
+import Classroom from './ui/Classroom'
 import Emergency from './ui/Emergency'
 import Home from './ui/Home'
 import Journey from './ui/Journey'
@@ -15,7 +16,7 @@ import { useAmbientGround } from './ui/useAmbientGround'
 import { getActiveLevels, getOnboarded, levelsUpTo, setActiveLevels, setOnboarded } from './store/settings'
 import './App.css'
 
-type View = 'onboarding' | 'placement' | 'home' | 'review' | 'scene' | 'journey' | 'emergency'
+type View = 'onboarding' | 'placement' | 'home' | 'review' | 'scene' | 'journey' | 'emergency' | 'classroom'
 
 export default function App() {
   const { view, containerRef, navigate } = useViewTransition<View>(() =>
@@ -59,6 +60,8 @@ export default function App() {
     content = <Journey onHome={() => navigate('home')} />
   } else if (view === 'emergency') {
     content = <Emergency onHome={() => navigate('home')} />
+  } else if (view === 'classroom') {
+    content = <Classroom onHome={() => navigate('home')} />
   } else {
     content = (
       <Home
@@ -71,6 +74,7 @@ export default function App() {
         }}
         onJourney={() => navigate('journey')}
         onEmergency={() => navigate('emergency')}
+        onClassroom={() => navigate('classroom')}
       />
     )
   }

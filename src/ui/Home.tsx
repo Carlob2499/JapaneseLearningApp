@@ -11,8 +11,15 @@ import { stash } from '../motion/flipHandoff'
 import { isReducedMotion } from '../motion/reducedMotion'
 import { ambientDrift, celebrate, staggerIn } from '../motion/timelines'
 import { revealChars } from '../motion/typeReveal'
+import {
+  daysUntilClass,
+  dismissClassDiscovery,
+  getClassSettings,
+  isClassDiscoveryDismissed,
+} from '../store/classSettings'
 import { ALL_LEVELS } from '../store/settings'
 import About from './About'
+import { SectionHead } from './SectionHead'
 import streetPhoto from '../assets/photos/street-yanaka.webp'
 import konbiniPhoto from '../assets/photos/konbini-heartin.webp'
 import transitPhoto from '../assets/photos/transit-mikunigaoka.webp'
@@ -115,16 +122,41 @@ function LifeStageBadge({
   )
 }
 
-/** A bilingual section header (D-032): a small Japanese eyebrow in the display mincho over the
- *  English heading, on a short kumiko rule — the joinery motif in its designated divider role. */
-function SectionHead({ ja, en }: { ja: string; en: string }) {
+/** The Classroom thread's front door on Home (D-034): once enabled, a quiet reminder of how far
+ *  class is; before that, a single dismissable invitation — never both, never pushy. */
+function ClassroomEntry({ onClassroom }: { onClassroom: () => void }) {
+  const [settings] = useState(getClassSettings)
+  const [dismissed, setDismissed] = useState(isClassDiscoveryDismissed)
+
+  if (settings.enabled) {
+    const days = daysUntilClass(new Date(), settings.classDay)
+    const when = days === 0 ? 'today' : days === 1 ? 'tomorrow' : `in ${days} days`
+    return (
+      <button type="button" className="class-entry" onClick={onClassroom}>
+        <span aria-hidden="true">授業</span> Class {when} · Lesson {settings.lesson}
+      </button>
+    )
+  }
+  if (dismissed) return null
   return (
-    <div className="section-head">
-      <span className="section-ja" aria-hidden="true">
-        {ja}
-      </span>
-      <h2>{en}</h2>
-      <span className="section-rule" aria-hidden="true" />
+    <div className="class-discovery">
+      <p>Taking a Japanese class? Line the app up with it.</p>
+      <div className="class-discovery-actions">
+        <button type="button" className="ghost-btn" onClick={onClassroom}>
+          Set up →
+        </button>
+        <button
+          type="button"
+          className="class-discovery-dismiss"
+          aria-label="Dismiss"
+          onClick={() => {
+            dismissClassDiscovery()
+            setDismissed(true)
+          }}
+        >
+          ×
+        </button>
+      </div>
     </div>
   )
 }
@@ -160,6 +192,7 @@ export default function Home({
   onStartScene,
   onJourney,
   onEmergency,
+  onClassroom,
 }: {
   levels: Level[]
   onToggleLevel: (level: Level) => void
@@ -167,6 +200,7 @@ export default function Home({
   onStartScene: (sceneId: string) => void
   onJourney: () => void
   onEmergency: () => void
+  onClassroom: () => void
 }) {
   const today = useToday(levels)
   const selectedCount = levels.reduce((sum, l) => sum + levelItemCount(l), 0)
@@ -229,6 +263,8 @@ export default function Home({
           </>
         )}
       </section>
+
+      <ClassroomEntry onClassroom={onClassroom} />
 
       {today.diaryEntries.length > 0 && (
         <section className="card diary-card">
