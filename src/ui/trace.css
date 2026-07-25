@@ -1,0 +1,47 @@
+/* TraceCanvas (D-037): a pointer-drawn practice surface over a KanjiVG guide. touch-action:none is
+   load-bearing — without it, a touch drag pans the page instead of drawing. */
+.trace-canvas {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+.trace-svg {
+  width: 240px;
+  height: 240px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  touch-action: none;
+  cursor: crosshair;
+}
+.trace-guide {
+  fill: none;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.trace-guide.pending {
+  stroke: var(--muted);
+  opacity: 0.16;
+}
+.trace-guide.active {
+  stroke: var(--accent-2);
+  opacity: 0.5;
+}
+.trace-guide.done {
+  stroke: var(--accent);
+  opacity: 1;
+}
+.trace-live {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 7;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.trace-progress {
+  color: var(--muted);
+}

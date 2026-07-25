@@ -137,6 +137,35 @@ export function strokeDrawIn(paths: gsap.TweenTarget): gsap.core.Tween {
   )
 }
 
+/**
+ * One traced stroke inking in (D-037, TraceCanvas): a single guide path draws itself once the
+ * learner's own trace validates, same DrawSVG cadence as `strokeDrawIn` but for one path at a
+ * time (the learner controls when each stroke fires, not a fixed replay sequence). Reduced
+ * motion still must advance state — the stroke simply appears fully drawn, zero duration, no
+ * drawSVG property (the jsdom law).
+ */
+export function traceInk(path: gsap.TweenTarget): gsap.core.Tween {
+  if (isReducedMotion()) return gsap.to(path, { duration: 0 })
+  return gsap.fromTo(path, { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.4, ease: 'power1.inOut' })
+}
+
+/**
+ * Wrong-stroke feedback (D-037): the guide shakes (shakeFail's own cadence) then pulses to
+ * redraw the eye to what to trace next — "gentle shake + guide pulse" as one gesture. Reduced
+ * motion: a genuinely empty timeline (duration 0, nothing added) — the guide simply holds still.
+ */
+export function traceWrong(guide: gsap.TweenTarget): gsap.core.Timeline {
+  const tl = gsap.timeline()
+  if (isReducedMotion()) return tl
+  tl.to(guide, { keyframes: [{ x: -8 }, { x: 8 }, { x: -5 }, { x: 5 }, { x: 0 }], duration: DURATION.slow, ease: EASE.inOut }).fromTo(
+    guide,
+    { opacity: 0.55 },
+    { opacity: 1, duration: 0.45, ease: 'sine.inOut' },
+    '-=0.1',
+  )
+  return tl
+}
+
 /** A celebratory pop for the life-stage-up moment — bouncy elastic settle. */
 export function celebrate(target: gsap.TweenTarget): gsap.core.Tween {
   const reduced = isReducedMotion()

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, hankoPop, pulsePass, shakeFail, staggerIn, stampPress, strokeDrawIn } from './timelines'
+import { ambientDrift, celebrate, enterTimeline, exitTimeline, gentleSway, hankoPop, pulsePass, shakeFail, staggerIn, stampPress, strokeDrawIn, traceInk, traceWrong } from './timelines'
 
 function div(): HTMLDivElement {
   return document.createElement('div')
@@ -74,5 +74,17 @@ describe('motion timeline factories (reduced-motion branch)', () => {
     expect(tw.duration()).toBe(0)
     expect((tw.vars as Record<string, unknown>).drawSVG).toBeUndefined()
     expect(tw.vars.stagger).toBeUndefined()
+  })
+
+  it('traceInk inks a traced stroke in instantly, and never touches drawSVG (the jsdom law)', () => {
+    const tw = traceInk(div())
+    expect(tw.duration()).toBe(0)
+    expect((tw.vars as Record<string, unknown>).drawSVG).toBeUndefined()
+  })
+
+  it('traceWrong holds the guide still — a genuinely empty timeline', () => {
+    const tl = traceWrong(div())
+    expect(tl.duration()).toBe(0)
+    expect(tl.getChildren().length).toBe(0)
   })
 })
