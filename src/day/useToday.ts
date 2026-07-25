@@ -3,7 +3,15 @@ import type { ItemState, JournalEntry, Level } from '@hikkoshi/schemas'
 import { loadClassbook, loadLevels, type Content } from '../content/packs'
 import { appendJournal, getAllItemStates, getJournal } from '../store/db'
 import { dueItems, pickNewItems } from '../scheduler/srs'
-import { dayIndex, introBudget, shapeDueQueue } from '../scheduler/loadShaper'
+import {
+  DEFAULT_DUE_CEILING,
+  WARM_RETURN_CAP,
+  applyAmnesty,
+  dayIndex,
+  introBudget,
+  isWarmReturn,
+  shapeDueQueue,
+} from '../scheduler/loadShaper'
 import { reviewablePoolIds } from '../lib/appMeta'
 import { getClassSettings } from '../store/classSettings'
 import { getLastCelebratedStage, setLastCelebratedStage } from '../store/settings'
@@ -70,9 +78,12 @@ export function useToday(levels: Level[]): TodayApi {
       const idSet = new Set(allIds)
 
       // Read-only preview of what a review session would show — mirrors useReview's shaping
-      // but never persists the slide/intro side effects (no putItemState calls here).
+      // (amnesty then warm-return-aware ceiling) but never persists any slide (no putItemState
+      // calls here).
       const dueInPool = dueItems(now, states).filter((s) => idSet.has(s.itemId))
-      const { keep } = shapeDueQueue(dueInPool, now)
+      const { keep: afterAmnesty } = applyAmnesty(dueInPool, now)
+      const warmReturn = isWarmReturn(afterAmnesty)
+      const { keep } = shapeDueQueue(afterAmnesty, now, warmReturn ? WARM_RETURN_CAP : DEFAULT_DUE_CEILING)
       const introIds = pickNewItems(allIds, states, introBudget(states, now))
 
       const history = deriveSceneHistory(journal)
@@ -110,6 +121,7 @@ export function useToday(levels: Level[]): TodayApi {
         buildDayPlan({
           dueCount: keep.length,
           introCount: introIds.length,
+          isWarmReturn: warmReturn,
           candidates,
           history,
           todayIndex: dayIndex(now),

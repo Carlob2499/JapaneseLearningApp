@@ -88,3 +88,39 @@ export function shapeDueQueue(
   const slide = ranked.slice(ceiling).map((s) => ({ ...s, due: now + DAY }))
   return { keep, slide }
 }
+
+/** Amnesty threshold (D-038): an item overdue longer than this doesn't keep stacking at the
+ *  front of the queue — see `applyAmnesty`. */
+export const AMNESTY_OVERDUE_MS = 14 * DAY
+
+/**
+ * Amnesty rule (D-038): an item overdue more than 14 days is re-spread across the following
+ * week instead of piling up on today's session — a lapsed return should feel like a clean
+ * restart, not a wall of backlog (review debt is the #1 cited SRS-abandonment cause). The 1-7
+ * day offset is deterministic from the item's own (pre-amnesty) due timestamp, so re-running
+ * this before the offset elapses doesn't reshuffle the same item to a different day.
+ */
+export function applyAmnesty(due: ItemState[], now: number): { keep: ItemState[]; slide: ItemState[] } {
+  const keep: ItemState[] = []
+  const slide: ItemState[] = []
+  for (const s of due) {
+    if (now - s.due > AMNESTY_OVERDUE_MS) {
+      const offsetDays = 1 + (Math.abs(dayIndex(s.due)) % 7)
+      slide.push({ ...s, due: now + offsetDays * DAY })
+    } else {
+      keep.push(s)
+    }
+  }
+  return { keep, slide }
+}
+
+/** A lapsed return's raw due pile shouldn't feel like a grind: past this many items, the day's
+ *  review task is built from a smaller, gentler cap instead of the full rush-day ceiling — twice
+ *  the daily new-item cap, the same "this is already a lot" instinct that number already encodes. */
+export const WARM_RETURN_CAP = 2 * DEFAULT_DAILY_NEW
+
+/** Whether today's due pile (after amnesty, before shaping) is large enough to warrant the
+ *  gentler warm-return cap and copy, instead of the normal rush-day ceiling. */
+export function isWarmReturn(dueAfterAmnesty: ItemState[]): boolean {
+  return dueAfterAmnesty.length > WARM_RETURN_CAP
+}

@@ -19,8 +19,12 @@ import { appendJournal, getAllItemStates, getJournal, putItemState } from '../st
 import { applyReview, dueItems, isLeech, LEECH_WINDOW_MS, newState, pickNewItems } from '../scheduler/srs'
 import { ALL_LEVELS } from '../store/settings'
 import {
+  DEFAULT_DUE_CEILING,
+  WARM_RETURN_CAP,
+  applyAmnesty,
   dayIndex,
   introBudget,
+  isWarmReturn,
   loadHistogram,
   shapeDueQueue,
   snapToLightestDay,
@@ -206,7 +210,15 @@ export function useReview(levels: Level[], options: ReviewOptions = {}): ReviewA
 
       // Load-shape the due set (only items in the active levels); slide the lowest-stakes overflow.
       const dueInPool = dueItems(now, states).filter((s) => byIdRef.current.has(s.itemId))
-      const { keep, slide } = shapeDueQueue(dueInPool, now)
+      // Amnesty (D-038): an item overdue >14 days re-spreads across the next week rather than
+      // stacking at the front of today's queue — a lapsed return shouldn't feel like a grind.
+      const { keep: afterAmnesty, slide: amnestySlid } = applyAmnesty(dueInPool, now)
+      for (const s of amnestySlid) {
+        statesRef.current.set(s.itemId, s)
+        void putItemState(s)
+      }
+      const ceiling = isWarmReturn(afterAmnesty) ? WARM_RETURN_CAP : DEFAULT_DUE_CEILING
+      const { keep, slide } = shapeDueQueue(afterAmnesty, now, ceiling)
       for (const s of slide) {
         statesRef.current.set(s.itemId, s)
         void putItemState(s)

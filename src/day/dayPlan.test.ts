@@ -53,7 +53,19 @@ describe('buildDayPlan', () => {
 
   it('reports the real due/intro counts on the review task verbatim, never fabricated', () => {
     const plan = buildDayPlan({ dueCount: 7, introCount: 3, candidates: [], history: new Map(), todayIndex: 0 })
-    expect(plan.tasks).toEqual([{ kind: 'review', dueCount: 7, introCount: 3 }])
+    expect(plan.tasks).toEqual([{ kind: 'review', dueCount: 7, introCount: 3, isWarmReturn: false }])
+  })
+
+  it('threads isWarmReturn onto the review task when a lapsed return called for the gentler cap', () => {
+    const plan = buildDayPlan({
+      dueCount: 20,
+      introCount: 0,
+      isWarmReturn: true,
+      candidates: [],
+      history: new Map(),
+      todayIndex: 0,
+    })
+    expect(plan.tasks).toEqual([{ kind: 'review', dueCount: 20, introCount: 0, isWarmReturn: true }])
   })
 
   it('still includes a lone candidate shown today — staleness sorts, never filters', () => {
@@ -89,7 +101,7 @@ describe('buildDayPlan', () => {
     const candidates = ['a', 'b', 'c', 'd', 'e'].map((id) => scene(id))
     const plan = buildDayPlan({ dueCount: 5, introCount: 0, candidates, history: new Map(), todayIndex: 0, cap: 3 })
     expect(plan.tasks).toHaveLength(3)
-    expect(plan.tasks[0]).toEqual({ kind: 'review', dueCount: 5, introCount: 0 })
+    expect(plan.tasks[0]).toEqual({ kind: 'review', dueCount: 5, introCount: 0, isWarmReturn: false })
     expect(plan.tasks.filter((t) => t.kind === 'errand')).toHaveLength(2)
   })
 

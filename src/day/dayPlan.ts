@@ -11,7 +11,7 @@ export const SCENE_KIND_TITLE: Record<SceneTemplate['sceneKind'], string> = {
 }
 
 export type DayTask =
-  | { kind: 'review'; dueCount: number; introCount: number }
+  | { kind: 'review'; dueCount: number; introCount: number; isWarmReturn: boolean }
   | { kind: 'errand'; sceneId: string; sceneKind: SceneTemplate['sceneKind']; title: string }
   | { kind: 'class-seed'; lessonId: string; itemIds: string[] }
   | { kind: 'class-capture'; lessonId: string; itemIds: string[] }
@@ -23,6 +23,10 @@ export interface DayPlan {
 export interface BuildDayPlanInput {
   dueCount: number
   introCount: number
+  /** Whether today's due pile (after amnesty, before shaping) called for the gentler
+   *  warm-return cap (D-038) — the review task carries this through so the UI can show "Today
+   *  is short on purpose" instead of the raw numbers for a lapsed return. */
+  isWarmReturn?: boolean
   candidates: SceneTemplate[]
   history: Map<string, number>
   todayIndex: number
@@ -62,9 +66,10 @@ function daysSinceShown(sceneId: string, history: Map<string, number>, todayInde
  * prioritized first when present; `cap` bounds the combined total.
  */
 export function buildDayPlan(input: BuildDayPlanInput): DayPlan {
-  const { dueCount, introCount, candidates, history, todayIndex, cap = DAY_PLAN_MAX_TASKS, classTask } = input
+  const { dueCount, introCount, isWarmReturn = false, candidates, history, todayIndex, cap = DAY_PLAN_MAX_TASKS, classTask } =
+    input
   const tasks: DayTask[] = []
-  if (dueCount > 0 || introCount > 0) tasks.push({ kind: 'review', dueCount, introCount })
+  if (dueCount > 0 || introCount > 0) tasks.push({ kind: 'review', dueCount, introCount, isWarmReturn })
   // The class task sits right after review — ahead of errand exploration, never displacing it.
   if (classTask && tasks.length < cap) tasks.push(classTask)
 

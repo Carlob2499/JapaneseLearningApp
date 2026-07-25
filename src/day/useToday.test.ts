@@ -108,6 +108,23 @@ describe('useToday', () => {
     expect(matching[0]).toMatchObject({ interaction: 'context', outcome: 'pass' })
   })
 
+  it('caps a lapsed-return due pile to the warm-return size and flags the review task (D-038)', async () => {
+    const content = await loadLevels(LEVELS)
+    const ids = reviewablePoolIds(content, 'L1')
+    const now = Date.now()
+    // Comfortably past due, but within the 14-day amnesty window — a real, large due pile today.
+    for (const id of ids.slice(0, 25)) {
+      await putItemState({ itemId: id, stage: 1, due: now - 86_400_000, introducedAt: now - 999_999, lapses: 0, lastOutcomes: 0 })
+    }
+
+    const { result } = renderHook(() => useToday(LEVELS))
+    await waitFor(() => expect(result.current.mode).toBe('ready'), { timeout: 10_000 })
+
+    expect(result.current.dueCount).toBeLessThanOrEqual(20)
+    const reviewTask = result.current.dayPlan?.tasks.find((t) => t.kind === 'review')
+    expect(reviewTask).toMatchObject({ isWarmReturn: true })
+  })
+
   it('never writes to itemStates or the journal merely from loading (read-only mirror)', async () => {
     const beforeStates = await getAllItemStates()
     const beforeJournal = await getJournal()

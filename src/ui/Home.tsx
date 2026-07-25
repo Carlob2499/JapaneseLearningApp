@@ -242,7 +242,7 @@ export default function Home({
                           Start today's review
                         </button>
                         <p className="fineprint">
-                          {task.dueCount} due · {task.introCount} new
+                          {task.isWarmReturn ? 'Today is short on purpose.' : `${task.dueCount} due · ${task.introCount} new`}
                         </p>
                       </div>
                     )

@@ -1,9 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import type { ItemState } from '@hikkoshi/schemas'
 import {
+  AMNESTY_OVERDUE_MS,
   DEFAULT_DUE_CEILING,
+  WARM_RETURN_CAP,
+  applyAmnesty,
   dayIndex,
   introBudget,
+  isWarmReturn,
   loadHistogram,
   shapeDueQueue,
   snapToLightestDay,
@@ -107,5 +111,57 @@ describe('constants', () => {
   it('exposes a sane default ceiling', () => {
     expect(DEFAULT_DUE_CEILING).toBeGreaterThan(0)
     expect(dayIndex(DAY + 1)).toBe(1)
+  })
+})
+
+describe('applyAmnesty', () => {
+  const now = 1_000 * DAY
+
+  it('keeps an item overdue by less than 14 days untouched', () => {
+    const s = state('a', { due: now - 13 * DAY })
+    const { keep, slide } = applyAmnesty([s], now)
+    expect(keep).toEqual([s])
+    expect(slide).toEqual([])
+  })
+
+  it('re-spreads an item overdue by more than 14 days into the following week, never today', () => {
+    const s = state('a', { due: now - 20 * DAY })
+    const { keep, slide } = applyAmnesty([s], now)
+    expect(keep).toEqual([])
+    expect(slide).toHaveLength(1)
+    const gap = slide[0].due - now
+    expect(gap).toBeGreaterThan(0)
+    expect(gap).toBeLessThanOrEqual(7 * DAY)
+  })
+
+  it('is exactly the boundary at AMNESTY_OVERDUE_MS: not yet amnestied at the threshold itself', () => {
+    const s = state('a', { due: now - AMNESTY_OVERDUE_MS })
+    expect(applyAmnesty([s], now).keep).toEqual([s])
+  })
+
+  it('gives the same item the same offset across repeated calls (deterministic, no reshuffle)', () => {
+    const s = state('a', { due: now - 30 * DAY })
+    const first = applyAmnesty([s], now).slide[0].due
+    const second = applyAmnesty([s], now).slide[0].due
+    expect(first).toBe(second)
+  })
+
+  it('leaves non-overdue items alone entirely', () => {
+    const items = [state('a', { due: now - DAY }), state('b', { due: now + DAY })]
+    const { keep, slide } = applyAmnesty(items, now)
+    expect(keep).toEqual(items)
+    expect(slide).toEqual([])
+  })
+})
+
+describe('isWarmReturn', () => {
+  it('is false at or under the warm-return cap', () => {
+    const items = Array.from({ length: WARM_RETURN_CAP }, (_, i) => state(`w${i}`))
+    expect(isWarmReturn(items)).toBe(false)
+  })
+
+  it('is true once the due pile exceeds the warm-return cap', () => {
+    const items = Array.from({ length: WARM_RETURN_CAP + 1 }, (_, i) => state(`w${i}`))
+    expect(isWarmReturn(items)).toBe(true)
   })
 })
