@@ -7,6 +7,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 1 }],
     "patterns": ["ようになりました", "ようになる", "ようになった", "ようになって"]
   },
   {
@@ -17,6 +18,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
     "patterns": ["ことにしました", "ことにする", "ことにした", "ことにして"]
   },
   {
@@ -27,6 +29,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
     "patterns": ["ことになりました", "ことになる", "ことになった", "ことになって"]
   },
   {
@@ -37,6 +40,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 1 }],
     "patterns": ["ために、", "ための", "ためです"]
   },
   {
@@ -47,6 +51,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 1 }],
     "patterns": ["らしいです", "らしい。", "らしく"]
   },
   {
@@ -57,17 +62,19 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
     "patterns": ["べきだ", "べきです", "べきではない", "べきじゃない"]
   },
   {
     "kind": "grammar", "id": "grammar:l3:you-to-suru", "name": "〜ようとする", "level": "L3",
     "gloss": "try to / be about to",
-    "summary": "The volitional form + とする expresses an attempt to do something, or being on the verge of doing it.",
+    "summary": "The volitional form + とする expresses an attempt to do something, or being on the verge of doing it; とする with a negative volitional (〜まいとする) or the plain negative (〜ようとしない) expresses refusing to try.",
     "citations": [
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
-    "patterns": ["ようとして", "ようとした", "ようとする", "おうとして"]
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
+    "patterns": ["ようとして", "ようとした", "ようとする", "おうとして", "ようとしない"]
   },
   {
     "kind": "grammar", "id": "grammar:l3:tokoro", "name": "〜ところ", "level": "L3",
@@ -82,12 +89,13 @@
   {
     "kind": "grammar", "id": "grammar:l3:okage-de", "name": "〜おかげで", "level": "L3",
     "gloss": "thanks to (positive cause)",
-    "summary": "おかげで attributes a good result to a cause, expressing gratitude (thanks to …).",
+    "summary": "おかげで attributes a good result to a cause, expressing gratitude (thanks to …); it also appears as a predicate, おかげだ (it's thanks to …).",
     "citations": [
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
-    "patterns": ["おかげで", "おかげです"]
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
+    "patterns": ["おかげで", "おかげです", "おかげだ"]
   },
   {
     "kind": "grammar", "id": "grammar:l3:sei-de", "name": "〜せいで", "level": "L3",
@@ -97,6 +105,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
     "patterns": ["せいで", "せいだ", "せいです"]
   },
   {
@@ -107,6 +116,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
     "patterns": ["ままで", "たまま", "のまま", "まま、"]
   },
   {
@@ -117,6 +127,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
     "patterns": ["うちに"]
   },
   {
@@ -137,6 +148,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
     "patterns": ["として、", "としては", "としても", "としての"]
   },
   {
@@ -157,6 +169,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
     "patterns": ["によって", "により", "による"]
   },
   {
@@ -167,6 +180,7 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
     "patterns": ["ずに", "せずに"]
   },
   {
@@ -187,6 +201,205 @@
       { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
     "patterns": ["わけではない", "わけじゃない", "わけではありません"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:to-ieba", "name": "〜といえば", "level": "L3",
+    "gloss": "speaking of N, when it comes to N",
+    "summary": "Nといえば picks up a just-mentioned or well-known topic and pivots to something associated with it (speaking of N, that reminds me …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 1 }],
+    "patterns": ["といえば", "と言えば"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:toori-ni", "name": "〜とおりに", "level": "L3",
+    "gloss": "as, in the way that; in accordance with",
+    "summary": "Verb dictionary/past form + とおりに, or Nどおりに after a noun, expresses doing something exactly as instructed, shown, or expected.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 1 }],
+    "patterns": ["とおりに", "どおりに", "通りに"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:ni-yoru-to", "name": "〜によると", "level": "L3",
+    "gloss": "according to N",
+    "summary": "Nによると (or によれば, によりますと in formal register) cites the source of the information that follows — a report, forecast, or someone's account.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 1 }],
+    "patterns": ["によると", "によれば", "によりますと"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:tame-cause", "name": "〜ため（原因）", "level": "L3",
+    "gloss": "because of, due to (cause — a more formal ため, distinct from purpose ために)",
+    "summary": "ため can also state a cause or reason, more formal than から or ので — most often as the connector そのため／そのために ('because of that, therefore') rather than attached mid-sentence, which keeps it distinct from the purpose sense already covered by ために.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
+    "patterns": ["そのため、", "そのために"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:to-wa-kagiranai", "name": "〜とは限らない", "level": "L3",
+    "gloss": "isn't necessarily the case that",
+    "summary": "とは限らない follows a plain-form clause to say that it isn't always or necessarily true — often paired with 必ずしも earlier in the sentence.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
+    "patterns": ["とは限らない", "とは限りません"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:you-na-ki-ga-suru", "name": "〜ような気がする", "level": "L3",
+    "gloss": "I have a feeling that, it seems like",
+    "summary": "A clause + ような気がする expresses a vague, unconfirmed impression or hunch, softer than a direct claim.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
+    "patterns": ["ような気がする", "ような気がした", "ような気がします"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:sae-ba", "name": "〜さえ〜ば", "level": "L3",
+    "gloss": "if only ~, as long as just ~",
+    "summary": "さえ marks the one condition that matters, paired with a ば-conditional: if just this one thing holds, everything else follows (if only …, as long as …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
+    "patterns": ["さえあれば", "さえすれば", "さえよければ", "さえいれば"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:hodo-nai", "name": "〜ほど〜ない", "level": "L3",
+    "gloss": "not as ~ as",
+    "summary": "X は Y ほど〜ない compares two things, saying X falls short of Y's degree (X isn't as ~ as Y).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
+    "patterns": ["ほどではない", "ほどでもない"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:ba-noni", "name": "〜ば〜のに", "level": "L3",
+    "gloss": "if only ~ would/had (regret)",
+    "summary": "A ば-conditional + のに expresses a counterfactual wish or regret: if only this had been true, but it wasn't.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
+    "patterns": ["ばよかったのに", "すればよかったのに", "行けばよかったのに"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:ki-ga-suru", "name": "〜気がする", "level": "L3",
+    "gloss": "have a feeling that / feel like",
+    "summary": "気がする reports a vague sense or impression forming, without a clear reason (I get the feeling that …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
+    "patterns": ["気がする", "気がした", "気がします"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:ba-hodo", "name": "〜ば〜ほど", "level": "L3",
+    "gloss": "the more X, the more Y",
+    "summary": "A ば-conditional followed by the same word + ほど expresses that as one quantity increases, so does another (the more …, the more …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
+    "patterns": ["大きければ大きいほど", "考えれば考えるほど", "多ければ多いほど", "早ければ早いほど"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:marude-you-da", "name": "（まるで）〜のようだ", "level": "L3",
+    "gloss": "just like N, as if it were N",
+    "summary": "Nのようだ (casual Nみたいだ) compares something to N; adding まるで in front intensifies the comparison into a vivid simile (just like …, as if it were really …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
+    "patterns": ["まるで夢のようだ", "まるで天使のようだ", "夢のようだ", "天使のようだ"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:qw-temo", "name": "疑問詞〜ても", "level": "L3",
+    "gloss": "no matter who/what/when/where/how ~",
+    "summary": "A question word (何, 誰, いつ, どこ, どんなに …) followed by a て-form + も states that the outcome holds regardless of the answer (no matter what/who/when …).",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 5 }],
+    "patterns": ["何があっても", "誰が来ても", "いつ行っても", "どんなに頑張っても", "どこへ行っても"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:tabi-ni", "name": "〜たびに", "level": "L3",
+    "gloss": "every time, on each occasion that",
+    "summary": "Dictionary-form verb (or noun + の) + たびに says that something happens every time a given occasion comes around, often with an emotional undertone.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 5 }],
+    "patterns": ["たびに", "のたびに"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:tatoe-temo", "name": "（たとえ）〜ても", "level": "L3",
+    "gloss": "even if",
+    "summary": "たとえ marks a hypothetical as extreme or unlikely, paired with a て-form + も clause: even if this (unlikely) thing were true, the outcome wouldn't change.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 5 }],
+    "patterns": ["たとえ彼が失敗しても", "たとえ悪くなくても", "たとえ疲れていても", "たとえ何を着ても", "たとえ雨が降っても"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:you-ni-purpose", "name": "〜ように（目的）", "level": "L3",
+    "gloss": "so that, in such a way that",
+    "summary": "A potential or negative-potential clause + ように states a goal the rest of the sentence is arranged to achieve (so that …, in a way that …) — distinct from the same ように used for simile.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 5 }],
+    "patterns": ["忘れないように", "遅れないように", "わかるように", "間に合うように"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:hodo-extent", "name": "〜ほど（程度）", "level": "L3",
+    "gloss": "to the extent that, so much that",
+    "summary": "A clause + ほど expresses degree by giving a vivid extreme it approaches (so much that …, to the point of …) — always attached to a concrete instantiation, since bare ほど also means 'about/roughly.'",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
+    "patterns": ["死ぬほど", "驚くほど", "涙が出るほど", "信じられないほど"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l3:wazawaza", "name": "わざわざ", "level": "L3",
+    "gloss": "to go out of one's way to, to bother to",
+    "summary": "わざわざ marks an action as taken with deliberate, often unnecessary, extra effort — going out of one's way for something.",
+    "citations": [
+      { "name": "JLPT Sensei — N3 grammar list", "url": "https://jlptsensei.com/jlpt-n3-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N3 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
+    "patterns": ["わざわざ"]
   }
 ]

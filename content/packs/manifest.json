@@ -183,51 +183,6 @@
       "sha256": "c3e67eb61945034139b48fa18fec9f7403b343016e90c8ec394a049e2cf01d14"
     },
     {
-      "packId": "grammar.l1.core",
-      "path": "l1/grammar.json",
-      "level": "L1",
-      "domain": "grammar",
-      "packVersion": "0.1.0",
-      "itemCount": 25,
-      "sha256": "1a4a8b05819dabab36e0c0c01cdb0d125db46442a6ae31c1831247af225db5ba"
-    },
-    {
-      "packId": "grammar.l2.core",
-      "path": "l2/grammar.json",
-      "level": "L2",
-      "domain": "grammar",
-      "packVersion": "0.1.0",
-      "itemCount": 24,
-      "sha256": "ffc2df8282e3cde85a388227e91f231c4e7ba0d3f0890549b892b900eaef0094"
-    },
-    {
-      "packId": "grammar.l3.core",
-      "path": "l3/grammar.json",
-      "level": "L3",
-      "domain": "grammar",
-      "packVersion": "0.1.0",
-      "itemCount": 19,
-      "sha256": "40a8ca50bd45dc6b86be0a9fee5fd22db045c364038c7925cd69b1effdd6c496"
-    },
-    {
-      "packId": "grammar.l4.core",
-      "path": "l4/grammar.json",
-      "level": "L4",
-      "domain": "grammar",
-      "packVersion": "0.1.0",
-      "itemCount": 16,
-      "sha256": "7362ac3e46fe001628b57d945917aa8232180c14ed2201862715f0e659cde31d"
-    },
-    {
-      "packId": "grammar.l5.core",
-      "path": "l5/grammar.json",
-      "level": "L5",
-      "domain": "grammar",
-      "packVersion": "0.1.0",
-      "itemCount": 14,
-      "sha256": "d54677d47041746e2efe6fb00d5aa1bc760b4c476d52a1202ffeace192f7d85f"
-    },
-    {
       "packId": "kana.l0.core",
       "path": "l0/kana.json",
       "level": "L0",
@@ -262,6 +217,51 @@
       "packVersion": "0.1.0",
       "itemCount": 3,
       "sha256": "cea2015bad6cc2869a1380298fb901edb8c7168fcdf97a8e72c9a03a4fb9ff83"
+    },
+    {
+      "packId": "grammar.l1.core",
+      "path": "l1/grammar.json",
+      "level": "L1",
+      "domain": "grammar",
+      "packVersion": "0.1.0",
+      "itemCount": 25,
+      "sha256": "1a4a8b05819dabab36e0c0c01cdb0d125db46442a6ae31c1831247af225db5ba"
+    },
+    {
+      "packId": "grammar.l2.core",
+      "path": "l2/grammar.json",
+      "level": "L2",
+      "domain": "grammar",
+      "packVersion": "0.1.0",
+      "itemCount": 31,
+      "sha256": "4e8a20e8cc80b27219b13cede4a46020c45f20f29c1d6b3dbdc0a99e77905c1a"
+    },
+    {
+      "packId": "grammar.l3.core",
+      "path": "l3/grammar.json",
+      "level": "L3",
+      "domain": "grammar",
+      "packVersion": "0.1.0",
+      "itemCount": 37,
+      "sha256": "1e8191794fa9bc3ecfef8250545bda7b3ad81e02ede686a40d5c2e6aa968d8c7"
+    },
+    {
+      "packId": "grammar.l4.core",
+      "path": "l4/grammar.json",
+      "level": "L4",
+      "domain": "grammar",
+      "packVersion": "0.1.0",
+      "itemCount": 25,
+      "sha256": "5938c3c0c9190f252945483a8e5fa0dfd57d8bfff48e7f5549825104c9f72563"
+    },
+    {
+      "packId": "grammar.l5.core",
+      "path": "l5/grammar.json",
+      "level": "L5",
+      "domain": "grammar",
+      "packVersion": "0.1.0",
+      "itemCount": 14,
+      "sha256": "d54677d47041746e2efe6fb00d5aa1bc760b4c476d52a1202ffeace192f7d85f"
     }
   ]
 }

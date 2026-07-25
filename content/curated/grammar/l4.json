@@ -7,6 +7,7 @@
       { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
     "patterns": ["わけだ", "わけです", "わけですね"]
   },
   {
@@ -77,6 +78,7 @@
       { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
     "patterns": ["にとって", "にとっては", "にとっての"]
   },
   {
@@ -158,5 +160,104 @@
       { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
     "patterns": ["一方で", "一方、"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:kikkake-de", "name": "〜がきっかけで", "level": "L4",
+    "gloss": "with ~ as the trigger/opportunity for",
+    "summary": "Nがきっかけで (or をきっかけに／をきっかけとして) names the event that set something else in motion — the spark that started it.",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 1 }],
+    "patterns": ["がきっかけで", "をきっかけに", "をきっかけとして"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:nanto-itte-mo", "name": "何と言っても", "level": "L4",
+    "gloss": "no matter what anyone says, above all",
+    "summary": "何と言っても opens a statement of the speaker's firmest opinion — whatever else might be argued, this point stands above all.",
+    "citations": [
+      { "name": "Bunpro — N2 grammar point", "url": "https://bunpro.jp/grammar_points/何といっても", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-25", "license": "editorial reference — general grammar index; no JLPT Sensei entry exists for this point (confirmed absent)" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
+    "patterns": ["何と言っても", "何といっても", "なんといっても"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:kara-to-itte", "name": "〜からといって", "level": "L4",
+    "gloss": "just because ~ (doesn't mean)",
+    "summary": "からといって states a reason, then denies that it's sufficient grounds for the expected conclusion (just because A, that doesn't mean B).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
+    "patterns": ["からといって", "からって"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:irai", "name": "〜以来", "level": "L4",
+    "gloss": "ever since",
+    "summary": "て-form or a noun + 以来 marks a point in the past after which a state has continued unbroken up to now (ever since …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
+    "patterns": ["以来", "て以来", "それ以来"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:sekkaku", "name": "せっかく", "level": "L4",
+    "gloss": "having gone to the trouble to, a rare chance to",
+    "summary": "せっかく marks an effort or opportunity as valuable and easily wasted — often followed by a clause about the effort going unrewarded (せっかく…のに) or advice to make the most of it.",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
+    "patterns": ["せっかく"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:naide-sumu", "name": "〜ないで済む・〜ずに済む", "level": "L4",
+    "gloss": "to get by without doing",
+    "summary": "ないで済む (or the more formal ずに済む) says that something turned out not to be necessary — you got through it without having to.",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
+    "patterns": ["ないで済む", "ずに済む", "ずに済んだ", "なくて済んだ"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:dake-atte", "name": "〜だけあって", "level": "L4",
+    "gloss": "as one would expect from, being that ~",
+    "summary": "だけあって credits a result to a fitting cause — given who/what it is, the outcome makes sense (as one would expect from …).",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 5 }],
+    "patterns": ["だけあって"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:kara-miru-to", "name": "〜から見ると", "level": "L4",
+    "gloss": "from N's point of view, judging from N",
+    "summary": "Nから見ると (or からすると／から言うと) frames a judgment as made from a particular vantage point or based on a particular piece of evidence.",
+    "citations": [
+      { "name": "JLPT Sensei — N2 grammar list", "url": "https://jlptsensei.com/jlpt-n2-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N2 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
+    "patterns": ["から見ると", "からすると", "から言うと", "からすれば", "から見れば"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l4:nodewanai-darou-ka", "name": "〜のではないだろうか", "level": "L4",
+    "gloss": "isn't it that ~? I wonder if ~",
+    "summary": "のではないだろうか (polite のではないでしょうか) floats a tentative conclusion as a rhetorical question, softer than stating it outright.",
+    "citations": [
+      { "name": "Bunpro — N2 grammar point", "url": "https://bunpro.jp/grammar_points/のではないだろうか", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-25", "license": "editorial reference — general grammar index; no JLPT Sensei entry exists for this point (confirmed absent)" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
+    "patterns": ["ではないだろうか", "のではないだろうか", "のではないでしょうか", "んじゃないだろうか"]
   }
 ]

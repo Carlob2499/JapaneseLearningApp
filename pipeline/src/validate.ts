@@ -1,6 +1,6 @@
-import { readFile } from 'node:fs/promises'
+import { readdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { Manifest, type ManifestEntry, Pack } from '@hikkoshi/schemas'
+import { Classbook, Manifest, type ManifestEntry, Pack } from '@hikkoshi/schemas'
 import { PACKS_DIR } from './lib/paths'
 import { sha256 } from './lib/io'
 
@@ -51,6 +51,54 @@ export function checkPack(entry: ManifestEntry, bytes: Buffer): string[] {
   return errs
 }
 
+/** All item ids for one domain across every manifest entry (for classbook cross-reference). */
+async function collectIds(manifest: Manifest, domain: ManifestEntry['domain']): Promise<Set<string>> {
+  const ids = new Set<string>()
+  for (const entry of manifest.packs) {
+    if (entry.domain !== domain) continue
+    const raw = JSON.parse(await readFile(join(PACKS_DIR, entry.path), 'utf8')) as { items: { id: string }[] }
+    for (const it of raw.items) ids.add(it.id)
+  }
+  return ids
+}
+
+/**
+ * Validate every committed classbook (D-034) — outside the Level-scoped manifest (a lesson
+ * isn't a JLPT level), so it's checked separately: schema-valid, and every grammarId/vocabId
+ * resolves against the already-validated grammar/vocab packs (catches a stale reference if a
+ * point is ever renamed or removed).
+ */
+async function checkClassbooks(manifest: Manifest): Promise<string[]> {
+  const classDir = join(PACKS_DIR, 'class')
+  let files: string[]
+  try {
+    files = (await readdir(classDir)).filter((f) => f.endsWith('.json'))
+  } catch {
+    return [] // no classbooks shipped yet
+  }
+  if (files.length === 0) return []
+
+  const [grammarIds, vocabIds] = await Promise.all([collectIds(manifest, 'grammar'), collectIds(manifest, 'vocab')])
+  const errs: string[] = []
+  for (const file of files) {
+    const raw = JSON.parse(await readFile(join(classDir, file), 'utf8'))
+    const res = Classbook.safeParse(raw)
+    if (!res.success) {
+      for (const issue of res.error.issues) errs.push(`class/${file}: ${issue.path.join('.') || '(root)'} — ${issue.message}`)
+      continue
+    }
+    for (const lesson of res.data.lessons) {
+      for (const id of lesson.grammarIds) {
+        if (!grammarIds.has(id)) errs.push(`class/${file}: lesson ${lesson.lesson} references unknown grammar id "${id}"`)
+      }
+      for (const id of lesson.vocabIds) {
+        if (!vocabIds.has(id)) errs.push(`class/${file}: lesson ${lesson.lesson} references unknown vocab id "${id}"`)
+      }
+    }
+  }
+  return errs
+}
+
 async function main(): Promise<void> {
   const manifestRes = Manifest.safeParse(
     JSON.parse(await readFile(join(PACKS_DIR, 'manifest.json'), 'utf8')),
@@ -71,6 +119,8 @@ async function main(): Promise<void> {
     allErrors.push(...checkPack(entry, bytes))
     items += entry.itemCount
   }
+
+  allErrors.push(...(await checkClassbooks(manifest)))
 
   if (allErrors.length > 0) {
     console.error('Pack validation FAILED:')

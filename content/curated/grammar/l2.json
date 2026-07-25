@@ -95,7 +95,7 @@
       { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
-    "textbookAnchors": [{ "book": "genki2", "chapter": 15 }],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 15 }, { "book": "quartet1", "chapter": 5 }],
     "patterns": ["ておきます", "ておく", "ておいた", "でおく", "でおきます"]
   },
   {
@@ -194,7 +194,7 @@
       { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" },
       { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-13", "license": "editorial reference — level placement only; prose not copied" }
     ],
-    "textbookAnchors": [{ "book": "genki2", "chapter": 19 }],
+    "textbookAnchors": [{ "book": "genki2", "chapter": 19 }, { "book": "quartet1", "chapter": 5 }],
     "patterns": ["はずです", "はずだ", "はずが", "はずは"]
   },
   {
@@ -262,5 +262,93 @@
     ],
     "textbookAnchors": [{ "book": "genki2", "chapter": 22 }],
     "patterns": ["させます", "させる", "させた", "させて"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:you-ni-suru", "name": "〜ようにする", "level": "L2",
+    "gloss": "make an effort to / try to make a habit of",
+    "summary": "The dictionary or ない-form + ようにする expresses making a conscious effort to do (or avoid) something, often habitually — distinct from 〜ようになる, which describes a change that happens on its own.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 1 }],
+    "patterns": ["ようにする", "ようにしている", "ようにしています", "ようにしてください"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:noni-purpose", "name": "〜のに（使う）", "level": "L2",
+    "gloss": "for ~ing, in order to (before a verb of use/need)",
+    "summary": "The dictionary form + のに, followed by a verb like 使う or an expression like 必要だ／時間がかかる, states the purpose something is used for or the cost of doing it — a different のに from the concessive 'even though' sense.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 3 }],
+    "patterns": ["のに使います", "のに使う", "のに必要", "のに時間がかかる"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:ta-bakari", "name": "〜たばかり", "level": "L2",
+    "gloss": "just did / just finished doing",
+    "summary": "The past (た) form + ばかり expresses that something happened only a moment ago, often as ばかりの before a noun.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 4 }],
+    "patterns": ["たばかり", "たばかりの", "たばかりです"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:te-kuru-te-iku", "name": "〜てくる・〜ていく", "level": "L2",
+    "gloss": "a change coming this way / a change going on from here",
+    "summary": "て-form + くる frames a change as having led up to now (toward the speaker); て-form + いく frames a change as continuing on from now (away from the speaker) — the same forms used for literal coming and going, extended to describe change over time.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
+    "patterns": ["てくる", "ていく", "てきた", "ていった"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:shika-nai", "name": "〜しか〜ない", "level": "L2",
+    "gloss": "nothing but / only",
+    "summary": "しか, paired with a negative predicate, narrows something down to the one thing named — nothing else qualifies (only …). With an animate subject the negative is いない, not ない.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
+    "patterns": ["しかない", "一つしかない", "少ししかない", "これしかない", "一人しかいない", "しかありません", "しかなかった"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:ki-ga-tsuku", "name": "〜に気がつく", "level": "L2",
+    "gloss": "to notice / to realize",
+    "summary": "気がつく (also written 気づく) expresses noticing or becoming aware of something — a sudden realization, not a deliberate observation.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 2 }],
+    "patterns": ["気がつく", "気づく", "気がついた", "気づいた", "気がつかない", "気づかない"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:garu", "name": "〜がる", "level": "L2",
+    "gloss": "shows signs of feeling ~ (third person)",
+    "summary": "An emotion/desire adjective stem + がる describes a third person outwardly showing a feeling (欲しい→欲しがる, 嫌→嫌がる) — first-person feelings use the plain adjective; がる is for observing someone else's.",
+    "citations": [
+      { "name": "JLPT Sensei — N4 grammar list", "url": "https://jlptsensei.com/jlpt-n4-grammar-list/", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Bunpro — N4 grammar", "url": "https://bunpro.jp/grammar_points", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
+    "patterns": ["を欲しがって", "を怖がって", "を怖がる", "を怖がら", "を嫌がって", "を嫌がる", "を面白がって"]
+  },
+  {
+    "kind": "grammar", "id": "grammar:l2:you-ni-iu", "name": "〜ように言う", "level": "L2",
+    "gloss": "to tell someone to (do)",
+    "summary": "A dictionary or ない-form clause + ように言う reports an instruction given to someone (told them to …) — the same ように that marks purpose, here introducing what was said.",
+    "citations": [
+      { "name": "Bunpro — N4 grammar point", "url": "https://bunpro.jp/grammar_points/ように", "retrieved": "2026-07-25", "license": "editorial reference — level placement only; prose not copied" },
+      { "name": "Tae Kim — Guide to Japanese Grammar", "url": "https://guidetojapanese.org/learn/grammar", "retrieved": "2026-07-25", "license": "editorial reference — general grammar index; no JLPT Sensei entry exists for this point (confirmed absent)" }
+    ],
+    "textbookAnchors": [{ "book": "quartet1", "chapter": 6 }],
+    "patterns": ["ように言う", "ように言った", "ように言われた"]
   }
 ]

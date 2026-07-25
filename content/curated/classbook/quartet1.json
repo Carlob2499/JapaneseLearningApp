@@ -1,0 +1,360 @@
+{
+  "book": "quartet1",
+  "lessons": [
+    {
+      "lesson": 1,
+      "titleEn": "Miyazaki and the Art of Craft",
+      "themeEn": "How a filmmaker's discipline and imagination built a body of work the world knows.",
+      "grammarIds": [
+        "grammar:l2:you-ni-suru",
+        "grammar:l3:you-ni-naru",
+        "grammar:l3:tame-ni",
+        "grammar:l3:rashii",
+        "grammar:l3:to-ieba",
+        "grammar:l3:toori-ni",
+        "grammar:l3:ni-yoru-to",
+        "grammar:l4:kikkake-de"
+      ],
+      "vocabIds": [
+        "vocab:1173720:えいが",
+        "vocab:1213720:かんとく",
+        "vocab:1297910:さくひん",
+        "vocab:1294630:さいのう",
+        "vocab:1445130:どりょく",
+        "vocab:1373860:せかい",
+        "vocab:1541620:ゆうめい",
+        "vocab:1529410:ゆめ",
+        "vocab:1307850:こども",
+        "vocab:1526920:まんが",
+        "vocab:1202270:え",
+        "vocab:1583460:えがく",
+        "vocab:1367010:にんき",
+        "vocab:1375690:せいこう",
+        "vocab:1439090:てんさい",
+        "vocab:1399610:そうぞう",
+        "vocab:1519830:ぼうけん",
+        "vocab:1212570:かんどう",
+        "vocab:1490010:ひょうか"
+      ],
+      "kanjiWeeks": [
+        [
+          "力",
+          "画",
+          "能",
+          "想",
+          "映",
+          "努"
+        ]
+      ],
+      "kind": "lesson",
+      "id": "lesson:quartet1:1",
+      "book": "quartet1",
+      "citations": [
+        {
+          "name": "Quartet: A Course in Intermediate Japanese — official series page",
+          "url": "https://quartet.japantimes.co.jp/en/about/",
+          "retrieved": "2026-07-24",
+          "license": "publisher fact page — lesson theme/number only, no textbook content reproduced"
+        },
+        {
+          "name": "Bunpro — Quartet I Grammar deck (textbook-order reference)",
+          "url": "https://bunpro.jp/decks/kyi3ss/Quartet-I-Grammar",
+          "retrieved": "2026-07-24",
+          "license": "editorial reference — lesson placement only; prose not copied"
+        }
+      ]
+    },
+    {
+      "lesson": 2,
+      "titleEn": "Writing to Ask for Something",
+      "themeEn": "The etiquette of a written request — thanking, apologizing for the imposition, and asking anyway.",
+      "grammarIds": [
+        "grammar:l2:te-kuru-te-iku",
+        "grammar:l2:shika-nai",
+        "grammar:l2:ki-ga-tsuku",
+        "grammar:l3:koto-ni-suru",
+        "grammar:l3:koto-ni-naru",
+        "grammar:l3:okage-de",
+        "grammar:l3:sei-de",
+        "grammar:l3:zu-ni",
+        "grammar:l3:ki-ga-suru",
+        "grammar:l3:ba-hodo",
+        "grammar:l3:marude-you-da"
+      ],
+      "vocabIds": [
+        "vocab:1327720:てがみ",
+        "vocab:1387990:せんせい",
+        "vocab:1217900:ねがい",
+        "vocab:1512220:へんじ",
+        "vocab:1402730:おくる",
+        "vocab:1343950:かく",
+        "vocab:1371170:すいせん",
+        "vocab:1441870:つたえる",
+        "vocab:1427360:ていねい",
+        "vocab:1228560:きゅう",
+        "vocab:1594590:しめきり",
+        "vocab:1413250:だいがくいん",
+        "vocab:1347530:しょうがくきん",
+        "vocab:1591990:きをつける",
+        "vocab:1591330:きづく"
+      ],
+      "kanjiWeeks": [
+        [
+          "手",
+          "急",
+          "送",
+          "伝",
+          "紙",
+          "願"
+        ]
+      ],
+      "kind": "lesson",
+      "id": "lesson:quartet1:2",
+      "book": "quartet1",
+      "citations": [
+        {
+          "name": "Quartet: A Course in Intermediate Japanese — official series page",
+          "url": "https://quartet.japantimes.co.jp/en/about/",
+          "retrieved": "2026-07-24",
+          "license": "publisher fact page — lesson theme/number only, no textbook content reproduced"
+        },
+        {
+          "name": "Bunpro — Quartet I Grammar deck (textbook-order reference)",
+          "url": "https://bunpro.jp/decks/kyi3ss/Quartet-I-Grammar",
+          "retrieved": "2026-07-24",
+          "license": "editorial reference — lesson placement only; prose not copied"
+        }
+      ]
+    },
+    {
+      "lesson": 3,
+      "titleEn": "Climbing Fuji, and Coming Down for a Drink",
+      "themeEn": "A trip up Japan's most-climbed mountain, and the izakaya customs waiting at the bottom.",
+      "grammarIds": [
+        "grammar:l2:noni-purpose",
+        "grammar:l3:beki",
+        "grammar:l3:uchi-ni",
+        "grammar:l3:toshite",
+        "grammar:l3:ni-yotte",
+        "grammar:l3:tame-cause",
+        "grammar:l3:to-wa-kagiranai",
+        "grammar:l4:ni-totte",
+        "grammar:l4:nanto-itte-mo",
+        "grammar:l4:kara-to-itte"
+      ],
+      "vocabIds": [
+        "vocab:1553170:りょこう",
+        "vocab:1352570:のぼる",
+        "vocab:1183450:おんせん",
+        "vocab:1329010:さけ",
+        "vocab:1250870:けしき",
+        "vocab:1483740:つかれる",
+        "vocab:1302680:やま",
+        "vocab:1430220:ちょうじょう",
+        "vocab:1214840:かんこう",
+        "vocab:1449870:とうちゃく",
+        "vocab:1543750:よやく",
+        "vocab:1337190:やど",
+        "vocab:1438690:てんき"
+      ],
+      "kanjiWeeks": [
+        [
+          "景",
+          "観",
+          "光",
+          "登",
+          "色",
+          "宿"
+        ]
+      ],
+      "kind": "lesson",
+      "id": "lesson:quartet1:3",
+      "book": "quartet1",
+      "citations": [
+        {
+          "name": "Quartet: A Course in Intermediate Japanese — official series page",
+          "url": "https://quartet.japantimes.co.jp/en/about/",
+          "retrieved": "2026-07-24",
+          "license": "publisher fact page — lesson theme/number only, no textbook content reproduced"
+        },
+        {
+          "name": "Bunpro — Quartet I Grammar deck (textbook-order reference)",
+          "url": "https://bunpro.jp/decks/kyi3ss/Quartet-I-Grammar",
+          "retrieved": "2026-07-24",
+          "license": "editorial reference — lesson placement only; prose not copied"
+        }
+      ]
+    },
+    {
+      "lesson": 4,
+      "titleEn": "Abroad, and On the Clock",
+      "themeEn": "Studying in a new place and working your first Japanese part-time job.",
+      "grammarIds": [
+        "grammar:l2:ta-bakari",
+        "grammar:l3:you-na-ki-ga-suru",
+        "grammar:l3:sae-ba",
+        "grammar:l3:hodo-nai",
+        "grammar:l3:ba-noni",
+        "grammar:l4:wake-da",
+        "grammar:l4:irai",
+        "grammar:l4:sekkaku",
+        "grammar:l4:naide-sumu"
+      ],
+      "vocabIds": [
+        "vocab:1552740:りゅうがく",
+        "vocab:1019420:アルバイト",
+        "vocab:1413240:だいがく",
+        "vocab:1330290:じゅぎょう",
+        "vocab:1388410:せんぱい",
+        "vocab:1331670:しゅうしょく",
+        "vocab:1230360:きゅうりょう",
+        "vocab:1533510:めんせつ",
+        "vocab:1347710:しょうらい",
+        "vocab:1389780:せんこう",
+        "vocab:1405890:そつぎょう",
+        "vocab:1180030:おうぼ"
+      ],
+      "kanjiWeeks": [
+        [
+          "業",
+          "職",
+          "専",
+          "給",
+          "留",
+          "卒"
+        ]
+      ],
+      "kind": "lesson",
+      "id": "lesson:quartet1:4",
+      "book": "quartet1",
+      "citations": [
+        {
+          "name": "Quartet: A Course in Intermediate Japanese — official series page",
+          "url": "https://quartet.japantimes.co.jp/en/about/",
+          "retrieved": "2026-07-24",
+          "license": "publisher fact page — lesson theme/number only, no textbook content reproduced"
+        },
+        {
+          "name": "Bunpro — Quartet I Grammar deck (textbook-order reference)",
+          "url": "https://bunpro.jp/decks/kyi3ss/Quartet-I-Grammar",
+          "retrieved": "2026-07-24",
+          "license": "editorial reference — lesson placement only; prose not copied"
+        }
+      ]
+    },
+    {
+      "lesson": 5,
+      "titleEn": "How a Dish Gets Made",
+      "themeEn": "From kaiten-zushi's conveyor belt to a home-cooked nikujaga, step by step.",
+      "grammarIds": [
+        "grammar:l2:teoku",
+        "grammar:l2:hazu",
+        "grammar:l3:qw-temo",
+        "grammar:l3:tabi-ni",
+        "grammar:l3:tatoe-temo",
+        "grammar:l3:you-ni-purpose",
+        "grammar:l4:dake-atte"
+      ],
+      "vocabIds": [
+        "vocab:1554310:りょうり",
+        "vocab:1526960:あじ",
+        "vocab:1296670:ざいりょう",
+        "vocab:1537370:やさい",
+        "vocab:1463520:にく",
+        "vocab:1597890:つくる",
+        "vocab:1486650:おいしい",
+        "vocab:1358280:たべる",
+        "vocab:1582120:みせ",
+        "vocab:1426650:ちゅうもん",
+        "vocab:1133790:メニュー",
+        "vocab:1429310:ちょうり",
+        "vocab:1350600:やく"
+      ],
+      "kanjiWeeks": [
+        [
+          "理",
+          "調",
+          "野",
+          "味",
+          "料",
+          "店"
+        ]
+      ],
+      "kind": "lesson",
+      "id": "lesson:quartet1:5",
+      "book": "quartet1",
+      "citations": [
+        {
+          "name": "Quartet: A Course in Intermediate Japanese — official series page",
+          "url": "https://quartet.japantimes.co.jp/en/about/",
+          "retrieved": "2026-07-24",
+          "license": "publisher fact page — lesson theme/number only, no textbook content reproduced"
+        },
+        {
+          "name": "Bunpro — Quartet I Grammar deck (textbook-order reference)",
+          "url": "https://bunpro.jp/decks/kyi3ss/Quartet-I-Grammar",
+          "retrieved": "2026-07-24",
+          "license": "editorial reference — lesson placement only; prose not copied"
+        }
+      ]
+    },
+    {
+      "lesson": 6,
+      "titleEn": "Saying What You Think",
+      "themeEn": "Building an opinion — on packaging waste, on when a language should be taught — and defending it.",
+      "grammarIds": [
+        "grammar:l2:you-ni-iu",
+        "grammar:l3:you-to-suru",
+        "grammar:l3:mama",
+        "grammar:l3:wake-dewa-nai",
+        "grammar:l3:hodo-extent",
+        "grammar:l3:wazawaza",
+        "grammar:l4:kara-miru-to",
+        "grammar:l4:nodewanai-darou-ka"
+      ],
+      "vocabIds": [
+        "vocab:1156530:いけん",
+        "vocab:1213280:かんきょう",
+        "vocab:1322700:しゃかい",
+        "vocab:1536010:もんだい",
+        "vocab:1236950:きょういく",
+        "vocab:1480670:はんたい",
+        "vocab:1304200:さんせい",
+        "vocab:1515510:ほうそう",
+        "vocab:1281020:かんがえる",
+        "vocab:1261190:げんいん",
+        "vocab:1173660:えいきょう",
+        "vocab:1487660:ひつよう",
+        "vocab:1198960:かいけつ",
+        "vocab:1376070:せいふ"
+      ],
+      "kanjiWeeks": [
+        [
+          "会",
+          "社",
+          "対",
+          "意",
+          "要",
+          "教"
+        ]
+      ],
+      "kind": "lesson",
+      "id": "lesson:quartet1:6",
+      "book": "quartet1",
+      "citations": [
+        {
+          "name": "Quartet: A Course in Intermediate Japanese — official series page",
+          "url": "https://quartet.japantimes.co.jp/en/about/",
+          "retrieved": "2026-07-24",
+          "license": "publisher fact page — lesson theme/number only, no textbook content reproduced"
+        },
+        {
+          "name": "Bunpro — Quartet I Grammar deck (textbook-order reference)",
+          "url": "https://bunpro.jp/decks/kyi3ss/Quartet-I-Grammar",
+          "retrieved": "2026-07-24",
+          "license": "editorial reference — lesson placement only; prose not copied"
+        }
+      ]
+    }
+  ]
+}
