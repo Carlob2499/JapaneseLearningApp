@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { ItemState, JournalEntry, Level } from '@hikkoshi/schemas'
-import { loadLevels, type Content } from '../content/packs'
+import { loadClassbook, loadLevels, type Content } from '../content/packs'
 import { appendJournal, getAllItemStates, getJournal } from '../store/db'
 import { dueItems, pickNewItems } from '../scheduler/srs'
 import { dayIndex, introBudget, shapeDueQueue } from '../scheduler/loadShaper'
 import { reviewablePoolIds } from '../lib/appMeta'
+import { getClassSettings } from '../store/classSettings'
 import { getLastCelebratedStage, setLastCelebratedStage } from '../store/settings'
+import { buildClassTask, phaseFor } from './classWeek'
 import { computeLifeStage, decideCelebration, type LifeStage } from './lifeStage'
 import { isSceneUnlocked, sceneMeetsStage } from './moduleUnlock'
 import { buildDayPlan, deriveSceneHistory, type DayPlan } from './dayPlan'
@@ -84,6 +86,22 @@ export function useToday(levels: Level[]): TodayApi {
       const celebration = decideCelebration(stage.stage, getLastCelebratedStage())
       if (celebration.newBaseline !== undefined) setLastCelebratedStage(celebration.newBaseline)
 
+      // The Classroom thread's task for today (D-035) — level-independent (item states aren't
+      // scoped to active levels), so it degrades to no task rather than failing Today's load if
+      // the classbook can't be reached (offline before its first fetch).
+      const classSettings = getClassSettings()
+      let classTask = null
+      if (classSettings.enabled) {
+        try {
+          const book = await loadClassbook(classSettings.book)
+          const lesson = book.lessons.find((l) => l.lesson === classSettings.lesson)
+          if (lesson) classTask = buildClassTask(phaseFor(new Date(now), classSettings), lesson, states)
+        } catch {
+          // offline or not-yet-cached — Today still works, just without the class task
+        }
+      }
+      if (!alive) return
+
       setDueCount(keep.length)
       setIntroCount(introIds.length)
       setLifeStage(stage)
@@ -95,6 +113,7 @@ export function useToday(levels: Level[]): TodayApi {
           candidates,
           history,
           todayIndex: dayIndex(now),
+          classTask,
         }),
       )
       setDiaryEntries(pickDiaryEntries(content, journal, now))

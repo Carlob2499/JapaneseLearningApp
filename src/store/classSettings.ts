@@ -19,6 +19,9 @@ export interface ClassSettings {
 
 const DEFAULTS: ClassSettings = { enabled: false, book: 'quartet1', classDay: 3, lesson: 1 }
 
+/** JS Date#getDay() order — shared so every surface names a `classDay` the same way. */
+export const WEEKDAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const
+
 function isValid(v: unknown): v is Partial<ClassSettings> {
   return typeof v === 'object' && v !== null
 }
@@ -64,6 +67,13 @@ export function setClassSettings(patch: Partial<ClassSettings>): ClassSettings {
 /** Days from `now` to the next occurrence of `classDay` (0 = today is class day, 1–6 = upcoming). */
 export function daysUntilClass(now: Date, classDay: number): number {
   return (classDay - now.getDay() + 7) % 7
+}
+
+/** Days since the most recent `classDay` (0 = today is class day, 1–6 = since it happened). The
+ *  complement of `daysUntilClass` around the 7-day cycle — the week engine reasons forward from
+ *  "class just happened" rather than backward from "class is coming." */
+export function daysSinceClass(now: Date, classDay: number): number {
+  return (7 - daysUntilClass(now, classDay)) % 7
 }
 
 const DISCOVERY_KEY = 'hikkoshi:class-discovery-dismissed'

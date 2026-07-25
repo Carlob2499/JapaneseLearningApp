@@ -77,6 +77,14 @@
   line-height: 1.3;
 }
 
+.classroom-readiness {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
 .grammar-list {
   display: grid;
   gap: 0;

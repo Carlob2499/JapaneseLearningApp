@@ -13,6 +13,8 @@ export const SCENE_KIND_TITLE: Record<SceneTemplate['sceneKind'], string> = {
 export type DayTask =
   | { kind: 'review'; dueCount: number; introCount: number }
   | { kind: 'errand'; sceneId: string; sceneKind: SceneTemplate['sceneKind']; title: string }
+  | { kind: 'class-seed'; lessonId: string; itemIds: string[] }
+  | { kind: 'class-capture'; lessonId: string; itemIds: string[] }
 
 export interface DayPlan {
   tasks: DayTask[]
@@ -25,6 +27,9 @@ export interface BuildDayPlanInput {
   history: Map<string, number>
   todayIndex: number
   cap?: number
+  /** The Classroom thread's task for today, if any (D-035) — reused from classWeek's
+   *  `buildClassTask` as-is; this module only decides where it sits in the plan. */
+  classTask?: DayTask | null
 }
 
 /**
@@ -57,9 +62,11 @@ function daysSinceShown(sceneId: string, history: Map<string, number>, todayInde
  * prioritized first when present; `cap` bounds the combined total.
  */
 export function buildDayPlan(input: BuildDayPlanInput): DayPlan {
-  const { dueCount, introCount, candidates, history, todayIndex, cap = DAY_PLAN_MAX_TASKS } = input
+  const { dueCount, introCount, candidates, history, todayIndex, cap = DAY_PLAN_MAX_TASKS, classTask } = input
   const tasks: DayTask[] = []
   if (dueCount > 0 || introCount > 0) tasks.push({ kind: 'review', dueCount, introCount })
+  // The class task sits right after review — ahead of errand exploration, never displacing it.
+  if (classTask && tasks.length < cap) tasks.push(classTask)
 
   const sorted = [...candidates].sort(
     (a, b) => daysSinceShown(b.id, history, todayIndex) - daysSinceShown(a.id, history, todayIndex),

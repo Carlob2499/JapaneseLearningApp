@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
-import { Classbook, type GrammarPoint, type ItemState, type VocabItem } from '@hikkoshi/schemas'
-import { loadLevels, type Content } from '../content/packs'
+import type { Classbook, GrammarPoint, ItemState, VocabItem } from '@hikkoshi/schemas'
+import { loadClassbook, loadLevels, type Content } from '../content/packs'
+import { lessonReadiness } from '../day/classWeek'
 import { getAllItemStates } from '../store/db'
-import { getClassSettings, setClassSettings, type ClassSettings } from '../store/classSettings'
+import { getClassSettings, setClassSettings, WEEKDAY_NAMES, type ClassSettings } from '../store/classSettings'
 import { ALL_LEVELS, getActiveLevels } from '../store/settings'
 import { staggerIn } from '../motion/timelines'
 import { SectionHead } from './SectionHead'
 import './classroom.css'
 
 const DAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
 interface ClassroomData {
   book: Classbook
   grammarById: Map<string, GrammarPoint>
   vocabById: Map<string, VocabItem>
   metById: Set<string>
+  states: ItemState[]
 }
 
 /** Weekly kanji sheet (D-034): shows the current lesson's default week, or the learner's own
@@ -101,9 +102,7 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
     let alive = true
     void (async () => {
       try {
-        const res = await fetch(`${import.meta.env.BASE_URL}packs/class/${settings.book}.json`)
-        if (!res.ok) throw new Error(`class pack HTTP ${res.status}`)
-        const book = Classbook.parse(await res.json())
+        const book = await loadClassbook(settings.book)
 
         let content: Content
         try {
@@ -119,6 +118,7 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
           grammarById: new Map(content.grammar.map((g) => [g.id, g])),
           vocabById: new Map(content.vocab.map((v) => [v.id, v])),
           metById: new Set(states.map((s) => s.itemId)),
+          states,
         })
       } catch {
         if (alive) setError(true)
@@ -195,7 +195,7 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
                   key={i}
                   type="button"
                   className={`day-chip${settings.classDay === i ? ' on' : ''}`}
-                  aria-label={DAY_NAMES[i]}
+                  aria-label={WEEKDAY_NAMES[i]}
                   aria-pressed={settings.classDay === i}
                   onClick={() => update({ classDay: i })}
                 >
@@ -229,6 +229,9 @@ export default function Classroom({ onHome }: { onHome: () => void }) {
           <section className="card classroom-lesson">
             <SectionHead ja={`第${lesson.lesson}課`} en={lesson.titleEn} />
             <p className="fineprint">{lesson.themeEn}</p>
+            <p className="classroom-readiness">
+              {Math.round(lessonReadiness(lesson, data.states) * 100)}% met
+            </p>
             <div className="grammar-list">
               {lesson.grammarIds.map((id) => {
                 const g = data.grammarById.get(id)

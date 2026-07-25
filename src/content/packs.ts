@@ -1,4 +1,5 @@
 import {
+  Classbook,
   Pack,
   type GrammarPoint,
   type Item,
@@ -93,4 +94,12 @@ export async function loadLevels(levels: Level[]): Promise<Content> {
 /** Load the L1 (≈N5) content packs — the always-available default. */
 export async function loadL1(): Promise<Content> {
   return loadLevels(['L1'])
+}
+
+/** Fetch and validate one classbook (D-034) — outside the Level-scoped manifest system, since a
+ *  lesson isn't a JLPT level; served at the same `packs/` path as everything else. */
+export async function loadClassbook(book: string): Promise<Classbook> {
+  const res = await fetch(`${import.meta.env.BASE_URL}packs/class/${book}.json`)
+  if (!res.ok) throw new Error(`Could not load classbook ${book} (HTTP ${res.status})`)
+  return Classbook.parse(await res.json())
 }

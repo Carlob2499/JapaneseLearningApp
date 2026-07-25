@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import {
+  daysSinceClass,
   daysUntilClass,
   dismissClassDiscovery,
   getClassSettings,
@@ -48,6 +49,25 @@ describe('daysUntilClass', () => {
   it('counts forward to the next occurrence within the week', () => {
     expect(daysUntilClass(new Date('2026-07-20'), 3)).toBe(2) // Monday → Wednesday
     expect(daysUntilClass(new Date('2026-07-23'), 3)).toBe(6) // Thursday → next Wednesday
+  })
+})
+
+describe('daysSinceClass', () => {
+  it('is 0 when today is the class day', () => {
+    expect(daysSinceClass(new Date('2026-07-22'), 3)).toBe(0)
+  })
+
+  it('counts forward from the most recent occurrence', () => {
+    expect(daysSinceClass(new Date('2026-07-23'), 3)).toBe(1) // Thursday, day after Wednesday class
+    expect(daysSinceClass(new Date('2026-07-20'), 3)).toBe(5) // Monday, 5 days after last Wednesday
+    expect(daysSinceClass(new Date('2026-07-21'), 3)).toBe(6) // Tuesday, day before next Wednesday
+  })
+
+  it('is the 7-cycle complement of daysUntilClass at every offset', () => {
+    for (let day = 0; day < 7; day++) {
+      const now = new Date(2026, 6, 19 + day) // a run of 7 consecutive local dates
+      expect((daysSinceClass(now, 3) + daysUntilClass(now, 3)) % 7).toBe(0)
+    }
   })
 })
 
